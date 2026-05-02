@@ -6,6 +6,7 @@ import {Floppy, Play} from "react-bootstrap-icons";
 import {useDispatch} from "react-redux";
 
 import {useDalEngine} from "../../../Providers/GlobalProviders";
+import {useServer} from "../../../Providers/GlobalProviders";
 import {selectBehaviorThunk} from "../../../Store/appThunk";
 import {setTransformOutput} from "../../../Store/scriptingSlice/scriptingSlice";
 import {setTransformOutputLog} from "../../../Store/scriptingSlice/scriptingSlice";
@@ -26,6 +27,7 @@ ScriptingToolBar.propTypes = {
  */
 export function ScriptingToolBar () {
     const behavior = useSelectedBehavior();
+    const {sendMessage} = useServer();
     const {engine} = useDalEngine();
     const dispatch = useDispatch();
     const workerRef = useRef(null);
@@ -173,7 +175,13 @@ export function ScriptingToolBar () {
 
     const runDesign = useCallback(() => {
         // Implement logic to run the entire design here.
-    }, []);
+        sendMessage({
+            type: "terminal_run_design",
+            payload: {
+                designName: engine._name,
+            },
+        });
+    }, [sendMessage]);
 
     return (
         // eslint-disable-next-line max-len

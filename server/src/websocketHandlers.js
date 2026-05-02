@@ -28,6 +28,7 @@ export class  WSMessageHandler {
             delete_design: this.deleteDesign.bind(this),
             load_design: this.loadDesign.bind(this),
             terminal_run_entry_point: this.onTerminalRunEntryPoint.bind(this),
+            terminal_run_design: this.onTerminalRunDesign.bind(this),
         };
     }
 
@@ -193,6 +194,7 @@ export class  WSMessageHandler {
     }
 
     onTerminalRunDesign = async (msg) => {
+        console.log("Running design:", msg.payload);
         /**
          * Run the design using the terminal. After some thinking
          * I decided to load the node script using relative paths
