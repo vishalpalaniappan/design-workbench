@@ -25,6 +25,21 @@ export function MainToolbar () {
      * settings, help etc.
      */
 
+    /**
+     * Plan
+     * 1. Set toolbar height to 25px;
+     * 2. Create standard buttons
+     * 3. All layouts will have a save button.
+     * 4. Implementation Layout
+     *    - Run Implementation
+     * 5. Scripting Layout
+     *    - Behavior Dropdown
+     *    - Run Behavior
+     *    - Run Design
+     * 6. Debugging Layout
+     *    - Trace Source Dropdown (Design, Implementation, Scripting)
+     */
+
     return (
         <div className="mainToolBar">
             <div className="mainToolBarLeft">
