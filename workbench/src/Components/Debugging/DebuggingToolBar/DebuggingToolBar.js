@@ -22,19 +22,30 @@ export function DebuggingToolBar () {
     const dispatch = useDispatch();
     const traces = useTraces();
     const [selectedTrace, setSelectedTrace] = useState(null);
+    const [traceType, setTraceType] = useState("design");
+    const [filteredTraces, setFilteredTraces] = useState([]);
 
     useEffect(() => {
-        if (traces) {
-            const values = Object.values(traces);
-            if (values.length > 0) {
-                dispatch(setSelectedTraceIdThunk(values[0].uid));
-            }
+        if (traces && traceType) {
+            const filtered = Object.values(traces).filter(
+                (trace) => trace.type === traceType
+            );
+            console.log(filtered);
+            setFilteredTraces(filtered);
         }
-    }, [traces]);
+    }, [traces, traceType]);
+
+    useEffect(() => {
+        if (filteredTraces && filteredTraces.length > 0) {
+            dispatch(setSelectedTraceIdThunk(filteredTraces[0].uid));
+        } else {
+            dispatch(setSelectedTraceIdThunk(null));
+        }
+    }, [filteredTraces]);
 
     useEffect(() => {
         if (selectedTrace) {
-            console.log("Selected new trace");
+            console.log("Selected new trace:", selectedTrace);
             dispatch(setSelectedTraceIdThunk(selectedTrace));
         }
     }, [selectedTrace, dispatch]);
@@ -44,8 +55,10 @@ export function DebuggingToolBar () {
             <div className="debuggingToolBarLeft">
                 <div className="debuggingToolBarGroup">
                     <span className="debuggingToolBarLabel">Source:</span>
-                    <select >
-                        {/* <option key={"semantic"} value={"semantic"}>Semantic Model</option> */}
+                    <select
+                        value={traceType}
+                        onChange={(e) => setTraceType(e.target.value)}>
+                        <option key={"semantic"} value={"design"}>Semantic Model</option>
                         <option key={"implementation"} value={"implementation"}>Implementation</option>
                     </select>
                 </div>
@@ -54,7 +67,7 @@ export function DebuggingToolBar () {
                     <select
                         value={selectedTrace}
                         onChange={(e) => setSelectedTrace(e.target.value)}>
-                        {traces && Object.values(traces).map((trace) => (
+                        {filteredTraces.map((trace) => (
                             <option key={trace.uid} value={trace.uid}>{trace.timestamp}</option>
                         ))}
                     </select>

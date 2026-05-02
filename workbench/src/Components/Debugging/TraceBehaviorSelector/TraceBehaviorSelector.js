@@ -49,6 +49,8 @@ export function TraceBehaviorSelector () {
                 atomicIndex: 0,
                 entryIndex: 0,
             }));
+        } else {
+            setBehaviors([]);
         }
     }, [selectedTraceId, dispatch, traces]);
 

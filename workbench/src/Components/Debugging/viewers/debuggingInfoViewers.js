@@ -31,8 +31,18 @@ function DebuggingInfoViewer ({type, isJson = true}) {
     const {engine} = useDalEngine();
 
     useEffect(() => {
-        if (ready && selectedTraceId && traces) {
-            if (selectedTraceEntryIndex === null || selectedTraceEntryIndex === undefined) return;
+        if (ready && traces) {
+            // If there is no selected trace, we clear the viewer.
+            if (selectedTraceId === null || selectedTraceId === undefined) {
+                editorRef.current.setValue("");
+                return;
+            }
+            // If no trace entry is selected, then we also clear the viewer.
+            if (selectedTraceEntryIndex === null || selectedTraceEntryIndex === undefined) {
+                editorRef.current.setValue("");
+                return;
+            }
+
             const ind = selectedTraceEntryIndex;
             const trace = Object.values(traces).find((t) => t.uid === selectedTraceId);
             if (!trace) {
