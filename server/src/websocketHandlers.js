@@ -168,7 +168,7 @@ export class  WSMessageHandler {
 
         this.entryPointFinishedSent = true;
         try {
-            const traceEntry = await saveTraceInEngine();
+            const traceEntry = await saveTraceInEngine("implementation");
             if (traceEntry) {
                 this.sendMessage({ type: "add_trace", data: traceEntry });
             } else {
@@ -198,8 +198,7 @@ export class  WSMessageHandler {
 
         this.designExecutionFinishedSent = true;
         try {
-            // TODO: Save until design traces, not implementation traces.
-            const traceEntry = await saveTraceInEngine();
+            const traceEntry = await saveTraceInEngine("design");
             if (traceEntry) {
                 this.sendMessage({ type: "add_trace", data: traceEntry });
             } else {

@@ -49,9 +49,10 @@ async function clearTraceFilesInPlayground() {
  * Saves the generated traces in the engine. It uses the meta file in the
  * playground to find the design file, then reads the trace file and
  * saves it in the engine.
+ * @param {String} type The type of trace to save (e.g., "design" or "implementation").
  * @returns {Promise<void>}
  */
-async function saveTraceInEngine() {
+async function saveTraceInEngine(type) {
     // Save the generated trace from the playground to the engine.
     const playgroundPath = path.join(process.cwd(), "playground");
     const workspacePath = path.join(process.cwd(), "workspace");
@@ -85,7 +86,8 @@ async function saveTraceInEngine() {
     const traceData = await fs.readFile(traceFilePath);
     const traceEntry = {
         uid: clpZstFiles[0].name,
-        trace: traceData
+        trace: traceData,
+        type: type
     }
 
     try {
