@@ -214,6 +214,12 @@ export function ScriptingToolBar () {
                         style={{"color": "white", "cursor": "pointer"}}/>
                     <span className="scriptingToolBarButton">Run Design</span>
                 </span>
+                <span className="scriptingToolBarButton" >
+                    <Floppy
+                        size={14}
+                        style={{"color": "white", "cursor": "pointer"}}/>
+                    <span className="scriptingToolBarButton">Save Design</span>
+                </span>
             </div>
         </div>
     );

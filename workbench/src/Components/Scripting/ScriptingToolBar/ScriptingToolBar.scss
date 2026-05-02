@@ -48,6 +48,10 @@ $darkened-status-bar-color: rgb(51, 16, 59);
   padding: 3px;
   border-radius: 4px;
 }
+
+.scriptingToolBarButton:hover {
+  background-color: $darkened-status-bar-color;
+}
 .scriptingToolBar > .scriptingToolBarRight {
   display:flex;
   align-items:center;
