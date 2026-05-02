@@ -302,7 +302,7 @@
         },
         "mainToolBar": {
             "id": "mainToolBar",
-            "component": "MainToolbar",
+            "component": "ImplementationToolbar",
             "background": "#222222"
         }
     }

@@ -1,0 +1,60 @@
+$status-bar-background-color: #4f3b55;
+$darker-status-bar-color: #3c2c41;
+$darkened-status-bar-color: #312435;
+
+.mainToolBar {
+  height: 100%;
+  display: flex;
+  padding: 0 5px;
+  gap: 10px;
+  color: white;
+  align-items: center;
+  display:flex;
+  justify-content:space-between;
+  background-color: $status-bar-background-color;
+}
+
+.mainToolBar > .mainToolBarLeft {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  height:100%;
+}
+
+.mainToolBar > .mainToolBarLeft > select {
+  background-color: $status-bar-background-color;
+  color: white;
+  border: none;
+  font-size: 13px;
+  border:none;
+  height:100%;
+  padding-top:2px;
+}
+
+.mainToolBar > .mainToolBarLeft > select:hover {
+  background-color: $darkened-status-bar-color;
+}
+
+.mainToolBar > .mainToolBarLeft >.mainToolBarLabel {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+}
+.mainToolBarButton {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+  cursor:pointer;
+  background-color: $darker-status-bar-color;
+  padding: 3px;
+  border-radius: 4px;
+}
+
+.mainToolBarButton:hover {
+  background-color: $darkened-status-bar-color;
+}
+.mainToolBar > .mainToolBarRight {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
