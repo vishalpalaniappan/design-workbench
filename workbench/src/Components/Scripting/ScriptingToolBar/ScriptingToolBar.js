@@ -187,7 +187,7 @@ export function ScriptingToolBar () {
         // eslint-disable-next-line max-len
         <div className="scriptingToolBar">
             <div className="scriptingToolBarLeft">
-                <span>Select Behavior:</span>
+                <span className="scriptingToolBarLabel">Behavior:</span>
                 <select
                     value={selectedBehavior}
                     onChange={(e) => setSelectedBehavior(e.target.value)}>
@@ -199,18 +199,21 @@ export function ScriptingToolBar () {
                         </option>
                     ))}
                 </select>
+                <span className="scriptingToolBarButton" onClick={runTransformation}>
+                    <Play
+                        size={20}
+                        style={{"color": "white", "cursor": "pointer"}}/>
+                    <span className="scriptingToolBarButton">Compute Behavior</span>
+                </span>
+
             </div>
             <div className="scriptingToolBarRight">
-                <span>Compute Behavior:</span>
-                <Play
-                    size={20}
-                    style={{"color": "white", "cursor": "pointer"}}
-                    onClick={runTransformation} />
-                <span>Run Design:</span>
-                <Play
-                    size={20}
-                    style={{"color": "white", "cursor": "pointer"}}
-                    onClick={runDesign} />
+                <span className="scriptingToolBarButton" onClick={runDesign}>
+                    <Play
+                        size={20}
+                        style={{"color": "white", "cursor": "pointer"}}/>
+                    <span className="scriptingToolBarButton">Run Design</span>
+                </span>
             </div>
         </div>
     );

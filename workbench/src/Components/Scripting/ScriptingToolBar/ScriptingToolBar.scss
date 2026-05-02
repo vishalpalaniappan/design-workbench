@@ -1,10 +1,11 @@
 $status-bar-background-color: #4f3b55;
+$darker-status-bar-color: #3c2c41;
 $darkened-status-bar-color: rgb(51, 16, 59);  
 
 .scriptingToolBar {
   height: 100%;
   display: flex;
-  margin: 0 10px;
+  margin: 0 5px;
   gap: 10px;
   color: white;
   align-items: center;
@@ -23,16 +24,30 @@ $darkened-status-bar-color: rgb(51, 16, 59);
   background-color: $status-bar-background-color;
   color: white;
   border: none;
-  font-size: 14px;
+  font-size: 13px;
   border:none;
   height:100%;
-  padding:0 10px;
+  padding-top:2px;
 }
 
 .scriptingToolBar > .scriptingToolBarLeft > select:hover {
   background-color: $darkened-status-bar-color;
 }
 
+.scriptingToolBar > .scriptingToolBarLeft >.scriptingToolBarLabel {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+}
+.scriptingToolBarButton {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+  cursor:pointer;
+  background-color: $darker-status-bar-color;
+  padding: 3px;
+  border-radius: 4px;
+}
 .scriptingToolBar > .scriptingToolBarRight {
   display:flex;
   align-items:center;
