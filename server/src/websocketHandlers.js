@@ -193,17 +193,32 @@ export class  WSMessageHandler {
         this.terminal.start();
     }
 
-    onTerminalRunDesign = async (msg) => {
-        console.log("Running design:", msg.payload);
+    handleDesignExecutionFinished = async () => {
+        if (this.designExecutionFinishedSent) return;
 
+        this.designExecutionFinishedSent = true;
+        // try {
+        //     const traceEntry = await saveTraceInEngine();
+        //     if (traceEntry) {
+        //         this.sendMessage({ type: "add_trace", data: traceEntry });
+        //     } else {
+        //         console.warn("No trace entry to send to front end.");
+        //     }
+        // } catch (err) {
+        //     console.error("Failed to save trace:", err);
+        // }
+        this.startTerminalAndAddListeners();
+    }
+
+    onTerminalRunDesign = async (msg) => {
         const cmd = `node ../tools/design-runtime/src/index.js ../workspace/${msg.payload.designName}`;
         await clearTraceFilesInPlayground();
         this.stopTerminalAndRemoveListeners();
         this.terminal = new TerminalSession({ command: cmd });
         this.terminal.on("data", this.onTerminalData);
-        this.terminal.on("exit", this.handleEntryPointFinished);
+        this.terminal.on("exit", this.handleDesignExecutionFinished);
         this.terminal.on("start", this.onTerminalStart);
-        this.terminal.on("stop", this.handleEntryPointFinished);
+        this.terminal.on("stop", this.handleDesignExecutionFinished);
         this.terminal.start();
     }
 }
