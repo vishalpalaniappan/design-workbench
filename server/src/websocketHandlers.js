@@ -196,7 +196,6 @@ export class  WSMessageHandler {
     handleDesignExecutionFinished = async () => {
         if (this.designExecutionFinishedSent) return;
 
-        this.designExecutionFinishedSent = true;
         try {
             const traceEntry = await saveTraceInEngine("design");
             if (traceEntry) {
@@ -207,10 +206,13 @@ export class  WSMessageHandler {
         } catch (err) {
             console.error("Failed to save trace:", err);
         }
+        this.designExecutionFinishedSent = true;
         this.startTerminalAndAddListeners();
     }
 
-    onTerminalRunDesign = async (msg) => {
+    onTerminalRunDesign = async (msg) => {     
+        this.designExecutionFinishedSent = false;
+        
         const cmd = `node ../tools/design-runtime/src/index.js ../workspace/${msg.payload.designName}`;
         await clearTraceFilesInPlayground();
         this.stopTerminalAndRemoveListeners();
