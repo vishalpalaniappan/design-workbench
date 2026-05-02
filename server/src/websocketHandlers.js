@@ -197,16 +197,17 @@ export class  WSMessageHandler {
         if (this.designExecutionFinishedSent) return;
 
         this.designExecutionFinishedSent = true;
-        // try {
-        //     const traceEntry = await saveTraceInEngine();
-        //     if (traceEntry) {
-        //         this.sendMessage({ type: "add_trace", data: traceEntry });
-        //     } else {
-        //         console.warn("No trace entry to send to front end.");
-        //     }
-        // } catch (err) {
-        //     console.error("Failed to save trace:", err);
-        // }
+        try {
+            // TODO: Save until design traces, not implementation traces.
+            const traceEntry = await saveTraceInEngine();
+            if (traceEntry) {
+                this.sendMessage({ type: "add_trace", data: traceEntry });
+            } else {
+                console.warn("No trace entry to send to front end.");
+            }
+        } catch (err) {
+            console.error("Failed to save trace:", err);
+        }
         this.startTerminalAndAddListeners();
     }
 
