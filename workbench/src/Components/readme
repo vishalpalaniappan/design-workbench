@@ -1,10 +1,13 @@
 As I continued to build out the features, the code structure started to get disjoined and I wanted to note down some changes I need to make:
 
 - I need to group the components into the modes more cleanly. 
-    - The design and implementation components are in their own folder but the implementation is in the root. This is mainly because I have actually defined more about the application strucutre as I was exploring and I didn't take the time to make changes to the folder structure to reflect this.
+    - The design and implementation components are in their own folder but the implementation is in the root. This is mainly because I have actually defined more about the application strucutre as I was exploring and I didn't take the time to make changes to the folder structure to reflect this. I am also sharing components between the modes, like the behavioral control graph, I don't want to do this, I want dedicated components per mode.
 
 - I need to separate the stores into slices in a cleaner way
-    - Right now when I select the behavior in the behavioral control graph in the design mode, it is using the thunk in the root store. Then when I deselect a behavior, I am manually clearing the transform output log, the primitive. If I create a separate selector for the design mode, I can cleanly manage the state in the design thunk and simplify my life. 
+    - Right now when I select the behavior in the behavioral control graph in the design mode, it is using the thunk in the root store. Then when I deselect a behavior in design mode, I am manually clearing the transform output log, the primitive etc (because no active behavior is present). If I create a separate selector for the design mode, I can cleanly manage the state in the design thunk and simplify my life. 
+
+- I need to clean up the participant and invariant components.
+    - I've fully moved away from the participants and the invariant components in favour of the scripting language. So I need to remove those.
 
 - I need to url arguments for sepecific traces or behaviors and then I need to add keybaord shortcuts for moving between the modes.
     - The reason for the traces or behavior url args is because it will allow me to load the UI into a sepcific state.
