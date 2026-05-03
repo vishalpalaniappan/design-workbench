@@ -153,9 +153,7 @@
                     "containerId": "ImplementationScriptContainer",
                     "type": "container",
                     "size": { 
-                        "initial": { "value": 270, "unit": "px", "type": "fixed" },
-                        "min": { "value": 170, "unit": "px"},
-                        "max": { "value": 320, "unit": "px"}
+                        "initial": { "value": 370, "unit": "px", "type": "fixed" }
                     },
                     "collapse": { "value": 900, "condition": "lessThan", "relative": "parent" }
                 }
@@ -164,7 +162,7 @@
         "ImplementationScriptContainer": {
             "id": "ImplementationScriptContainer",
             "component": "ImplementationBehaviorScriptViewer",
-            "background": "#007acc"
+            "background": "#252526"
         },
         "footer": {
             "id": "footer",

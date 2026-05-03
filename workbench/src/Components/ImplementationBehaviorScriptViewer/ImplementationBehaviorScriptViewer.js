@@ -4,6 +4,8 @@ import Editor from "@monaco-editor/react";
 import PropTypes from "prop-types";
 import {useDispatch} from "react-redux";
 
+import {useSelectedBehavior} from "../../Store/useAppSelection";
+
 import "./ImplementationBehaviorScriptViewer.scss";
 
 ImplementationBehaviorScriptViewer.propTypes = {
@@ -17,12 +19,13 @@ export function ImplementationBehaviorScriptViewer ({}) {
     const dispatch = useDispatch();
     const [ready, setReady] = useState(false);
     const editorRef = useRef(null);
+    const selectedBehavior = useSelectedBehavior();
 
     useEffect(() => {
-        if (ready) {
-            editorRef.current.setValue("asdf");
+        if (ready && selectedBehavior) {
+            editorRef.current.setValue(selectedBehavior._script);
         }
-    }, [ready]);
+    }, [ready, selectedBehavior]);
 
     const handleEditorMount = useCallback((editor, monaco) => {
         editorRef.current = editor;
@@ -33,18 +36,24 @@ export function ImplementationBehaviorScriptViewer ({}) {
 
     return (
         <div style={{width: "100%", height: "100%"}}>
-            <Editor
-                defaultLanguage={"plaintext"}
-                defaultValue="asdf"
-                theme="vs-dark"
-                onMount={handleEditorMount}
-                options={{
-                    minimap: {enabled: false},
-                    lineNumbers: "off",
-                    wordWrap: "on",
-                    scrollBeyondLastLine: false,
-                }}
-            />
+            {selectedBehavior ?
+                <Editor
+                    defaultLanguage={"plaintext"}
+                    defaultValue=""
+                    theme="vs-dark"
+                    onMount={handleEditorMount}
+                    options={{
+                        minimap: {enabled: false},
+                        lineNumbers: "off",
+                        wordWrap: "on",
+                        scrollBeyondLastLine: false,
+                        readOnly: true,
+                    }}
+                />:
+                <div className="noSelectionPlaceholder">
+                    No behavior selected.
+                </div>
+            }
         </div>
     );
 }
