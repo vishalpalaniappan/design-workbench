@@ -17,6 +17,16 @@ export function ImplementationBehaviorScriptViewer ({}) {
     const editorRef = useRef(null);
     const selectedBehavior = useSelectedBehavior();
 
+    useEffect(() => {
+        if (editorRef.current) {
+            if (selectedBehavior && selectedBehavior._script) {
+                editorRef.current.setValue(selectedBehavior._script);
+            } else {
+                editorRef.current.setValue("");
+            }
+        }
+    }, [selectedBehavior]);
+
     const handleEditorMount = useCallback((editor, monaco) => {
         editorRef.current = editor;
         editor.onDidChangeModelContent((e) => {});
