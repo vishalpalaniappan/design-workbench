@@ -7,6 +7,7 @@ import {useDispatch} from "react-redux";
 
 import {useDalEngine} from "../../../Providers/GlobalProviders";
 import {useServer} from "../../../Providers/GlobalProviders";
+import {setStatusMsg} from "../../../Store/appSlice";
 import {selectBehaviorThunk} from "../../../Store/appThunk";
 import {setTransformOutput} from "../../../Store/scriptingSlice/scriptingSlice";
 import {setTransformOutputLog} from "../../../Store/scriptingSlice/scriptingSlice";
@@ -35,6 +36,13 @@ export function ScriptingToolBar () {
     const {behaviors} = useScriptingBehaviors();
     const [selectedBehavior, setSelectedBehavior] = useState(null);
     const selectedTransformationTest = useSelectedTransformationTest();
+
+    const saveDesign = useCallback(() => {
+        if (engine) {
+            engine.save();
+            dispatch(setStatusMsg("Saving design..."));
+        }
+    }, [engine, dispatch]);
 
     useEffect(() => {
         if (behaviors.length > 0 && selectedBehavior) {
@@ -214,7 +222,7 @@ export function ScriptingToolBar () {
                         style={{"color": "white", "cursor": "pointer"}}/>
                     <span className="scriptingToolBarButton">Run Design</span>
                 </span>
-                <span className="scriptingToolBarButton" >
+                <span className="scriptingToolBarButton" onClick={saveDesign}>
                     <Floppy
                         size={14}
                         style={{"color": "white", "cursor": "pointer"}}/>
