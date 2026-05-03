@@ -1,0 +1,23 @@
+As I continued to build out the features, the code structure started to get disjoined and I wanted to note down some changes I need to make:
+
+- I need to group the components into the modes more cleanly. 
+    - The design and implementation components are in their own folder but the implementation is in the root. This is mainly because I have actually defined more about the application strucutre as I was exploring and I didn't take the time to make changes to the folder structure to reflect this.
+
+- I need to separate the stores into slices in a cleaner way
+    - Right now when I select the behavior in the behavioral control graph in the design mode, it is using the thunk in the root store. Then when I deselect a behavior, I am manually clearing the transform output log, the primitive. If I create a separate selector for the design mode, I can cleanly manage the state in the design thunk and simplify my life. 
+
+- I need to url arguments for sepecific traces or behaviors and then I need to add keybaord shortcuts for moving between the modes.
+    - The reason for the traces or behavior url args is because it will allow me to load the UI into a sepcific state.
+    - Moving between nodes is because it will help me see the results of my executions.
+
+- Add behavioral control graph to the debug view and allow a visualization of which node is being inspected using the position from the design trace.
+    - This one is relavtivel simply, I just want to visualize where I am in the atomic design path on top of the behavioral control graph.
+
+- All the toolbars should share the same style sheet.
+    - This is part of a bigger change that I mentioned a while back where I am defining style sheets on the fly and this one will probably wait until much later when I create my component library. 
+
+Essentially, since I established these three modes, I haven't taken the time to make changes to the code structure to reflect these changes. SO I am leaving a note here for myself to fix it and to be consistent with my naming for the design, implementation and debugging modes.
+
+Luckily, none of these changes are very difficult and once I dedicate a day to this, I will be able to move it forward cleanly.
+
+Note: One note I wanted to make was, when I save a design file that has a lot of traces, the websocket message becomes too large and causes an error. In the future I will have intelligent saving mechanisms where only the modified data will be sent to the server to be saved. Right now I send the whole file, I can either limit the number of active traces to a fixed amount or I can send a multi part message through the websocket. However, this isn't priority because it doesn't affect functionality, I will address it soon when it becomes more of a concern.
