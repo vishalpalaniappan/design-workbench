@@ -166,7 +166,6 @@ export function ScriptingToolBar () {
         workerRef.current.onmessage = (event) => {
             setResult(event.data);
             if (event.data.type === "Success") {
-                console.log("Transformation result:", event.data.payload);
                 addLog("Transformation succeeded. See output state for details.");
                 dispatch(setTransformOutput(event.data.payload.output));
             } else if (event.data.type === "Error") {
