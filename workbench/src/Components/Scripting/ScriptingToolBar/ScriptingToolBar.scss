@@ -5,12 +5,13 @@ $darkened-status-bar-color: rgb(51, 16, 59);
 .scriptingToolBar {
   height: 100%;
   display: flex;
-  margin: 0 5px;
+  padding: 0 5px;
   gap: 10px;
   color: white;
   align-items: center;
   display:flex;
   justify-content:space-between;
+  background-color: $status-bar-background-color;
 }
 
 .scriptingToolBar > .scriptingToolBarLeft {
@@ -47,6 +48,15 @@ $darkened-status-bar-color: rgb(51, 16, 59);
   background-color: $darker-status-bar-color;
   padding: 3px;
   border-radius: 4px;
+  padding-right:10px;
+  min-height: 23px;
+}
+
+.scriptingToolBarLabel {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+  padding: 3px;
 }
 
 .scriptingToolBarButton:hover {

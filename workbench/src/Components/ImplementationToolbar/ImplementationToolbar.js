@@ -57,8 +57,8 @@ export function ImplementationToolbar () {
                     <Play
                         size={20}
                         className="mainToolBarButton"
-                        style={{"color": "white", "cursor": "pointer"}}/>
-                    <span className="mainToolBarButton">Run Implementation</span>
+                        style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
+                    <span >Run Implementation</span>
                 </span>
             </div>
             <div className="mainToolBarRight">
@@ -67,8 +67,8 @@ export function ImplementationToolbar () {
                     <Floppy
                         size={14}
                         className="mainToolBarButton"
-                        style={{"color": "white", "cursor": "pointer"}}/>
-                    <span className="mainToolBarButton">Save</span>
+                        style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
+                    <span>Save</span>
                 </span>
             </div>
         </div>

@@ -77,6 +77,7 @@ export function ScriptingToolBar () {
     }, [dispatch]);
 
     const runTransformation = useCallback((e) => {
+        console.log("Running transformation for behavior:", selectedBehavior);
         dispatch(setTransformOutput(null));
         addLog(null, true);
         // I decided to run transformations in worker for the current iteration.
@@ -194,23 +195,12 @@ export function ScriptingToolBar () {
         // eslint-disable-next-line max-len
         <div className="scriptingToolBar">
             <div className="scriptingToolBarLeft">
-                <span className="scriptingToolBarLabel">Behavior:</span>
-                <select
-                    value={selectedBehavior}
-                    onChange={(e) => setSelectedBehavior(e.target.value)}>
-                    {behaviors.map((behavior) => (
-                        <option
-                            key={behavior.dal_engine_uid}
-                            value={behavior.dal_engine_uid}>
-                            {behavior._name}
-                        </option>
-                    ))}
-                </select>
+                <span className="scriptingToolBarLabel">Design:</span>
                 <span className="scriptingToolBarButton" onClick={runTransformation}>
                     <Play
                         size={20}
-                        style={{"color": "white", "cursor": "pointer"}}/>
-                    <span className="scriptingToolBarButton">Compute Behavior</span>
+                        style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
+                    <span >Compute Behavior</span>
                 </span>
 
             </div>
@@ -218,14 +208,14 @@ export function ScriptingToolBar () {
                 <span className="scriptingToolBarButton" onClick={runDesign}>
                     <Play
                         size={20}
-                        style={{"color": "white", "cursor": "pointer"}}/>
-                    <span className="scriptingToolBarButton">Run Design</span>
+                        style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
+                    <span >Run Design</span>
                 </span>
                 <span className="scriptingToolBarButton" onClick={saveDesign}>
                     <Floppy
                         size={14}
-                        style={{"color": "white", "cursor": "pointer"}}/>
-                    <span className="scriptingToolBarButton">Save Design</span>
+                        style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
+                    <span >Save</span>
                 </span>
             </div>
         </div>
