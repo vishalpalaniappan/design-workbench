@@ -32,7 +32,7 @@ export function TransformOutputMeta ({}) {
     }, [transformOutput, ready]);
 
     useEffect(() => {
-        if (editorRef.current && selectedBehavior) {
+        if (editorRef.current && !selectedBehavior) {
             editorRef.current.setValue("");
         }
     }, [selectedBehavior]);

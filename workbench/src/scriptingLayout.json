@@ -366,7 +366,7 @@
             "component": "ExpectedPostWorldStateEditor",
             "menuBar": {
                 "showClose": false,
-                "title": "Expected Post Transformation World State"
+                "title": "Observed Post Transformation World State"
             },
             "background": "#222222"
         },

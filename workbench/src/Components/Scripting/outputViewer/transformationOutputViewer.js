@@ -36,7 +36,7 @@ export function TransformationOutputViewer ({}) {
     }, [transformOutput, ready]);
 
     useEffect(() => {
-        if (editorRef.current && selectedBehavior) {
+        if (editorRef.current && !selectedBehavior) {
             editorRef.current.setValue("");
         }
     }, [selectedBehavior]);

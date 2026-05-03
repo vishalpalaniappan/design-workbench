@@ -3,6 +3,7 @@ import React, {useCallback, useEffect, useRef, useState} from "react";
 import Editor from "@monaco-editor/react";
 
 import {useTransformOutputLog} from "../../../Store/scriptingSlice/useScriptingSelection";
+import {useSelectedBehavior} from "../../../Store/useAppSelection";
 
 TransformationOutputLogViewer.propTypes = {};
 
@@ -13,19 +14,24 @@ TransformationOutputLogViewer.propTypes = {};
 export function TransformationOutputLogViewer ({ }) {
     const transformOutputLog = useTransformOutputLog();
     const editorRef = useRef(null);
+    const selectedBehavior = useSelectedBehavior();
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
-        if (editorRef.current && transformOutputLog && ready) {
-            const logstr = transformOutputLog
-                .map((entry) => {
-                    const timestamp = new Date(entry.timestamp).toISOString();
-                    return `[${timestamp}] ${entry.message}`;
-                })
-                .join("\n");
-            editorRef.current.setValue(logstr);
+        if (ready) {
+            if (transformOutputLog && selectedBehavior) {
+                const logstr = transformOutputLog
+                    .map((entry) => {
+                        const timestamp = new Date(entry.timestamp).toISOString();
+                        return `[${timestamp}] ${entry.message}`;
+                    })
+                    .join("\n");
+                editorRef.current.setValue(logstr);
+            } else {
+                editorRef.current.setValue("");
+            }
         }
-    }, [transformOutputLog, ready]);
+    }, [transformOutputLog, selectedBehavior, ready]);
 
     const handleEditorMount = useCallback((editor, monaco) => {
         editorRef.current = editor;
