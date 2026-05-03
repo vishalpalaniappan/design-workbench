@@ -1,8 +1,6 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
 
 import Editor from "@monaco-editor/react";
-import PropTypes from "prop-types";
-import {useDispatch} from "react-redux";
 
 import {useSelectedBehavior} from "../../Store/useAppSelection";
 
@@ -16,23 +14,16 @@ ImplementationBehaviorScriptViewer.propTypes = {
  * @return {JSX.Element}
  */
 export function ImplementationBehaviorScriptViewer ({}) {
-    const dispatch = useDispatch();
-    const [ready, setReady] = useState(false);
     const editorRef = useRef(null);
     const selectedBehavior = useSelectedBehavior();
 
-    useEffect(() => {
-        if (ready && selectedBehavior) {
-            editorRef.current.setValue(selectedBehavior._script);
-        }
-    }, [ready, selectedBehavior]);
-
     const handleEditorMount = useCallback((editor, monaco) => {
         editorRef.current = editor;
-        editor.onDidChangeModelContent((e) => {
-        });
-        setReady(true);
-    }, []);
+        editor.onDidChangeModelContent((e) => {});
+        if (selectedBehavior && selectedBehavior?._script) {
+            editorRef.current.setValue(selectedBehavior._script);
+        }
+    }, [selectedBehavior]);
 
     return (
         <div style={{width: "100%", height: "100%"}}>
