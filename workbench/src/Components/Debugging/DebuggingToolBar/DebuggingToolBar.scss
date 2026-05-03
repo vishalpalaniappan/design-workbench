@@ -1,51 +1,68 @@
 $status-bar-background-color: #66351f;
-$darkened-status-bar-color: #552a1f;
+$darker-status-bar-color: #552a1f;
+$darkened-status-bar-color: #441f1f;
 
 .debuggingToolBar {
-    height: 100%;
-    display: flex;
-    padding: 0 10px;
-    gap: 10px;
-    color: white;
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-    background-color: $status-bar-background-color;
+  height: 100%;
+  display: flex;
+  padding: 0 5px;
+  gap: 10px;
+  color: white;
+  align-items: center;
+  justify-content:space-between;
+  background-color: $status-bar-background-color;
+  flex-direction:row;
 }
 
-.debuggingToolBar>.debuggingToolBarLeft {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    height: 100%;
+.debuggingToolBar > .debuggingToolBarLeft {
+  display:flex;
+  align-items:center;
+  gap:5px;
+  height:100%;
 }
 
-.debuggingToolBar>.debuggingToolBarLeft>.debuggingToolBarGroup {
-    margin-right: 10px;
+.debuggingToolBarSelect > select {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+  cursor:pointer;
+  background-color: $darker-status-bar-color;
+  padding: 3px;
+  border-radius: 4px;
+  padding-right:10px;
+  min-height: 23px;
+  color:white;
 }
 
-.debuggingToolBar>.debuggingToolBarLeft>.debuggingToolBarGroup>.debuggingToolBarLabel {
-    font-size: 13px;
-    margin-right: 5px;
-    color:rgb(255, 255, 255);
+.debuggingToolBarButton > select:hover {
+  background-color: $darkened-status-bar-color;
 }
 
-.debuggingToolBar>.debuggingToolBarLeft>.debuggingToolBarGroup>select {
-    background-color: $status-bar-background-color;
-    color: white;
-    border: none;
-    font-size: 14px;
-    border: none;
-    height: 100%;
-    padding: 0 2px;
+.debuggingToolBarLabel {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+  padding: 3px;
 }
 
-.debuggingToolBar>.debuggingToolBarLeft>.debuggingToolBarGroup>select:hover {
-    background-color: $darkened-status-bar-color;
+.debuggingToolBar > .debuggingToolBarRight {
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
-.debuggingToolBar>.debuggingToolBarRight {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+.debuggingToolBarButton {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+  cursor:pointer;
+  background-color: $darker-status-bar-color;
+  padding: 3px;
+  border-radius: 4px;
+  padding-right:10px;
+  min-height: 23px;
+}
+
+.debuggingToolBarButton:hover {
+  background-color: $darkened-status-bar-color;
 }

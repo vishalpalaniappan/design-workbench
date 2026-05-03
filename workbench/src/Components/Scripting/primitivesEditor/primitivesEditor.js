@@ -24,9 +24,13 @@ export function PrimitivesEditor({ }) {
     const [isReady, setIsReady] = useState(false);
 
     useEffect(() => {
-        if (editorRef.current && behavior) {
-            const primitivesStr = behavior._script;
-            editorRef.current.setValue(primitivesStr);
+        if (editorRef.current) {
+            if (behavior && behavior._script) {
+                const primitivesStr = behavior._script;
+                editorRef.current.setValue(primitivesStr);
+            } else {
+                editorRef.current.setValue("");
+            }
         }
     }, [isReady, behavior]);
 

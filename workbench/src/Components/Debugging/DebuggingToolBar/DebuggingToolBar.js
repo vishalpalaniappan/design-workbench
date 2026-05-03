@@ -1,9 +1,10 @@
-/* eslint-disable max-len */
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 
 import PropTypes from "prop-types";
+import {Floppy} from "react-bootstrap-icons";
 import {useDispatch} from "react-redux";
 
+import {useDalEngine} from "../../../Providers/GlobalProviders";
 import {setSelectedTraceIdThunk} from "../../../Store/appThunk";
 import {useTraces} from "../../../Store/useAppSelection";
 
@@ -19,6 +20,7 @@ DebuggingToolBar.propTypes = {
  * @return {JSX.Element}
  */
 export function DebuggingToolBar () {
+    const {engine} = useDalEngine();
     const dispatch = useDispatch();
     const traces = useTraces();
     const [selectedTrace, setSelectedTrace] = useState(null);
@@ -35,6 +37,13 @@ export function DebuggingToolBar () {
         }
     }, [traces, traceType]);
 
+    const saveDesign = useCallback(() => {
+        if (engine) {
+            engine.save();
+            dispatch(setStatusMsg("Saving design..."));
+        }
+    }, [engine, dispatch]);
+
     useEffect(() => {
         if (filteredTraces && filteredTraces.length > 0) {
             dispatch(setSelectedTraceIdThunk(filteredTraces[0].uid));
@@ -50,20 +59,19 @@ export function DebuggingToolBar () {
         }
     }, [selectedTrace, dispatch]);
     return (
-        // eslint-disable-next-line max-len
         <div className="debuggingToolBar">
             <div className="debuggingToolBarLeft">
-                <div className="debuggingToolBarGroup">
-                    <span className="debuggingToolBarLabel">Source:</span>
+                <span className="debuggingToolBarLabel">Debug:</span>
+                <span className="debuggingToolBarSelect" >
                     <select
                         value={traceType}
                         onChange={(e) => setTraceType(e.target.value)}>
                         <option key={"semantic"} value={"design"}>Semantic Model</option>
                         <option key={"implementation"} value={"implementation"}>Implementation</option>
                     </select>
-                </div>
-                <div className="debuggingToolBarGroup">
-                    <span className="debuggingToolBarLabel">Select Trace:</span>
+                </span>
+                <span className="debuggingToolBarLabel">Select Trace:</span>
+                <span className="debuggingToolBarSelect" >
                     <select
                         value={selectedTrace}
                         onChange={(e) => setSelectedTrace(e.target.value)}>
@@ -71,9 +79,16 @@ export function DebuggingToolBar () {
                             <option key={trace.uid} value={trace.uid}>{trace.timestamp}</option>
                         ))}
                     </select>
-                </div>
+                </span>
             </div>
-            <div className="debuggingToolBarRight"></div>
+            <div className="debuggingToolBarRight">
+                <span className="debuggingToolBarButton" onClick={saveDesign}>
+                    <Floppy
+                        size={14}
+                        style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
+                    <span>Save</span>
+                </span>
+            </div>
         </div>
     );
 }

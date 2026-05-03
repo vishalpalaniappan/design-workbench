@@ -31,11 +31,15 @@ function ScriptingEditor ({type, initial, isJson = true}) {
     const transformationTest = useSelectedTransformationTest();
 
     useEffect(() => {
-        if (ready && transformationTest) {
-            if (!(type in transformationTest) || !transformationTest[type]) {
-                editorRef.current.setValue("");
+        if (ready) {
+            if (transformationTest) {
+                if (!(type in transformationTest) || !transformationTest[type]) {
+                    editorRef.current.setValue("");
+                } else {
+                    editorRef.current.setValue(transformationTest[type]);
+                }
             } else {
-                editorRef.current.setValue(transformationTest[type]);
+                editorRef.current.setValue("");
             }
         }
     }, [transformationTest, initial, isJson, ready]);
