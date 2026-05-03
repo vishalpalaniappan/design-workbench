@@ -147,10 +147,10 @@
                 {
                     "type": "handleBar",
                     "sibling1": "designLayoutContainer",
-                    "sibling2": "rightMenuContainer"
+                    "sibling2": "ImplementationScriptContainer"
                 },
                 {
-                    "containerId": "rightMenuContainer",
+                    "containerId": "ImplementationScriptContainer",
                     "type": "container",
                     "size": { 
                         "initial": { "value": 270, "unit": "px", "type": "fixed" },
@@ -160,6 +160,11 @@
                     "collapse": { "value": 900, "condition": "lessThan", "relative": "parent" }
                 }
             ]
+        },
+        "ImplementationScriptContainer": {
+            "id": "ImplementationScriptContainer",
+            "component": "ImplementationBehaviorScriptViewer",
+            "background": "#007acc"
         },
         "footer": {
             "id": "footer",

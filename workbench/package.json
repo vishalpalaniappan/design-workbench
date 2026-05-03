@@ -44,7 +44,7 @@
     "react-redux": "^9.2.0",
     "react-router-dom": "^6.4.3",
     "react-use-websocket": "^4.13.0",
-    "sample-ui-component-library": "0.0.99-dev",
+    "sample-ui-component-library": "0.0.100-dev",
     "save": "^2.9.0",
     "stream-browserify": "^3.0.0",
     "ui-layout-manager-dev": "^0.0.38-dev",
