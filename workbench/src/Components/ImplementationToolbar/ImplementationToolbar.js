@@ -52,22 +52,23 @@ export function ImplementationToolbar () {
     return (
         <div className="mainToolBar">
             <div className="mainToolBarLeft">
-                <div className="mainToolBarGroup"></div>
-                <div className="mainToolBarGroup"></div>
-            </div>
-            <div className="mainToolBarRight">
+                <span className="mainToolBarLabel">Implementation:</span>
                 <span className="mainToolBarButton" onClick={runDesign}>
                     <Play
                         size={20}
+                        className="mainToolBarButton"
                         style={{"color": "white", "cursor": "pointer"}}/>
                     <span className="mainToolBarButton">Run Implementation</span>
                 </span>
+            </div>
+            <div className="mainToolBarRight">
 
                 <span className="mainToolBarButton" onClick={saveDesign}>
                     <Floppy
                         size={14}
+                        className="mainToolBarButton"
                         style={{"color": "white", "cursor": "pointer"}}/>
-                    <span className="mainToolBarButton">Save Design</span>
+                    <span className="mainToolBarButton">Save</span>
                 </span>
             </div>
         </div>

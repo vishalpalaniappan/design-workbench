@@ -50,6 +50,13 @@ $darkened-status-bar-color: #312435;
   border-radius: 4px;
 }
 
+.mainToolBarLabel {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+  padding: 3px;
+}
+
 .mainToolBarButton:hover {
   background-color: $darkened-status-bar-color;
 }
