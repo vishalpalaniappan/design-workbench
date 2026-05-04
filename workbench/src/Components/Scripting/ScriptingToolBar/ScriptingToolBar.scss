@@ -21,19 +21,32 @@ $darkened-status-bar-color: rgb(51, 16, 59);
   height:100%;
 }
 
-.scriptingToolBar > .scriptingToolBarLeft > select {
-  background-color: $status-bar-background-color;
-  color: white;
-  border: none;
+
+
+.scriptingToolBarSelect > select {
   font-size: 13px;
-  border:none;
-  height:100%;
-  padding-top:2px;
+  display:flex;
+  align-items:center;
+  cursor:pointer;
+  background-color: $darker-status-bar-color;
+  padding: 3px;
+  border-radius: 4px;
+  padding-right:10px;
+  min-height: 23px;
+  color:white;
 }
 
-.scriptingToolBar > .scriptingToolBarLeft > select:hover {
+.scriptingToolBarButton > select:hover {
   background-color: $darkened-status-bar-color;
 }
+
+.scriptingToolBarLabel {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+  padding: 3px;
+}
+
 
 .scriptingToolBar > .scriptingToolBarLeft >.scriptingToolBarLabel {
   font-size: 13px;

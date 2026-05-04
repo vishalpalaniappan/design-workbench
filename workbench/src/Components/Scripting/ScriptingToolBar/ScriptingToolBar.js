@@ -217,15 +217,17 @@ export function ScriptingToolBar () {
 
             </div>
             <div className="scriptingToolBarRight">
-                <span className="debuggingToolBarLabel">Select Environment:</span>
-                <span className="debuggingToolBarSelect" >
+                <span className="scriptingToolBarLabel">Select Environment:</span>
+                <span className="scriptingToolBarSelect" >
                     <select 
                         value={selectedTrace}
                         onChange={(e) => setSelectedTrace(e.target.value)}>
                         <option key={"none"} value={null}>None</option>
                         {
                             designTraces.map((trace) => (
-                                <option key={trace.uid} value={trace.uid}>{trace.timestamp}</option>
+                                <option key={trace.uid} value={trace.uid}>{
+                                    (trace?.name ? trace.name : trace.timestamp)
+                                }</option>
                             ))
                         }
                     </select>
