@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react";
 
 import PropTypes from "prop-types";
-import {Floppy} from "react-bootstrap-icons";
+import {Floppy, Pencil} from "react-bootstrap-icons";
 import {useDispatch} from "react-redux";
 
 import {useDalEngine} from "../../../Providers/GlobalProviders";
@@ -58,6 +58,12 @@ export function DebuggingToolBar () {
             dispatch(setSelectedTraceIdThunk(selectedTrace));
         }
     }, [selectedTrace, dispatch]);
+
+    const setTraceName = useCallback(() => {
+        if (engine && selectedTrace) {
+            const trace = traces[selectedTrace];
+        }
+    }, [engine, selectedTrace, traces]);
     return (
         <div className="debuggingToolBar">
             <div className="debuggingToolBarLeft">
@@ -67,7 +73,9 @@ export function DebuggingToolBar () {
                         value={traceType}
                         onChange={(e) => setTraceType(e.target.value)}>
                         <option key={"semantic"} value={"design"}>Semantic Model</option>
-                        <option key={"implementation"} value={"implementation"}>Implementation</option>
+                        <option key={"implementation"} value={"implementation"}>
+                            Implementation
+                        </option>
                     </select>
                 </span>
                 <span className="debuggingToolBarLabel">Select Trace:</span>
@@ -82,6 +90,12 @@ export function DebuggingToolBar () {
                 </span>
             </div>
             <div className="debuggingToolBarRight">
+                <span className="debuggingToolBarButton" onClick={setTraceName}>
+                    <Pencil
+                        size={14}
+                        style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
+                    <span>Set Trace Name</span>
+                </span>
                 <span className="debuggingToolBarButton" onClick={saveDesign}>
                     <Floppy
                         size={14}
