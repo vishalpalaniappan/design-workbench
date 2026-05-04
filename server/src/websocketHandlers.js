@@ -6,6 +6,7 @@ import loadDesign from "./design-file-utils/loadDesign.js";
 import saveDesign from "./design-file-utils/saveDesign.js";
 import {saveTraceInEngine} from "./design-file-utils/saveTraceInEngine.js";
 import {clearTraceFilesInPlayground} from "./design-file-utils/saveTraceInEngine.js";
+import loadTraceInPlayground from "./design-file-utils/loadTraceInPlayground.js";
 import { unpack, pack } from 'msgpackr';
 
 export class  WSMessageHandler {
@@ -215,8 +216,14 @@ export class  WSMessageHandler {
 
         let cmd = `node ../tools/design-runtime/src/index.js`;
         if (msg.payload.designName) cmd = cmd + ` ../workspace/${msg.payload.designName}`;    
-        if (msg.payload.selectedTrace) cmd = cmd + ` ${msg.payload.selectedTrace}`;    
+        if (msg.payload.selectedTrace) cmd = cmd + ` ${msg.payload.selectedTrace}`;   
+
         await clearTraceFilesInPlayground();
+
+        if (msg.payload.selectedTrace) {
+            await loadTraceInPlayground(msg.payload.designName, msg.payload.selectedTrace);
+        }
+
         this.stopTerminalAndRemoveListeners();
         this.terminal = new TerminalSession({ command: cmd });
         this.terminal.on("data", this.onTerminalData);
