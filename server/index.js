@@ -30,7 +30,8 @@ server.listen(PORT);
 
 //Create a new websocket server on the same port as the http connection
 const wsServer = new WebSocketServer({
-    httpServer: server
+    httpServer: server,
+    maxPayload: 10 * 1024 * 1024 // 10 MB
 });
 
 wsServer.on('request', function(request) {

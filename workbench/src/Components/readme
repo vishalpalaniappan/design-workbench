@@ -22,5 +22,3 @@ As I continued to build out the features, the code structure started to get disj
 Essentially, since I established these three modes, I haven't taken the time to make changes to the code structure to reflect these changes. SO I am leaving a note here for myself to fix it and to be consistent with my naming for the design, implementation and debugging modes.
 
 Luckily, none of these changes are very difficult and once I dedicate a day to this, I will be able to move it forward cleanly.
-
-Note: One note I wanted to make was, when I save a design file that has a lot of traces, the websocket message becomes too large and causes an error. In the future I will have intelligent saving mechanisms where only the modified data will be sent to the server to be saved. Right now I send the whole file, I can either limit the number of active traces to a fixed amount or I can send a multi part message through the websocket. However, this isn't priority because it doesn't affect functionality, I will address it soon when it becomes more of a concern.
