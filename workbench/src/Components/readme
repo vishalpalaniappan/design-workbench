@@ -6,6 +6,12 @@ As I continued to build out the features, the code structure started to get disj
 - I need to separate the stores into slices in a cleaner way
     - Right now when I select the behavior in the behavioral control graph in the design mode, it is using the thunk in the root store. Then when I deselect a behavior in design mode, I am manually clearing the transform output log, the primitive etc (because no active behavior is present). If I create a separate selector for the design mode, I can cleanly manage the state in the design thunk and simplify my life. 
 
+- Update the debugging UI to highlight the difference with execution versus design debugging interfaces
+    - I am using the same user interface for the implementation debugging and the design debugging, this is not correct.
+    - The design trace's observed environment is just what the engine calcluated, I am essentially recalculating and verifying that the output is the same (which it always will be)
+    - There is nothign inherently wrong with this, its just misleading to the end user, so I will make that clear.
+    - The UI's themselves will evolve soon.
+
 - I need to clean up the participant and invariant components.
     - I've fully moved away from the participants and the invariant components in favour of the scripting language. So I need to remove those.
 

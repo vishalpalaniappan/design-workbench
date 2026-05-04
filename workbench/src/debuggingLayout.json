@@ -306,7 +306,7 @@
             "component": "DebuggerBehaviorExpectedPostWorldState",
             "menuBar": {
                 "showClose": false,
-                "title": "Implementation Post Transform World"
+                "title": "Observed Post Transform World"
             },
             "background": "#222222"
         },
