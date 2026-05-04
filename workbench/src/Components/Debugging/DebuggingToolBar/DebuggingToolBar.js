@@ -3,10 +3,12 @@ import React, {useCallback, useEffect, useState} from "react";
 import PropTypes from "prop-types";
 import {Floppy, Pencil} from "react-bootstrap-icons";
 import {useDispatch} from "react-redux";
+import {useModalManager} from "ui-layout-manager-dev";
 
 import {useDalEngine} from "../../../Providers/GlobalProviders";
 import {setSelectedTraceIdThunk} from "../../../Store/appThunk";
 import {useTraces} from "../../../Store/useAppSelection";
+import {AddTraceName} from "../../Modals/AddTraceName";
 
 import "./DebuggingToolBar.scss";
 
@@ -21,6 +23,7 @@ DebuggingToolBar.propTypes = {
  */
 export function DebuggingToolBar () {
     const {engine} = useDalEngine();
+    const {openModal} = useModalManager();
     const dispatch = useDispatch();
     const traces = useTraces();
     const [selectedTrace, setSelectedTrace] = useState(null);
@@ -47,6 +50,7 @@ export function DebuggingToolBar () {
     useEffect(() => {
         if (filteredTraces && filteredTraces.length > 0) {
             dispatch(setSelectedTraceIdThunk(filteredTraces[0].uid));
+            setSelectedTrace(filteredTraces[0].uid);
         } else {
             dispatch(setSelectedTraceIdThunk(null));
         }
@@ -60,10 +64,19 @@ export function DebuggingToolBar () {
     }, [selectedTrace, dispatch]);
 
     const setTraceName = useCallback(() => {
-        if (engine && selectedTrace) {
-            const trace = traces[selectedTrace];
+        if (selectedTrace) {
+            openModal({
+                title: "Set Trace Name",
+                args: {
+                    trace: selectedTrace,
+                },
+                render: ({close, args}) => {
+                    return <AddTraceName close={close} args={args} />;
+                },
+            });
         }
-    }, [engine, selectedTrace, traces]);
+    }, [selectedTrace, traces, openModal]);
+
     return (
         <div className="debuggingToolBar">
             <div className="debuggingToolBarLeft">
