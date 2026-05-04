@@ -40,14 +40,21 @@ export function ImplementationToolbar () {
             if (hasEntryPoint) {
                 sendMessage({
                     type: "terminal_run_entry_point",
-                    data: engine.implementation.getEntryPoint(),
-                    selectedTrace: selectedTrace,
+                    payload: {
+                        entryPoint: engine.implementation.getEntryPoint(),
+                        designName: engine._name,
+                        selectedTrace: selectedTrace,
+                    },
                 });
             } else {
                 const failureMsg = "Failed to run design. Please ensure an entry point is set.";
                 sendMessage({
                     type: "terminal_run_entry_point",
-                    data: `echo "${failureMsg}"`,
+                    payload: {
+                        data: `echo "${failureMsg}"`,
+                        designName: engine._name,
+                        selectedTrace: selectedTrace,
+                    },
                 });
             }
         }

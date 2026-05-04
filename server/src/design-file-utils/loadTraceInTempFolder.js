@@ -4,7 +4,7 @@ import { clearPlaygroundFolder } from "./initFolders.js";
 import {DALEngine} from "dal-engine-core-js-lib-dev";
 import fs from 'fs/promises';
 
-async function loadTraceInPlayground(designName, traceUid) {
+async function loadTraceInTempFolder(designName, traceUid) {
     const filePath = resolveDesignPath(designName);
     const data = await fs.readFile(filePath);
 
@@ -25,4 +25,4 @@ async function loadTraceInPlayground(designName, traceUid) {
 }
 
 
-export default loadTraceInPlayground;
+export default loadTraceInTempFolder;

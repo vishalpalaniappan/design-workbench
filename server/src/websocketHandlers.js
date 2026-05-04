@@ -6,7 +6,7 @@ import loadDesign from "./design-file-utils/loadDesign.js";
 import saveDesign from "./design-file-utils/saveDesign.js";
 import {saveTraceInEngine} from "./design-file-utils/saveTraceInEngine.js";
 import {clearTraceFilesInPlayground} from "./design-file-utils/saveTraceInEngine.js";
-import loadTraceInPlayground from "./design-file-utils/loadTraceInPlayground.js";
+import loadTraceInTempFolder from "./design-file-utils/loadTraceInTempFolder.js";
 import { unpack, pack } from 'msgpackr';
 
 export class  WSMessageHandler {
@@ -184,9 +184,29 @@ export class  WSMessageHandler {
     onTerminalRunEntryPoint = async (msg) => {        
         this.entryPointFinishedSent = false;
 
+        /**
+         * Entry point ex: python3 sample.py
+         * I parse this to remove the python3 and only keep the file and its args (if any)
+         * This works with current implementation but it does assume this syntax, so if stops
+         * working then we should consider this and potentially make it more robust.
+         * 
+         * Executor is hardcoded for python, so I can also parse this entry point to pass
+         * python3 and the file + args separately, extending this to support more languages.
+         */
+        const fileCmd = msg.entryPoint.split(" ")[1];
+
+        let cmd = `node ../tools/design-runtime/src/implementationExecutor.js`;
+        if (msg.payload.designName) cmd = cmd + ` ${fileCmd}`;    
+        if (msg.payload.selectedTrace) cmd = cmd + ` ../temp/${msg.payload.selectedTrace}`;
+
         await clearTraceFilesInPlayground();
+
+        if (msg.payload.selectedTrace && msg.payload.selectedTrace !== "None") {
+            await loadTraceInTempFolder(msg.payload.designName, msg.payload.selectedTrace);
+        }
+
         this.stopTerminalAndRemoveListeners();
-        this.terminal = new TerminalSession({ command: msg.data });
+        this.terminal = new TerminalSession({ command: cmd });
         this.terminal.on("data", this.onTerminalData);
         this.terminal.on("exit", this.handleEntryPointFinished);
         this.terminal.on("start", this.onTerminalStart);
@@ -221,7 +241,7 @@ export class  WSMessageHandler {
         await clearTraceFilesInPlayground();
 
         if (msg.payload.selectedTrace && msg.payload.selectedTrace !== "None") {
-            await loadTraceInPlayground(msg.payload.designName, msg.payload.selectedTrace);
+            await loadTraceInTempFolder(msg.payload.designName, msg.payload.selectedTrace);
         }
 
         this.stopTerminalAndRemoveListeners();
