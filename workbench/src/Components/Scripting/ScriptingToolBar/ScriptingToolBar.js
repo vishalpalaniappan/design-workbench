@@ -205,6 +205,14 @@ export function ScriptingToolBar () {
 
             </div>
             <div className="scriptingToolBarRight">
+                <span className="debuggingToolBarLabel">Select Environment:</span>
+                <span className="debuggingToolBarSelect" >
+                    <select>
+                        <option key={"1"} value={"1"}>None</option>
+                        <option key={"1"} value={"1"}>trace.clp.zst</option>
+                        <option key={"2"} value={"2"}>trace2.clp.zst</option>
+                    </select>
+                </span>
                 <span className="scriptingToolBarButton" onClick={runDesign}>
                     <Play
                         size={20}
