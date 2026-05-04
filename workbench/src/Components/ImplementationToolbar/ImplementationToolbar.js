@@ -41,6 +41,7 @@ export function ImplementationToolbar () {
                 sendMessage({
                     type: "terminal_run_entry_point",
                     data: engine.implementation.getEntryPoint(),
+                    selectedTrace: selectedTrace,
                 });
             } else {
                 const failureMsg = "Failed to run design. Please ensure an entry point is set.";
@@ -50,7 +51,7 @@ export function ImplementationToolbar () {
                 });
             }
         }
-    }, [sendMessage, hasEntryPoint, engine]);
+    }, [sendMessage, hasEntryPoint, engine, selectedTrace]);
 
     return (
         <div className="mainToolBar">
