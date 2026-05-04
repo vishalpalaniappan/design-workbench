@@ -155,23 +155,28 @@ export function DebuggingToolBar () {
                 }
             </div>
             <div className="debuggingToolBarRight">
-                <span className="debuggingToolBarButton" onClick={setTraceName}>
-                    <Pencil
-                        size={14}
+                <span className="debuggingToolBarButton"
+                    onClick={setTraceName}
+                    style={{"padding": "3px"}}
+                    title="Set Trace Name">
+                    <Pencil size={14}
                         style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
-                    <span>Set Trace Name</span>
                 </span>
-                <span className="debuggingToolBarButton" onClick={openTraceInEditor}>
+                <span className="debuggingToolBarButton"
+                    onClick={openTraceInEditor}
+                    style={{"padding": "3px"}}
+                    title="View Raw Trace">
                     <Eye
                         size={14}
                         style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
-                    <span>View Raw Trace</span>
                 </span>
-                <span className="debuggingToolBarButton" onClick={deleteTrace}>
+                <span className="debuggingToolBarButton"
+                    onClick={deleteTrace}
+                    style={{"padding": "3px"}}
+                    title="Delete Trace">
                     <Trash
                         size={14}
                         style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
-                    <span>Delete Trace</span>
                 </span>
                 <span className="debuggingToolBarButton" onClick={saveDesign}>
                     <Floppy
