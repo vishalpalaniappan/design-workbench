@@ -16,7 +16,11 @@ async function loadTraceInPlayground(designName, traceUid) {
     engine.deserialize(data);
 
     const trace = engine.traces.getTrace(traceUid);
-    const traceFilePath = path.join(process.cwd(), "playground", traceUid);
+
+    const tempDir = path.join(process.cwd(), "temp");
+    await fs.mkdir(tempDir, { recursive: true });
+
+    const traceFilePath = path.join(tempDir, traceUid);
     await fs.writeFile(traceFilePath, trace.trace);
 }
 
