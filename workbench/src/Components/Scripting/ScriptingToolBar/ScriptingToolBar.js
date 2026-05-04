@@ -194,7 +194,7 @@ export function ScriptingToolBar () {
     }, []);
 
     const runDesign = useCallback(() => {
-        // Implement logic to run the entire design here.
+        // Send design to server with the selected trace (if any)
         sendMessage({
             type: "terminal_run_design",
             payload: {
