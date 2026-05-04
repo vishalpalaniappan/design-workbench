@@ -193,7 +193,7 @@ export class  WSMessageHandler {
          * Executor is hardcoded for python, so I can also parse this entry point to pass
          * python3 and the file + args separately, extending this to support more languages.
          */
-        const fileCmd = msg.entryPoint.split(" ")[1];
+        const fileCmd = msg.payload.entryPoint.split(" ")[1];
 
         let cmd = `node ../tools/design-runtime/src/implementationExecutor.js`;
         if (msg.payload.designName) cmd = cmd + ` ${fileCmd}`;    
