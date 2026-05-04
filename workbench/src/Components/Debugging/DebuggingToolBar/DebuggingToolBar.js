@@ -136,18 +136,23 @@ export function DebuggingToolBar () {
                         </option>
                     </select>
                 </span>
-                <span className="debuggingToolBarLabel">Select Trace:</span>
-                <span className="debuggingToolBarSelect" >
-                    <select
-                        value={selectedTrace}
-                        onChange={(e) => setSelectedTrace(e.target.value)}>
-                        {filteredTraces.map((trace) => (
-                            <option key={trace.uid} value={trace.uid}>{
-                                (trace?.name ? trace.name : trace.timestamp)
-                            }</option>
-                        ))}
-                    </select>
-                </span>
+                {(filteredTraces && filteredTraces.length > 0) ?
+                    <>
+                        <span className="debuggingToolBarLabel">Select Trace:</span>
+                        <span className="debuggingToolBarSelect" >
+                            <select
+                                value={selectedTrace}
+                                onChange={(e) => setSelectedTrace(e.target.value)}>
+                                {filteredTraces.map((trace) => (
+                                    <option key={trace.uid} value={trace.uid}>{
+                                        (trace?.name ? trace.name : trace.timestamp)
+                                    }</option>
+                                ))}
+                            </select>
+                        </span>
+                    </>:
+                    <span className="debuggingToolBarLabel">No Traces Available</span>
+                }
             </div>
             <div className="debuggingToolBarRight">
                 <span className="debuggingToolBarButton" onClick={setTraceName}>
