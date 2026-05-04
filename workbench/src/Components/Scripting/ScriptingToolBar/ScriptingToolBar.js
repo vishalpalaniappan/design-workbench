@@ -14,6 +14,7 @@ import {setTransformOutputLog} from "../../../Store/scriptingSlice/scriptingSlic
 import {useScriptingBehaviors} from "../../../Store/scriptingSlice/useScriptingSelection";
 import {useSelectedTransformationTest} from "../../../Store/scriptingSlice/useScriptingSelection";
 import {useSelectedBehavior} from "../../../Store/useAppSelection";
+import {useTraces} from "../../../Store/useAppSelection";
 
 import "./ScriptingToolBar.scss";
 
@@ -28,14 +29,26 @@ ScriptingToolBar.propTypes = {
  */
 export function ScriptingToolBar () {
     const behavior = useSelectedBehavior();
+    const traces = useTraces();
     const {sendMessage} = useServer();
     const {engine} = useDalEngine();
     const dispatch = useDispatch();
     const workerRef = useRef(null);
-    const [result, setResult] = useState(null);
     const {behaviors} = useScriptingBehaviors();
     const [selectedBehavior, setSelectedBehavior] = useState(null);
     const selectedTransformationTest = useSelectedTransformationTest();
+    const [designTraces, setDesignTraces] = useState([]);
+    const [selectedTrace, setSelectedTrace] = useState(null);
+
+    useEffect(() => {
+        // Load the design traces into the dropdown
+        if (traces) {
+            const filtered = Object.values(traces).filter(
+                (trace) => trace.type === "design"
+            );
+            setDesignTraces(filtered);
+        }
+    }, [traces]);
 
     const saveDesign = useCallback(() => {
         if (engine) {
@@ -165,7 +178,6 @@ export function ScriptingToolBar () {
         );
 
         workerRef.current.onmessage = (event) => {
-            setResult(event.data);
             if (event.data.type === "Success") {
                 addLog("Transformation succeeded. See output state for details.");
                 dispatch(setTransformOutput(event.data.payload.output));
@@ -207,10 +219,15 @@ export function ScriptingToolBar () {
             <div className="scriptingToolBarRight">
                 <span className="debuggingToolBarLabel">Select Environment:</span>
                 <span className="debuggingToolBarSelect" >
-                    <select>
-                        <option key={"1"} value={"1"}>None</option>
-                        <option key={"1"} value={"1"}>trace.clp.zst</option>
-                        <option key={"2"} value={"2"}>trace2.clp.zst</option>
+                    <select 
+                        value={selectedTrace}
+                        onChange={(e) => setSelectedTrace(e.target.value)}>
+                        <option key={"none"} value={null}>None</option>
+                        {
+                            designTraces.map((trace) => (
+                                <option key={trace.uid} value={trace.uid}>{trace.timestamp}</option>
+                            ))
+                        }
                     </select>
                 </span>
                 <span className="scriptingToolBarButton" onClick={runDesign}>
