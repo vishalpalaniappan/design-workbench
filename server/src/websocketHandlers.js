@@ -212,8 +212,10 @@ export class  WSMessageHandler {
 
     onTerminalRunDesign = async (msg) => {     
         this.designExecutionFinishedSent = false;
-        
-        const cmd = `node ../tools/design-runtime/src/index.js ../workspace/${msg.payload.designName}`;
+
+        let cmd = `node ../tools/design-runtime/src/index.js`;
+        if (msg.payload.designName) cmd = cmd + ` ../workspace/${msg.payload.designName}`;    
+        if (msg.payload.selectedTrace) cmd = cmd + ` ${msg.payload.selectedTrace}`;    
         await clearTraceFilesInPlayground();
         this.stopTerminalAndRemoveListeners();
         this.terminal = new TerminalSession({ command: cmd });
