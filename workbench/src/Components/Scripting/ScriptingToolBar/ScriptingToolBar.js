@@ -199,9 +199,10 @@ export function ScriptingToolBar () {
             type: "terminal_run_design",
             payload: {
                 designName: engine._name,
+                selectedTrace: selectedTrace,
             },
         });
-    }, [sendMessage]);
+    }, [sendMessage, selectedTrace]);
 
     return (
         // eslint-disable-next-line max-len
