@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import React, {useCallback} from "react";
+import React, {useCallback, useState} from "react";
 
 import PropTypes from "prop-types";
 import {Floppy, Play} from "react-bootstrap-icons";
@@ -9,6 +9,7 @@ import {useDalEngine} from "../../Providers/GlobalProviders";
 import {useServer} from "../../Providers/GlobalProviders";
 import {setStatusMsg} from "../../Store/appSlice";
 import {useHasEntryPoint} from "../../Store/useAppSelection";
+import {useTraces} from "../../Store/useAppSelection";
 
 import "./ImplementationToolbar.scss";
 
@@ -24,6 +25,8 @@ export function ImplementationToolbar () {
     const {engine} = useDalEngine();
     const {sendMessage} = useServer();
     const hasEntryPoint = useHasEntryPoint();
+    const traces = useTraces();
+    const [selectedTrace, setSelectedTrace] = useState(null);
 
     const saveDesign = useCallback(() => {
         if (engine) {
@@ -52,7 +55,24 @@ export function ImplementationToolbar () {
     return (
         <div className="mainToolBar">
             <div className="mainToolBarLeft">
-                <span className="mainToolBarLabel">Implementation:</span>
+                <span className="mainToolBarLabel">Implementation</span>
+            </div>
+            <div className="mainToolBarRight">
+                <span className="mainToolBarLabel">Select Environment:</span>
+                <span className="mainToolBarSelect" >
+                    <select
+                        value={selectedTrace}
+                        onChange={(e) => setSelectedTrace(e.target.value)}>
+                        <option key={"none"} value={null}>None</option>
+                        {
+                            traces && Object.values(traces).map((trace) => (
+                                <option key={trace.uid} value={trace.uid}>{
+                                    (trace?.name ? trace.name : trace.timestamp)
+                                }</option>
+                            ))
+                        }
+                    </select>
+                </span>
                 <span className="mainToolBarButton" onClick={runDesign}>
                     <Play
                         size={20}
@@ -60,8 +80,6 @@ export function ImplementationToolbar () {
                         style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
                     <span >Run Implementation</span>
                 </span>
-            </div>
-            <div className="mainToolBarRight">
 
                 <span className="mainToolBarButton" onClick={saveDesign}>
                     <Floppy

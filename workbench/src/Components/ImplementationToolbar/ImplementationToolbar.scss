@@ -21,25 +21,32 @@ $darkened-status-bar-color: #0d202c;
   height:100%;
 }
 
-.mainToolBar > .mainToolBarLeft > select {
-  background-color: $status-bar-background-color;
-  color: white;
-  border: none;
-  font-size: 13px;
-  border:none;
-  height:100%;
-  padding-top:2px;
-}
 
-.mainToolBar > .mainToolBarLeft > select:hover {
-  background-color: $darkened-status-bar-color;
-}
 
-.mainToolBar > .mainToolBarLeft >.mainToolBarLabel {
+.mainToolBarSelect > select {
   font-size: 13px;
   display:flex;
   align-items:center;
+  cursor:pointer;
+  background-color: $darker-status-bar-color;
+  padding: 3px;
+  border-radius: 4px;
+  padding-right:10px;
+  min-height: 23px;
+  color:white;
 }
+
+.mainToolBarSelect > select:hover {
+  background-color: $darkened-status-bar-color;
+}
+
+.mainToolBarLabel {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+  padding: 3px;
+}
+
 .mainToolBarButton {
   font-size: 13px;
   display:flex;

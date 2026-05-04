@@ -29,26 +29,17 @@ ScriptingToolBar.propTypes = {
  */
 export function ScriptingToolBar () {
     const behavior = useSelectedBehavior();
-    const traces = useTraces();
-    const {sendMessage} = useServer();
-    const {engine} = useDalEngine();
     const dispatch = useDispatch();
-    const workerRef = useRef(null);
-    const {behaviors} = useScriptingBehaviors();
-    const [selectedBehavior, setSelectedBehavior] = useState(null);
     const selectedTransformationTest = useSelectedTransformationTest();
-    const [designTraces, setDesignTraces] = useState([]);
-    const [selectedTrace, setSelectedTrace] = useState(null);
+    const traces = useTraces();
+    const workerRef = useRef(null);
 
-    useEffect(() => {
-        // Load the design traces into the dropdown
-        if (traces) {
-            const filtered = Object.values(traces).filter(
-                (trace) => trace.type === "design"
-            );
-            setDesignTraces(filtered);
-        }
-    }, [traces]);
+    const {behaviors} = useScriptingBehaviors();
+    const {engine} = useDalEngine();
+    const {sendMessage} = useServer();
+
+    const [selectedBehavior, setSelectedBehavior] = useState(null);
+    const [selectedTrace, setSelectedTrace] = useState(null);
 
     const saveDesign = useCallback(() => {
         if (engine) {
@@ -225,7 +216,7 @@ export function ScriptingToolBar () {
                         onChange={(e) => setSelectedTrace(e.target.value)}>
                         <option key={"none"} value={null}>None</option>
                         {
-                            designTraces.map((trace) => (
+                            traces && Object.values(traces).map((trace) => (
                                 <option key={trace.uid} value={trace.uid}>{
                                     (trace?.name ? trace.name : trace.timestamp)
                                 }</option>
