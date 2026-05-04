@@ -56,6 +56,7 @@ export function AddTraceName ({close, args}) {
                 if (trace) {
                     trace.name = normalizedTraceName;
                 }
+                engine.save();
             }
             close();
         } catch (err) {

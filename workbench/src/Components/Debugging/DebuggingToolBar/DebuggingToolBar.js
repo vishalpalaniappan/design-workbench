@@ -97,7 +97,9 @@ export function DebuggingToolBar () {
                         value={selectedTrace}
                         onChange={(e) => setSelectedTrace(e.target.value)}>
                         {filteredTraces.map((trace) => (
-                            <option key={trace.uid} value={trace.uid}>{trace.timestamp}</option>
+                            <option key={trace.uid} value={trace.uid}>{
+                                (trace?.name ? trace.name : trace.timestamp)
+                            }</option>
                         ))}
                     </select>
                 </span>
