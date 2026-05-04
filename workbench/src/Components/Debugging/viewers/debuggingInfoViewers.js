@@ -84,9 +84,9 @@ function DebuggingInfoViewer ({type, isJson = true}) {
                 editorRef.current.setValue(b ? b._script : "");
             } else {
                 // For other types, we look into the processed trace entry.
-                const entry = computedResult[ind.atomicIndex][ind.entryIndex].input;
-                if (entry && type in entry) {
-                    const value = entry[type];
+                const entry = computedResult[ind.atomicIndex][ind.entryIndex];
+                if (entry && "input" in entry && type in entry.input) {
+                    const value = entry.input[type];
                     editorRef.current.setValue(
                         isJson ? JSON.stringify(value, null, 2) : String(value)
                     );
