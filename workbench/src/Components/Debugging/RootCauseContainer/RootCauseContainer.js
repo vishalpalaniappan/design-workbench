@@ -26,7 +26,6 @@ export function RootCauseContainer () {
     const traces = useTraces();
 
     const selectBehavior = (behavior) => {
-        console.log("Selected behavior:", behavior);
         dispatch(setSelectedTraceEntryIndexThunk({
             atomicIndex: Number(behavior.index.atomicIndex),
             entryIndex: Number(behavior.index.entryIndex),
@@ -46,6 +45,8 @@ export function RootCauseContainer () {
                 const failures = trace.debugger._failures;
                 setFailures(failures);
             }
+        } else {
+            setFailures([]);
         }
     }, [selectedTraceId, traces]);
 
