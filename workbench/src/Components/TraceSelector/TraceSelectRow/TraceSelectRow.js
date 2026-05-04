@@ -30,7 +30,9 @@ export function TraceSelectRow ({trace}) {
     const {openModal} = useModalManager();
 
     useEffect(() => {
-        if (trace?.timestamp) {
+        if (trace?.name) {
+            setDateRendered(trace.name);
+        } else if (trace?.timestamp) {
             const date = new Date(trace.timestamp);
             const formatted = date.getFullYear() + "-" +
                 String(date.getMonth() + 1).padStart(2, "0") + "-" +
