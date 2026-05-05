@@ -39,7 +39,7 @@ export function TraceBehaviorSelector () {
                 console.warn(`Trace with id ${selectedTraceId} not found or has no executableModelOutput`);
                 return;
             };
-            if (!trace?.debugger._executableSemanticModelOutputs) {
+            if (!trace?.debugger?._executableSemanticModelOutputs) {
                 console.warn("The executable model outputs were not found in the debugger");
                 return;
             };
