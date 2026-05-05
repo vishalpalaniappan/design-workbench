@@ -385,6 +385,7 @@ export const addTraceThunk = (trace) => (dispatch, getState, {engine}) => {
  * @return {Function} Thunk function.
  */
 export const deleteTraceThunk = (traceId) => (dispatch, getState, {engine}) => {
+    dispatch(setSelectedTraceId(null));
     engine.traces.deleteTrace(traceId);
     dispatch(incrementCounter());
     engine.save();
@@ -392,7 +393,7 @@ export const deleteTraceThunk = (traceId) => (dispatch, getState, {engine}) => {
 
 /**
  * Adds a failure prediction to the selected invariant.
- * @param {Object} predcitedBehavior Behavior object that will fail.
+ * @param {Object} predictedBehavior Behavior object that will fail
  * @param {String} description Description of the prediction.
  * @return {Function} Thunk function.
  */
