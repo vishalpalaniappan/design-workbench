@@ -37,6 +37,7 @@ function DebuggingInfoViewer ({type, isJson = true}) {
                 editorRef.current.setValue("");
                 return;
             }
+
             // If no trace entry is selected, then we also clear the viewer.
             if (selectedTraceEntryIndex === null || selectedTraceEntryIndex === undefined) {
                 editorRef.current.setValue("");
@@ -44,13 +45,23 @@ function DebuggingInfoViewer ({type, isJson = true}) {
             }
 
             const ind = selectedTraceEntryIndex;
+            // Invalid index, clear the viewer and return.
+            if (ind === null || ind.atomicIndex === undefined || ind.entryIndex === undefined) {
+                console.warn("Invalid trace entry index.");
+                editorRef.current.setValue("");
+                return;
+            }
+
             const trace = Object.values(traces).find((t) => t.uid === selectedTraceId);
+            // If the trace is not found, we clear the viewer and return.
             if (!trace) {
                 console.warn(`Trace with id ${selectedTraceId} not found`);
+                editorRef.current.setValue("");
                 return;
             };
 
-            if (!trace?.debugger?._executableSemanticModelOutputs) {
+            // If the trace doesn't have results, clear the viewer and return.
+            if (!trace?.computedResults) {
                 // eslint-disable-next-line max-len
                 console.warn("The result of the semantic validator used to populate the UI was not found in the debugger");
                 editorRef.current.setValue("");
@@ -64,6 +75,7 @@ function DebuggingInfoViewer ({type, isJson = true}) {
             if (type === "transformOutput") {
                 // Transformation output is saved in the executableModelOutput
                 // in the validation step of the transform section.
+                console.log(computedResult, ind);
                 const entry = computedResult[ind.atomicIndex][ind.entryIndex];
                 if ("transform" in entry.output) {
                     const validate = entry.output.transform.find((v) => v.type === "validate");
