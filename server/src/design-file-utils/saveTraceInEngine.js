@@ -90,6 +90,23 @@ async function saveTraceInEngine(type) {
         type: type
     };
 
+    try {
+        const engine = new DALEngine({
+            name: designName,
+            description: "Default engine",
+        });
+
+        const engineData = await fs.readFile(designPath);
+        const decompressedLogs = await loadTrace(new Uint8Array(traceData));
+        engine.deserialize(engineData);
+        engine.traces.addTrace(traceEntry,true, decompressedLogs);
+        console.log("Trace saved successfully in engine.");
+        return engine.traces.getTrace(traceEntry.uid);
+    } catch (err) {
+        console.error("Error saving trace in engine:", err);
+        return;
+    }
+
     return traceEntry;
 }
 
