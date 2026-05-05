@@ -134,10 +134,11 @@ export class  WSMessageHandler {
     }
 
     saveEngine = async (msg) => {
+        console.log("Saving design part ", msg.payload.index + 1, " of ", msg.payload.total);
         if (msg.payload.index === 0) {
             this.receivedEngineData = new Uint8Array();
             this.receivedEngineData = this.concatUint8(this.receivedEngineData, msg.payload.data);
-            return;
+            if (msg.payload.total > 1) return;
         } else if (msg.payload.index === msg.payload.total - 1) {
             this.receivedEngineData = this.concatUint8(this.receivedEngineData, msg.payload.data);
         } else {
@@ -146,8 +147,10 @@ export class  WSMessageHandler {
         }
 
         try {
-            const serializedEngine = await saveDesign(msg.payload.fileName, this.receivedEngineData);
-            this.sendMessage({ type: "design_save_successful", data: serializedEngine });
+            // TODO: Files is a remenant of when I was parsing the python files to update the
+            // mapping after every save. This is not necessary anymore and I will remove it.
+            const files = await saveDesign(msg.payload.fileName, this.receivedEngineData);
+            this.sendMessage({ type: "design_save_successful", data: files });
         } catch (err) {
             this.sendMessage({ type: "design_save_failed" });
             this.sendMessage({ type: "error", data: err.message });
