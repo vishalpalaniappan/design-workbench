@@ -83,6 +83,21 @@ function GlobalProviders ({children}) {
             case "add_trace":
                 dispatch(addTraceThunk(msg.data));
                 dispatch(setStatusMsg("Received trace from server."));
+                /**
+                 * I am saving this version of the engine to the server
+                 * every time that I add a new trace to it. You can ask
+                 * why don't you just save the engine directly on the server
+                 * because you can add the trace to it there and that might
+                 * be valid but it creates two sources of truth and I don't
+                 * want that. Instead, I only save the engine from the client
+                 * side and the execution and trace generation pipeline is just
+                 * meant to get the data to the front end and its up to the
+                 * front end to save it. I am automatically saving it here.
+                 * I will optimize all of this in the future but this is a
+                 * process that will not cause any corruption in the data and
+                 * even though it is convoluted, I will keep it as a reliable
+                 * workflow while I establish the rest of the functionality.
+                 */
                 engine.save();
                 break;
             case "error":
@@ -137,6 +152,12 @@ function GlobalProviders ({children}) {
     const saveEngine = useCallback(() => {
         if (!engineRef.current || !design) return;
         const serialized = engineRef.current.serialize();
+
+        // Sending design in chunks because there is a frame size
+        // limit. This limit doesn't happen on the server side
+        // but either way, I am not thinking too much about this, I am
+        // more concerned with getting a reliable workflow that I can
+        // use to test the features (this can be optimized later).
         const CHUNK_SIZE = 32 * 1024;
         const chunks = chunkUint8Array(serialized, CHUNK_SIZE);
         for (let i = 0; i < chunks.length; i++) {
