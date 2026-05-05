@@ -1,0 +1,13 @@
+I am going to use the two library manager designs in this folder to demonstrate learning and testing in a basic way. 
+
+The real way to do it is to have invariants be assigned to a failed root cause analysis and then the trace becomes the authoritative world that check that the invariant is respected. However, I don't have versioning right now, so I will do a crude demonstration of it.
+
+In this demo I will:
+- Have a library manager design with a failed root cause analysis
+- Learn an invariant that this failure reveals
+- Show that the automated root cause analysis predicts this failure after learning it
+- Introduce behavioral changes to respect the invariant
+- Demonstrate that the environment which resulted in the failed root cause analysis can be used to test that the behavioral changes respect the invriant.
+- Demonstrate how this same environment can be used to test that the implementaiton respects the invariant.
+
+Once I do this and assemble it in blog post, I will work on actually implementing versioning and implementing the whole process as part of this framework. I actually want to create more primitives, invariants etc before I proceed but I just want to demonstrate learning and testing in some basic way before moving forward.
