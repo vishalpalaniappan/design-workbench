@@ -171,6 +171,18 @@ function GlobalProviders ({children}) {
         if (!engineRef.current || !design) return;
         const serialized = engineRef.current.serialize();
 
+        /**
+         * Also, just wanted to note that there is no reason for
+         * the trace data to be stored in the same file as the
+         * design. They can be part of the same package but accessed
+         * independently (the traces will be fully compressed).
+         *
+         * I am currently storing them together because it is easier for
+         * my current workflow but in the future, the design and trace
+         * being managed separately will be a better idea because it
+         * will optimize these processes (will think more about this later).
+         */
+
         // Sending design in chunks because there is a frame size
         // limit. This limit doesn't happen on the server side
         // but either way, I am not thinking too much about this, I am
