@@ -36,14 +36,14 @@ export function TraceBehaviorSelector () {
             setBehaviors([]);
             const trace = Object.values(traces).find((t) => t.uid === selectedTraceId);
             if (!trace) {
-                console.warn(`Trace with id ${selectedTraceId} not found or has no executableModelOutput`);
+                console.warn(`Trace with id ${selectedTraceId} not found or has no computedResults`);
                 return;
             };
-            if (!trace?.debugger?._executableSemanticModelOutputs) {
-                console.warn("The executable model outputs were not found in the debugger");
+            if (!trace?.computedResults) {
+                console.warn("The computed results were not found in the debugger");
                 return;
             };
-            const atomicBehavioralTraces = trace.debugger._executableSemanticModelOutputs;
+            const atomicBehavioralTraces = trace.computedResults;
             setBehaviors(atomicBehavioralTraces);
             dispatch(setSelectedTraceEntryIndexThunk({
                 atomicIndex: 0,

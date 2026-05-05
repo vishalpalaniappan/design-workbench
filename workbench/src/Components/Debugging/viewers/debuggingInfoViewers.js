@@ -59,7 +59,7 @@ function DebuggingInfoViewer ({type, isJson = true}) {
 
             // Result of the semantic validator used to populate the UI. It
             // contains both the inputs and the outputs.
-            const computedResult = trace.debugger._executableSemanticModelOutputs;
+            const computedResult = trace.computedResults;
 
             if (type === "transformOutput") {
                 // Transformation output is saved in the executableModelOutput

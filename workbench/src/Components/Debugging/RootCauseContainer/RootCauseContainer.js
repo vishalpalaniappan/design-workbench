@@ -41,8 +41,8 @@ export function RootCauseContainer () {
                 console.warn(`Trace with id ${selectedTraceId} not found`);
                 return;
             }
-            if (trace?.debugger?._failures) {
-                const failures = trace.debugger._failures;
+            if (trace?.failures) {
+                const failures = trace.failures;
                 setFailures(failures);
             }
         } else {
