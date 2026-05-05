@@ -122,9 +122,27 @@ function GlobalProviders ({children}) {
         termWriteRef.current = fn;
     };
 
+
+    /**
+     * Leaving this note here regarding the loadSavedDesign method below:
+     * - First, the statement index can be removed because we are no longer
+     * using it to do visual mapping.
+     * - Second, I am updating the content of the text file to reflect what
+     * the server sent back (the saved version). This then tells the editor
+     * that the file is saved and it can update the UI accordingly. Its a nice
+     * idea and it makes sure that the editor is always in sync with the server.
+     * However, then why don't I update the rest of the content in the same way?
+     * I modify behaviors as well and other content as well.
+     *
+     * So I think that what I will do is, when the server tells me that the
+     * design is saved, I will trust it and update the all the editors to
+     * indicate that the updated content is the saved content. This might be
+     * less accurate, but I will revisit this later as it doesn't affect the
+     * core functionality.
+     */
     // When a design is saved, the server sends back the updated content
     // and mapping of the saved files in the design, this function saves
-    // those changes to the engien instance.
+    // those changes to the engine instance.
     const loadSavedDesign = useCallback((files) => {
         if (!engineRef.current) return;
         files.forEach((file) => {

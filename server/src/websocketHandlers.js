@@ -147,8 +147,10 @@ export class  WSMessageHandler {
         }
 
         try {
-            // TODO: Files is a remenant of when I was parsing the python files to update the
-            // mapping after every save. This is not necessary anymore and I will remove it.
+            // TODO: See note in GlobalProviders.js, I will be removing the files from the ata
+            // because I am no longer generating mapsn if I am sending the updated files, I should
+            // send the rest as well. So I decided I would trust the server when it says it saved
+            // the file succesfully and mark the editors as saved in the front end.
             const files = await saveDesign(msg.payload.fileName, this.receivedEngineData);
             this.sendMessage({ type: "design_save_successful", data: files });
         } catch (err) {
