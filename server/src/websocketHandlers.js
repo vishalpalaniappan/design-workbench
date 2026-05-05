@@ -126,9 +126,27 @@ export class  WSMessageHandler {
         }
     }
 
+    concatUint8 = (a, b) => {
+        const result = new Uint8Array(a.length + b.length);
+        result.set(a, 0);
+        result.set(b, a.length);
+        return result;
+    }
+
     saveEngine = async (msg) => {
+        if (msg.payload.index === 0) {
+            this.receivedEngineData = new Uint8Array();
+            this.receivedEngineData = this.concatUint8(this.receivedEngineData, msg.payload.data);
+            return;
+        } else if (msg.payload.index === msg.payload.total - 1) {
+            this.receivedEngineData = this.concatUint8(this.receivedEngineData, msg.payload.data);
+        } else {
+            this.receivedEngineData = this.concatUint8(this.receivedEngineData, msg.payload.data);
+            return;
+        }
+
         try {
-            const serializedEngine = await saveDesign(msg.payload.fileName, msg.payload.data);
+            const serializedEngine = await saveDesign(msg.payload.fileName, this.receivedEngineData);
             this.sendMessage({ type: "design_save_successful", data: serializedEngine });
         } catch (err) {
             this.sendMessage({ type: "design_save_failed" });

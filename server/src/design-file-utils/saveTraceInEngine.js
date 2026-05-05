@@ -88,25 +88,7 @@ async function saveTraceInEngine(type) {
         uid: clpZstFiles[0].name,
         trace: traceData,
         type: type
-    }
-
-    try {
-        const engine = new DALEngine({
-            name: designName,
-            description: "Default engine",
-        });
-
-        const engineData = await fs.readFile(designPath);
-        const decompressedLogs = await loadTrace(new Uint8Array(traceData));
-        engine.deserialize(engineData);
-        engine.traces.addTrace(traceEntry,true, decompressedLogs);
-        await fs.writeFile(designPath, engine.serialize());
-        
-        console.log("Trace saved successfully in engine.");
-    } catch (err) {
-        console.error("Error saving trace in engine:", err);
-        return;
-    }
+    };
 
     return traceEntry;
 }

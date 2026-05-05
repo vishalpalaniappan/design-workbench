@@ -125,19 +125,32 @@ function GlobalProviders ({children}) {
         });
     }, [dispatch]);
 
+    const chunkUint8Array = (uint8, chunkSize) => {
+        const chunks = [];
+        for (let i = 0; i < uint8.length; i += chunkSize) {
+            chunks.push(uint8.subarray(i, i + chunkSize));
+        }
+        return chunks;
+    };
+
     // Called to save the engine to the server.
     const saveEngine = useCallback(() => {
         if (!engineRef.current || !design) return;
-        // TODO: I think the file name should be stored in the
-        // engine to avoid having to pass it around separately like this.
-        // It is available in the name of engineRef.current.
-        sendMessage({
-            type: "save_engine",
-            payload: {
-                fileName: design.fileName,
-                data: engineRef.current.serialize(),
-            },
-        });
+        const serialized = engineRef.current.serialize();
+        const CHUNK_SIZE = 32 * 1024;
+        const chunks = chunkUint8Array(serialized, CHUNK_SIZE);
+        for (let i = 0; i < chunks.length; i++) {
+            const chunk = chunks[i];
+            sendMessage({
+                type: "save_engine",
+                payload: {
+                    fileName: design.fileName,
+                    data: chunk,
+                    index: i,
+                    total: chunks.length,
+                },
+            });
+        }
     }, [sendMessage, design]);
 
     // When the workspace is first loaded, find the engine and deserialize it.
