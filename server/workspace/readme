@@ -1,23 +1,19 @@
 I am going to use the library manager designs in this folder to demonstrate learning and testing in a basic way. 
 
-The proper way to do this in this framework is to have invariants learned from failed root cause analysis and then the trace becomes the authoritative environment that checks that the invariant is respected. However, I don't have versioning right now, so I will do a crude demonstration of it by iterating on the design in multiple DAL files.
-
 In this demo I will:
-- Have a library manager design with a failed root cause analysis. 
-    - lib_man_no_invariant.dal
-- Have the library manager learn an invariant revealed by this failed root cause analysis 
-    - lib_man_learn_inv.dal
+- Library manager design with a failed root cause analysis:
+    - `lib_man_no_invariant.dal`
+- Library manager learns an invariant revealed by the failed root cause analysis:
+    - `lib_man_learn_inv.dal`
     - Demonstrate that the automated debugger can now automatically identify the root cause of this failure
-- Introduce behavioral changes to respect the invariant
+- Introduce behavioral changes to respect the invariant:
+    - `lib_man_behav_changes.dal`
     - Refining design to reject semantically invalid state
     - Demonstrate that environment which resulted in failed root cause analysis validates that the behavioral refinements results in the design respecting the invariant.
-- Demonstrate how this same environment can be used to test that the implementaiton respects the invariant.
-    - Since the implementation is claiming to realize the design, to respect the invariant, it must also demonstrate the same behavioral refinements.
-    - This will be a nice demonstration because it will demonstrate how the design validates the implementation and how the testing of the implementation will be fully automated.
+- Demonstrate how this same environment can be used to test that the implementaiton respects the invariant:
+    - `lib_man_behav_changes.dal`
+    - Since the implementation is claiming to realize the design, to respect the invariant, it must also demonstrate the same behavior.
 
-Once I do this and assemble it in blog post, I will work on actually implementing versioning and implementing the whole process as part of this framework. I actually want to create more primitives, invariants etc before I proceed but I just want to demonstrate learning and testing in some basic way before moving forward.
+I will assemble process outlined in these design files in a blog post to demonstrate learning and testing in a basic way before moving forward.
 
-
-As part of the process above, there are some steps I need to execute first:
-- I will modify the behavioral script so that the next behaviors are selected by the behavior script
-- I will modify the beahvioral script of the library manager design to reflect these changes
+Once versioning is implemented, this entire process will be contained within the design and the complete evolution of the software system can be played back deterministically.
