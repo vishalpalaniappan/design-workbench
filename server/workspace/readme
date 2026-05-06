@@ -21,7 +21,7 @@ Once I do this and assemble it in blog post, I will work on actually implementin
 Update:
 
 As part of the process above, there are some steps I need to execute first:
-- I will modify the behavioral script so that the next behaviors are selected by the behavioral semantics (instead of the clumsy way I am doing it now)
+- I will modify the behavioral script so that the next behaviors are selected by the behavior script
 - I will modify the beahvioral script of the library manager design to reflect these changes
 - I will implement the behavioral modifications in the implementation (python program) of the library manager
 - I will test the behavior of the implementation using the environment which caused the failed root cause analyis
