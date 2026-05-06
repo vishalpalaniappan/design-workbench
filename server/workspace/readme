@@ -1,4 +1,6 @@
-I am going to use the library manager designs in this folder to demonstrate learning and testing in a basic way. 
+## Learning and Testing Demo
+
+I am going to use the library manager designs in this folder to demonstrate learning and testing in a basic way. Once versioning is implemented, this entire process will be contained within the design and the complete evolution of the software system can be played back deterministically. While I work on developing that part of that framework, I will use this to demonstrate the process.
 
 In this demo I will:
 - Library manager design with a failed root cause analysis:
@@ -16,4 +18,4 @@ In this demo I will:
 
 I will assemble process outlined in these design files in a blog post to demonstrate learning and testing in a basic way before moving forward.
 
-Once versioning is implemented, this entire process will be contained within the design and the complete evolution of the software system can be played back deterministically.
+
