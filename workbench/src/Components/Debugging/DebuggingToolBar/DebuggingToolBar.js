@@ -61,7 +61,6 @@ export function DebuggingToolBar () {
 
     useEffect(() => {
         if (selectedTrace) {
-            console.log("Selected new trace:", selectedTrace);
             dispatch(setSelectedTraceIdThunk(selectedTrace));
         }
     }, [selectedTrace, dispatch]);

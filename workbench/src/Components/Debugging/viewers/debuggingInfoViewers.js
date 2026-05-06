@@ -32,15 +32,14 @@ function DebuggingInfoViewer ({type, isJson = true}) {
 
     useEffect(() => {
         if (ready && traces) {
+            editorRef.current.setValue("");
             // If there is no selected trace, we clear the viewer.
             if (selectedTraceId === null || selectedTraceId === undefined) {
-                editorRef.current.setValue("");
                 return;
             }
 
             // If no trace entry is selected, then we also clear the viewer.
             if (selectedTraceEntryIndex === null || selectedTraceEntryIndex === undefined) {
-                editorRef.current.setValue("");
                 return;
             }
 
@@ -48,7 +47,6 @@ function DebuggingInfoViewer ({type, isJson = true}) {
             // Invalid index, clear the viewer and return.
             if (ind === null || ind.atomicIndex === undefined || ind.entryIndex === undefined) {
                 console.warn("Invalid trace entry index.");
-                editorRef.current.setValue("");
                 return;
             }
 
@@ -56,7 +54,6 @@ function DebuggingInfoViewer ({type, isJson = true}) {
             // If the trace is not found, we clear the viewer and return.
             if (!trace) {
                 console.warn(`Trace with id ${selectedTraceId} not found`);
-                editorRef.current.setValue("");
                 return;
             };
 
@@ -64,45 +61,60 @@ function DebuggingInfoViewer ({type, isJson = true}) {
             if (!trace?.computedResults) {
                 // eslint-disable-next-line max-len
                 console.warn("The result of the semantic validator used to populate the UI was not found in the debugger");
-                editorRef.current.setValue("");
                 return;
             }
 
             // Result of the semantic validator used to populate the UI. It
             // contains both the inputs and the outputs.
             const computedResult = trace.computedResults;
+            if (!computedResult) {
+                console.warn("Computed results not found in the selected trace.");
+                return;
+            }
+            if (ind.atomicIndex >= computedResult.length || ind.atomicIndex < 0) {
+                console.warn("Invalid atomic index.");
+                return;
+            }
+            if (ind.entryIndex >= computedResult[ind.atomicIndex].length || ind.entryIndex < 0) {
+                console.warn("Invalid entry index.");
+                return;
+            }
+            const entry = computedResult[ind.atomicIndex][ind.entryIndex];
 
-            if (type === "transformOutput") {
-                // Transformation output is saved in the executableModelOutput
-                // in the validation step of the transform section.
-                console.log(computedResult, ind);
-                const entry = computedResult[ind.atomicIndex][ind.entryIndex];
-                if ("transform" in entry.output) {
-                    const validate = entry.output.transform.find((v) => v.type === "validate");
-                    const output = validate ? validate.transformationOutput : null;
-                    editorRef.current.setValue(
-                        output ? JSON.stringify(output, null, 2) : ""
+            switch (type) {
+                case "transformOutput":
+                    // Transform output is saved in validation step of transform
+                    if (!entry?.output) return;
+                    if ("transform" in entry.output) {
+                        const validate = entry.output.transform.find((v) => v.type === "validate");
+                        const output = validate ? validate.transformationOutput : null;
+                        editorRef.current.setValue(
+                            output ? JSON.stringify(output, null, 2) : ""
+                        );
+                    }
+                    break;
+                case "transformOutputMetadata":
+                    // Entire transform output is the output metadata
+                    if (!entry) return;
+                    editorRef.current.setValue(JSON.stringify(entry, null, 4));
+                    break;
+                case "script":
+                    // Script is in behavior, so we find it and get the script.
+                    if (!entry?.behavior) return;
+                    const b = engine.graphs.getAllBehaviors().find(
+                        (b) => b.getName() === entry.behavior
                     );
-                }
-            } else if (type === "transformOutputMetadata") {
-                const entry = computedResult[ind.atomicIndex][ind.entryIndex];
-                editorRef.current.setValue(JSON.stringify(entry, null, 4));
-            } else if (type === "script") {
-                // Script is in the behavior, so we find it and get the script.
-                const entry = computedResult[ind.atomicIndex][ind.entryIndex];
-                const b = engine.graphs.getAllBehaviors().find(
-                    (b) => b.getName() === entry.behavior
-                );
-                editorRef.current.setValue(b ? b._script : "");
-            } else {
-                // For other types, we look into the processed trace entry.
-                const entry = computedResult[ind.atomicIndex][ind.entryIndex];
-                if (entry && "input" in entry && type in entry.input) {
-                    const value = entry.input[type];
-                    editorRef.current.setValue(
-                        isJson ? JSON.stringify(value, null, 2) : String(value)
-                    );
-                }
+                    editorRef.current.setValue(b ? b._script : "");
+                    break;
+                default:
+                    // For other types, we look into the processed trace entry.
+                    if (!entry?.input) return;
+                    if (entry && "input" in entry && type in entry.input) {
+                        const value = entry.input[type];
+                        editorRef.current.setValue(
+                            isJson ? JSON.stringify(value, null, 2) : String(value)
+                        );
+                    }
             }
         }
     }, [selectedTraceId, engine, ready, type, traces, selectedTraceEntryIndex]);
