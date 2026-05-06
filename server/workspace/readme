@@ -18,14 +18,6 @@ In this demo I will:
 Once I do this and assemble it in blog post, I will work on actually implementing versioning and implementing the whole process as part of this framework. I actually want to create more primitives, invariants etc before I proceed but I just want to demonstrate learning and testing in some basic way before moving forward.
 
 
-Update:
-
 As part of the process above, there are some steps I need to execute first:
 - I will modify the behavioral script so that the next behaviors are selected by the behavior script
 - I will modify the beahvioral script of the library manager design to reflect these changes
-- I will implement the behavioral modifications in the implementation (python program) of the library manager
-- I will test the behavior of the implementation using the environment which caused the failed root cause analyis
-    - This will fully demonstrate the learning loop of the design learning new invariants and behavioral refinements as well as the implementation being tested to prove that it also respects the invariant using the same environment.
-    - Although in this case, the invariant is a design intrinsic one and it should have been identified before the implementation was done but the point still stands.
-- It would be kind of cool to also introduce an environmental invariant but I will do that after, but the process is the same, the environment which reveals those semantics becomes authoritative and the design+implementation have to prove that they respect the invariant.
-- I will capture this entire process in a blog post which outlines this process
