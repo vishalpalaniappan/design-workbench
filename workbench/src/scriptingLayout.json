@@ -102,7 +102,7 @@
                     "containerId": "contentContainer",
                     "type": "container",
                     "size": { 
-                        "initial": { "value": 500, "unit": "px", "type": "fixed" },
+                        "initial": { "value": 250, "unit": "px", "type": "fixed" },
                         "min": { "value": 50, "unit": "px"}
                     }
                 },
@@ -120,10 +120,10 @@
                 {
                     "type": "handleBar",
                     "sibling1": "primitivesContainer",
-                    "sibling2": "transformOutputMetadataContainer"
+                    "sibling2": "transformOutputMetadataSplitContainer"
                 },
                 {
-                    "containerId": "transformOutputMetadataContainer",
+                    "containerId": "transformOutputMetadataSplitContainer",
                     "type": "container",
                     "size": { "initial": { "type": "fill" }}
                 }
@@ -318,11 +318,41 @@
                 }
             ]
         },
-        
+        "transformOutputMetadataSplitContainer": {
+            "id": "transformOutputMetadataSplitContainer",
+            "background": "#007acc",
+            "type": "split",
+            "orientation": "vertical",
+            "children": [
+                {
+                    "containerId": "transformOutputMetadataContainer",
+                    "type": "container",
+                    "size": { "initial": { "type": "fill" }}
+                },
+                {
+                    "type": "handleBar",
+                    "sibling1": "transformOutputMetadataContainer",
+                    "sibling2": "synthesizedOutputContainer" 
+                },
+                {
+                    "containerId": "synthesizedOutputContainer",
+                    "type": "container",
+                    "size": { "initial": { "type": "fill" }}
+                }
+            ]
+        },
         "transformOutputMetadataContainer": {
             "id": "transformOutputMetadataContainer",
             "background": "#252526",
             "component": "TransformOutputMeta",
+            "menuBar": {
+                "showClose": false,
+                "title": "Transform Metadata"
+            }
+        },
+        "synthesizedOutputContainer": {
+            "id": "synthesizedOutputContainer",
+            "background": "#252526",
             "menuBar": {
                 "showClose": false,
                 "title": "Transform Metadata"
