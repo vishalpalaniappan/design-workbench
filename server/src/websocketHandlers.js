@@ -214,8 +214,10 @@ export class  WSMessageHandler {
          * This works with current implementation but it does assume this syntax, so if stops
          * working then we should consider this and potentially make it more robust.
          * 
-         * Executor is hardcoded for python, so I can also parse this entry point to pass
-         * python3 and the file + args separately, extending this to support more languages.
+         * Executor is hardcoded for python, so I parse this entry point to pass
+         * python3 and the file + args separately.
+         * 
+         * TODO: Extend this to support more languages.
          */
         const fileCmd = msg.payload.entryPoint.split(" ")[1];
 
