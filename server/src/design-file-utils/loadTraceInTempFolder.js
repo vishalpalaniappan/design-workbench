@@ -1,6 +1,5 @@
 import path from 'path';
 import { resolveDesignPath } from "./validateDesignName.js";
-import { clearPlaygroundFolder } from "./initFolders.js";
 import {DALEngine} from "dal-engine-core-js-lib-dev";
 import fs from 'fs/promises';
 
