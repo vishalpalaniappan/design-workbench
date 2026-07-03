@@ -218,7 +218,7 @@ export class  WSMessageHandler {
          */
         const fileCmd = msg.payload.entryPoint.split(" ")[1];
 
-        let cmd = `node ../tools/design-runtime/src/implementationExecutor.js`;
+        let cmd = `node ../tools/design-runtime/src/index.js implementation`;
         if (msg.payload.designName) cmd = cmd + ` ${fileCmd}`;    
         if (msg.payload.selectedTrace) cmd = cmd + ` ../temp/${msg.payload.selectedTrace}`;
 
@@ -257,7 +257,7 @@ export class  WSMessageHandler {
     onTerminalRunDesign = async (msg) => {     
         this.designExecutionFinishedSent = false;
 
-        let cmd = `node ../tools/design-runtime/src/index.js`;
+        let cmd = `node ../tools/design-runtime/src/index.js design`;
         if (msg.payload.designName) cmd = cmd + ` ../workspace/${msg.payload.designName}`;    
         if (msg.payload.selectedTrace) cmd = cmd + ` ../temp/${msg.payload.selectedTrace}`;   
 
