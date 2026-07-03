@@ -328,16 +328,6 @@
                     "containerId": "transformOutputMetadataContainer",
                     "type": "container",
                     "size": { "initial": { "type": "fill" }}
-                },
-                {
-                    "type": "handleBar",
-                    "sibling1": "transformOutputMetadataContainer",
-                    "sibling2": "synthesizedOutputContainer" 
-                },
-                {
-                    "containerId": "synthesizedOutputContainer",
-                    "type": "container",
-                    "size": { "initial": { "type": "fill" }}
                 }
             ]
         },
@@ -348,14 +338,6 @@
             "menuBar": {
                 "showClose": false,
                 "title": "Transform Metadata"
-            }
-        },
-        "synthesizedOutputContainer": {
-            "id": "synthesizedOutputContainer",
-            "background": "#252526",
-            "menuBar": {
-                "showClose": false,
-                "title": "Synthesized Output"
             }
         },
         "menuBar": {
