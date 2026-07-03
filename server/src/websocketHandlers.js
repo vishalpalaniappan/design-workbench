@@ -259,7 +259,7 @@ export class  WSMessageHandler {
 
         let cmd = `node ../tools/design-runtime/src/index.js design`;
         if (msg.payload.designName) cmd = cmd + ` ../workspace/${msg.payload.designName}`;    
-        if (msg.payload.selectedTrace) cmd = cmd + ` ../temp/${msg.payload.selectedTrace}`;   
+        if (msg.payload.selectedTrace && msg.payload.selectedTrace !== "None") cmd = cmd + ` ../temp/${msg.payload.selectedTrace}`;   
 
         await clearTraceFilesInPlayground();
 
