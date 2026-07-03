@@ -89,11 +89,6 @@
             ],
             "background": "#252526"
         },
-        "traceViewer": {
-            "id": "traceViewer",
-            "component":"TraceSelector",
-            "background": "#252526"
-        },
         "terminal": {
             "id": "terminal",
             "tabsBar": {
@@ -182,20 +177,6 @@
             "children": [
                 {
                     "containerId": "fileTabsContainer",
-                    "type": "container",
-                    "size": { 
-                        "initial": { "value": 200, "unit": "px", "type": "fixed" },
-                        "min": { "value": 51, "unit": "px"}
-                    },
-                    "collapse": { "value": 150, "condition": "lessThan", "relative": "parent" }
-                },
-                {
-                    "type": "handleBar",
-                    "sibling1": "fileTabsContainer",
-                    "sibling2": "traceViewer"
-                },
-                {
-                    "containerId": "traceViewer",
                     "type": "container",
                     "size": { "initial": { "type": "fill" }}
                 }

@@ -44,10 +44,6 @@ export const registry = {
         import("./Components/SideBarMenu/SideBarMenu").then((m) => ({
             default: m.default || m.SideBarMenu,
         })),
-    TraceSelector: () =>
-        import("./Components/TraceSelector/TraceSelector").then((m) => ({
-            default: m.default || m.TraceSelector,
-        })),
     InitialArgsEditor: () =>
         import("./Components/Scripting/editors/scriptingEditors").then((m) => ({
             default: m.default || m.InitialArgsEditor,
