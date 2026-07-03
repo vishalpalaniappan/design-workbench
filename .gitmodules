@@ -5,4 +5,4 @@
 [submodule "server/tools/design-runtime"]
 	path = server/tools/design-runtime
 	url = https://github.com/vishalpalaniappan/design-runtime-node.git
-	branch = terminate_when_no_input
+	branch = use-trace-input
