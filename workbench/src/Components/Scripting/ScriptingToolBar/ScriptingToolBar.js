@@ -172,6 +172,28 @@ export function ScriptingToolBar () {
             if (event.data.type === "Success") {
                 addLog("Transformation succeeded. See output state for details.");
                 dispatch(setTransformOutput(event.data.payload.output));
+                /**
+                 * I am sending message to synthesize behaviors after computing behaviors
+                 * because the engine otuputs a synthesis package with the AST mapping for
+                 * each primitive and I send this to the synthesis program. It returns a
+                 * synthesized python function which realizes the behavioral semantics.
+                 *
+                 * I am only doing it this way to develop the functionality but in an actual
+                 * use case, everytime the script is modified, the behavior can be synthesized
+                 * and saved to the engine. This will probably be part of a background linting/
+                 * compiling process that validates the script as it is being written.
+                 *
+                 * In the bigger picture:
+                 *
+                 * design + substrate:  I will synthesize all the behaviors and then connect them
+                 * to the environment through the substrate scaffolding which will import the
+                 * synthesized behaviors.
+                 *
+                 * design: For just the design, I will synthesize the behaviors and connect it to the
+                 * environment directly (for automated testing, the environment will come from an
+                 * existing trace that will validate the environment).
+                 */
+                // TODO: Synthesize behaviors when behavioral semantic script changes.
                 sendMessage({
                     type: "synthesize_behaviors",
                     payload: {
