@@ -23,6 +23,8 @@ self.onmessage = (event) => {
             behavior.setPrimitiveArgs(payload.initialArgs);
             const output = behavior.computeTransformations();
 
+            console.log(output);
+
             /**
              * TODO: Given a behavior, extend the engine to generate a package
              * that will be sent to the program synthesis tool to generate a
