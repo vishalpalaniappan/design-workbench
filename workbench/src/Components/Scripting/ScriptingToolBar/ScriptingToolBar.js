@@ -172,6 +172,12 @@ export function ScriptingToolBar () {
             if (event.data.type === "Success") {
                 addLog("Transformation succeeded. See output state for details.");
                 dispatch(setTransformOutput(event.data.payload.output));
+                sendMessage({
+                    type: "synthesize_behaviors",
+                    payload: {
+                        synthPackage: event.data.payload?.output.output.synthPackage,
+                    },
+                });
             } else if (event.data.type === "Error") {
                 console.error("Transformation error:", event.data.payload.error);
                 addLog("Transformation failed.");
