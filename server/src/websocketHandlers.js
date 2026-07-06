@@ -30,6 +30,7 @@ export class  WSMessageHandler {
             load_design: this.loadDesign.bind(this),
             terminal_run_entry_point: this.onTerminalRunEntryPoint.bind(this),
             terminal_run_design: this.onTerminalRunDesign.bind(this),
+            synthesize_behaviors: this.onSynthesizeBehaviors.bind(this),
         };
     }
 
@@ -277,5 +278,10 @@ export class  WSMessageHandler {
         this.terminal.on("start", this.onTerminalStart);
         this.terminal.on("stop", this.handleDesignExecutionFinished);
         this.terminal.start();
+    }
+
+    onSynthesizeBehaviors = async(msg) => {
+        console.log("Received message to synthesize behaviors");
+        console.log(msg);
     }
 }
