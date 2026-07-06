@@ -353,6 +353,7 @@
         "synthesizedOutputContainer": {
             "id": "synthesizedOutputContainer",
             "background": "#252526",
+            "component": "SynthesisOutput",
             "menuBar": {
                 "showClose": false,
                 "title": "Synthesized Output"

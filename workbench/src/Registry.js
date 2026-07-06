@@ -76,6 +76,10 @@ export const registry = {
         import("./Components/Scripting/transformOutputMeta/transformOutputMeta").then((m) => ({
             default: m.default || m.TransformOutputMeta,
         })),
+    SynthesisOutput: () =>
+        import("./Components/Scripting/synthesisOutput/synthesisOutput").then((m) => ({
+            default: m.default || m.SynthesisOutput,
+        })),
     DebuggingToolBar: () =>
         import("./Components/Debugging/DebuggingToolBar/DebuggingToolBar").then((m) => ({
             default: m.default || m.DebuggingToolBar,
