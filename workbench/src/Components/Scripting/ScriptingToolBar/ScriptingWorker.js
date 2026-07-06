@@ -23,16 +23,6 @@ self.onmessage = (event) => {
             behavior.setPrimitiveArgs(payload.initialArgs);
             const output = behavior.computeTransformations();
 
-            console.log(output);
-
-            /**
-             * TODO: Given a behavior, extend the engine to generate a package
-             * that will be sent to the program synthesis tool to generate a
-             * python function which implements the behavior thorugh the AST
-             * mapping.
-            */
-            // const synthesisPackage = behavior.getSynthesisPackage();
-
             self.postMessage({
                 type: "Success",
                 payload: {
