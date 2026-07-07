@@ -95,6 +95,16 @@ export function ScriptingToolBar () {
         let _expectedPostWorldState;
         let _initialArgs;
         let _script;
+        let _behaviorName;
+
+        try {
+            _behaviorName = behavior._name;
+            addLog("Loaded Behavior Name.");
+        } catch (error) {
+            addLog("Error loading behavior name.");
+            addLog(`Error: ${error.message}`);
+            return;
+        }
 
         try {
             _initialWorldState = JSON.parse(selectedTransformationTest.initialWorldState);
@@ -147,6 +157,7 @@ export function ScriptingToolBar () {
             workerRef.current.postMessage({
                 type: "RUN_TRANSFORMATION",
                 payload: {
+                    behaviorName: _behaviorName,
                     initialWorldState: _initialWorldState,
                     expectedPostWorldState: _expectedPostWorldState,
                     script: _script,

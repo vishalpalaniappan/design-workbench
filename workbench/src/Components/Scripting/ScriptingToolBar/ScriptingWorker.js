@@ -12,8 +12,8 @@ self.onmessage = (event) => {
 
         // Create behavior
         const behavior = engine.createBehavior({
-            name: "Test Behavior",
-            description: "A behavior for testing transformations"
+            name: payload.behaviorName,
+            description: "A behavior for testing transformations",
         });
 
         try {
