@@ -23,6 +23,29 @@ self.onmessage = (event) => {
             behavior.setPrimitiveArgs(payload.initialArgs);
             const output = behavior.computeTransformations();
 
+            /**
+             * This is a temporary step as I move towards executig the design
+             * using the synthesized behaviors.
+             *
+             * I am establishing a workflow that will synthesize the spec
+             * for the behavior into a function. Then in the next step, I will
+             * replace the computeTransformations method used above with
+             * actually executing the synthesized behavior. This will require
+             * changes to the way the design is executed.
+             *
+             * So the order of the changes will be:
+             * 1. Initially, use the compute behavior button to generate
+             *    the synthesis of behaviors (while also calling old compute
+             *    transformations method).
+             * 2. Add a workflow so that everytime the script changes, it is
+             *    automatically synthesized into the behavior in the UI.
+             * 3. Replace the design executable with the synthesized behavior.
+             *
+             * Anyway, I will do it incrementally. The next step after that is
+             * to connect the design to the environment using the substrate.
+             */
+            output["output"]["synthPackage"] = behavior.generateSynthesisPackage();
+
             self.postMessage({
                 type: "Success",
                 payload: {
