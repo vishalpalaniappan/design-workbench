@@ -1,0 +1,48 @@
+.traceBehaviorSelector {
+    display: flex;
+    flex-direction: column;
+    overflow-y:scroll;
+    height:100%;
+}
+
+.traceBehaviorSelector >.traceBehaviorRow {
+    display: flex;
+    flex-direction: row;
+    width:100%;
+}
+
+.traceBehaviorSelector > .traceBehaviorRow:hover {
+    background-color: #242424;
+}
+
+.traceBehaviorSelector > .traceBehaviorRow > .traceBehaviorSelectorItem {
+    display: flex;
+    font-size: 13px;
+    padding: 7px 10px;
+    gap: 3px;
+    color:white;
+    cursor: pointer;
+    flex: 1;
+    flex-direction: column;
+}
+
+.traceBehaviorSelector > .traceBehaviorRow > .traceBehaviorSelectorItem > .traceBehaviorTransformValidity {
+    font-size: 14px;
+    color: #ff9494;
+}
+
+.traceBehaviorSelector > .traceBehaviorRow > .traceBehaviorSelectorItem > .traceBehaviorInvariantViolations {
+    font-size: 14px;
+    color: #ff9494;
+}
+
+.traceBehaviorSelector > .traceBehaviorRow > .traceBehaviorSelectorItem > .traceBehaviorImplementationFailure {
+    font-size: 14px;
+    color: #ff9494;
+}
+
+.traceBehaviorSelector > .traceAtomicSeparator {
+    background-color: #434343;
+    height: 1px;
+    min-height: 1px;
+}   

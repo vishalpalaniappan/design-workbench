@@ -1,0 +1,37 @@
+.failureContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+
+.failureLabel {
+    font-size: 13px;
+    color:white;
+    background-color: #431515;
+    padding:10px;
+    cursor: pointer;
+}
+
+.rootCauseContainer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.rootCauseContainer:hover {
+    background-color: #252525;
+}
+
+.rootCauseLabel {
+    font-size: 13px;
+    padding:4px 10px;
+    color:white;
+    cursor: pointer;
+}
+
+.noRootCauseLabel {
+    font-size: 13px;
+    padding:4px 10px;
+    color:white;
+}

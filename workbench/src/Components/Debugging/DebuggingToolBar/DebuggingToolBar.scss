@@ -1,0 +1,68 @@
+$status-bar-background-color: #66351f;
+$darker-status-bar-color: #552a1f;
+$darkened-status-bar-color: #441f1f;
+
+.debuggingToolBar {
+  height: 100%;
+  display: flex;
+  padding: 0 5px;
+  gap: 10px;
+  color: white;
+  align-items: center;
+  justify-content:space-between;
+  background-color: $status-bar-background-color;
+  flex-direction:row;
+}
+
+.debuggingToolBar > .debuggingToolBarLeft {
+  display:flex;
+  align-items:center;
+  gap:5px;
+  height:100%;
+}
+
+.debuggingToolBarSelect > select {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+  cursor:pointer;
+  background-color: $darker-status-bar-color;
+  padding: 3px;
+  border-radius: 4px;
+  padding-right:10px;
+  min-height: 23px;
+  color:white;
+}
+
+.debuggingToolBarButton > select:hover {
+  background-color: $darkened-status-bar-color;
+}
+
+.debuggingToolBarLabel {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+  padding: 3px;
+}
+
+.debuggingToolBar > .debuggingToolBarRight {
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.debuggingToolBarButton {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+  cursor:pointer;
+  background-color: $darker-status-bar-color;
+  padding: 3px;
+  border-radius: 4px;
+  padding-right:10px;
+  min-height: 23px;
+}
+
+.debuggingToolBarButton:hover {
+  background-color: $darkened-status-bar-color;
+}

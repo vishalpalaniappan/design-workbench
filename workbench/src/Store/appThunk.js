@@ -7,6 +7,7 @@ import {setSelectedBehavior} from "./appSlice";
 import {setSelectedInvariant} from "./appSlice";
 import {setHasEntryPoint} from "./appSlice";
 import {setSelectedTraceId} from "./appSlice";
+import {setSelectedTraceEntryIndex} from "./debuggingSlice/debuggingSlice";
 
 /**
  * Called to delete a file given a file ID.
@@ -193,6 +194,26 @@ export const selectBehaviorThunk = (behaviorId) => (dispatch, getState, {engine}
 };
 
 /**
+ * Adds a behavior to the engine.
+ * @param {Object} args Arguments for adding a behavior, including:
+ * @param {String} args.name Name of the behavior.
+ * @param {String} args.description Description of the behavior.
+ * @param {Boolean} args.isAtomic Is the behavior atomic?
+ * @param {Boolean} args.isDesignFork Is the behavior a fork in the design?
+ * @returns {Function} Thunk function.
+ */
+// eslint-disable-next-line max-len
+export const addBehaviorThunk = (args) => (dispatch, getState, {engine}) => {
+    const {name, description, isAtomic, isDesignFork} = args;
+    if (!name || name.trim() === "") {
+        throw new Error("Behavior name must not be empty.");
+    }
+    const newNode = engine.addNode(name, description, [], isAtomic, isDesignFork);
+    dispatch(setSelectedBehavior(newNode.getBehavior().getName()));
+    dispatch(incrementCounter());
+};
+
+/**
  * Deletes a behavior given its ID, removes its mapping from files,
  * and updates the selected behavior and participant.
  * @param {String} behaviorId String ID of the behavior to delete.
@@ -365,6 +386,8 @@ export const addTraceThunk = (trace) => (dispatch, getState, {engine}) => {
  * @return {Function} Thunk function.
  */
 export const deleteTraceThunk = (traceId) => (dispatch, getState, {engine}) => {
+    dispatch(setSelectedTraceId(null));
+    dispatch(setSelectedTraceEntryIndex(null));
     engine.traces.deleteTrace(traceId);
     dispatch(incrementCounter());
     engine.save();
@@ -372,7 +395,7 @@ export const deleteTraceThunk = (traceId) => (dispatch, getState, {engine}) => {
 
 /**
  * Adds a failure prediction to the selected invariant.
- * @param {Object} predcitedBehavior Behavior object that will fail.
+ * @param {Object} predictedBehavior Behavior object that will fail
  * @param {String} description Description of the prediction.
  * @return {Function} Thunk function.
  */

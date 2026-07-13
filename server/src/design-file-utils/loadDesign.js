@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import { resolveDesignPath } from "./validateDesignName.js";
 import {DALEngine} from "dal-engine-core-js-lib-dev";
-import loadDesignInPlayground from './loadDesignInPlayground.js';
+import loadImplementationInPlayground from './loadImplementationInPlayground.js';
 
 /**
  * Loads a design from the workspace with the given name.
@@ -21,7 +21,7 @@ async function loadDesign(designName) {
         engine.deserialize(data);
 
         // Write engine files to playground folder
-        await loadDesignInPlayground(engine);
+        await loadImplementationInPlayground(engine);
 
         return {
             fileName: designName,

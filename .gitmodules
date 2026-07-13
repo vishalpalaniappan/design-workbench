@@ -1,4 +1,8 @@
 [submodule "server/tools/instrumenter"]
 	path = server/tools/instrumenter
 	url = https://github.com/vishalpalaniappan/design-instrumenter.git
-	branch = auto-instrument
+	branch = main
+[submodule "server/tools/design-runtime"]
+	path = server/tools/design-runtime
+	url = https://github.com/vishalpalaniappan/design-runtime-node.git
+	branch = use-trace-input

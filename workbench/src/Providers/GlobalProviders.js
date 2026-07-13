@@ -83,6 +83,21 @@ function GlobalProviders ({children}) {
             case "add_trace":
                 dispatch(addTraceThunk(msg.data));
                 dispatch(setStatusMsg("Received trace from server."));
+                /**
+                 * I am saving this version of the engine to the server
+                 * every time that I add a new trace to it. You can ask
+                 * why don't you just save the engine directly on the server
+                 * because you can add the trace to it there and that might
+                 * be valid but it creates two sources of truth and I don't
+                 * want that. Instead, I only save the engine from the client
+                 * side and the execution and trace generation pipeline is just
+                 * meant to get the data to the front end and its up to the
+                 * front end to save it. I am automatically saving it here.
+                 * I will optimize all of this in the future but this is a
+                 * process that will not cause any corruption in the data and
+                 * even though it is convoluted, I will keep it as a reliable
+                 * workflow while I establish the rest of the functionality.
+                 */
                 engine.save();
                 break;
             case "error":
@@ -107,9 +122,27 @@ function GlobalProviders ({children}) {
         termWriteRef.current = fn;
     };
 
+
+    /**
+     * Leaving this note here regarding the loadSavedDesign method below:
+     * - First, the statement index can be removed because we are no longer
+     * using it to do visual mapping.
+     * - Second, I am updating the content of the text file to reflect what
+     * the server sent back (the saved version). This then tells the editor
+     * that the file is saved and it can update the UI accordingly. Its a nice
+     * idea and it makes sure that the editor is always in sync with the server.
+     * However, then why don't I update the rest of the content in the same way?
+     * I modify behaviors as well and other content as well.
+     *
+     * So I think that what I will do is, when the server tells me that the
+     * design is saved, I will trust it and update the all the editors to
+     * indicate that the updated content is the saved content. This might be
+     * less accurate, but I will revisit this later as it doesn't affect the
+     * core functionality.
+     */
     // When a design is saved, the server sends back the updated content
     // and mapping of the saved files in the design, this function saves
-    // those changes to the engien instance.
+    // those changes to the engine instance.
     const loadSavedDesign = useCallback((files) => {
         if (!engineRef.current) return;
         files.forEach((file) => {
@@ -125,19 +158,50 @@ function GlobalProviders ({children}) {
         });
     }, [dispatch]);
 
+    const chunkUint8Array = (uint8, chunkSize) => {
+        const chunks = [];
+        for (let i = 0; i < uint8.length; i += chunkSize) {
+            chunks.push(uint8.subarray(i, i + chunkSize));
+        }
+        return chunks;
+    };
+
     // Called to save the engine to the server.
     const saveEngine = useCallback(() => {
         if (!engineRef.current || !design) return;
-        // TODO: I think the file name should be stored in the
-        // engine to avoid having to pass it around separately like this.
-        // It is available in the name of engineRef.current.
-        sendMessage({
-            type: "save_engine",
-            payload: {
-                fileName: design.fileName,
-                data: engineRef.current.serialize(),
-            },
-        });
+        const serialized = engineRef.current.serialize();
+
+        /**
+         * Also, just wanted to note that there is no reason for
+         * the trace data to be stored in the same file as the
+         * design. They can be part of the same package but accessed
+         * independently (the traces will be fully compressed).
+         *
+         * I am currently storing them together because it is easier for
+         * my current workflow but in the future, the design and trace
+         * being managed separately will be a better idea because it
+         * will optimize these processes (will think more about this later).
+         */
+
+        // Sending design in chunks because there is a frame size
+        // limit. This limit doesn't happen on the server side
+        // but either way, I am not thinking too much about this, I am
+        // more concerned with getting a reliable workflow that I can
+        // use to test the features (this can be optimized later).
+        const CHUNK_SIZE = 32 * 1024;
+        const chunks = chunkUint8Array(serialized, CHUNK_SIZE);
+        for (let i = 0; i < chunks.length; i++) {
+            const chunk = chunks[i];
+            sendMessage({
+                type: "save_engine",
+                payload: {
+                    fileName: design.fileName,
+                    data: chunk,
+                    index: i,
+                    total: chunks.length,
+                },
+            });
+        }
     }, [sendMessage, design]);
 
     // When the workspace is first loaded, find the engine and deserialize it.

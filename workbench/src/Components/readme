@@ -1,0 +1,30 @@
+As I continued to build out the features, the code structure started to get disjoined and I wanted to note down some changes I need to make:
+
+- I need to group the components into the modes more cleanly. 
+    - The design and implementation components are in their own folder but the implementation is in the root. This is mainly because I have actually defined more about the application strucutre as I was exploring and I didn't take the time to make changes to the folder structure to reflect this. I am also sharing components between the modes, like the behavioral control graph, I don't want to do this, I want dedicated components per mode.
+
+- I need to separate the stores into slices in a cleaner way
+    - Right now when I select the behavior in the behavioral control graph in the design mode, it is using the thunk in the root store. Then when I deselect a behavior in design mode, I am manually clearing the transform output log, the primitive etc (because no active behavior is present). If I create a separate selector for the design mode, I can cleanly manage the state in the design thunk and simplify my life. 
+
+- Update the debugging UI to highlight the difference with execution versus design debugging interfaces
+    - I am using the same user interface for the implementation debugging and the design debugging, this is not correct.
+    - The design trace's observed environment is just what the engine calcluated, I am essentially recalculating and verifying that the output is the same (which it always will be)
+    - There is nothign inherently wrong with this, its just misleading to the end user, so I will make that clear.
+    - The UI's themselves will evolve soon.
+
+- I need to clean up the participant and invariant components.
+    - I've fully moved away from the participants and the invariant components in favour of the scripting language. So I need to remove those.
+
+- I need to url arguments for sepecific traces or behaviors and then I need to add keybaord shortcuts for moving between the modes.
+    - The reason for the traces or behavior url args is because it will allow me to load the UI into a sepcific state.
+    - Moving between nodes is because it will help me see the results of my executions.
+
+- Add behavioral control graph to the debug view and allow a visualization of which node is being inspected using the position from the design trace.
+    - This one is relavtivel simply, I just want to visualize where I am in the atomic design path on top of the behavioral control graph.
+
+- All the toolbars should share the same style sheet.
+    - This is part of a bigger change that I mentioned a while back where I am defining style sheets on the fly and this one will probably wait until much later when I create my component library. 
+
+Essentially, since I established these three modes, I haven't taken the time to make changes to the code structure to reflect these changes. SO I am leaving a note here for myself to fix it and to be consistent with my naming for the design, implementation and debugging modes.
+
+Luckily, none of these changes are very difficult and once I dedicate a day to this, I will be able to move it forward cleanly.

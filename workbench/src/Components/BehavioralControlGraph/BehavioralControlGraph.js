@@ -19,6 +19,15 @@ import "./BehavioralControlGraph.scss";
 export function BehavioralControlGraph () {
     const {engine} = useDalEngine();
 
+    /**
+     * TODO:
+     * Since the design is now an executable semantic model, it makes sense
+     * to include the control flow in the behavioral control graph, it serves
+     * a larger role than just richer semantic information. It will allow the
+     * behavior of the design as a whole to be simulated independant of the
+     * implementation.
+     */
+
     const dispatch = useDispatch();
     const selectedGraph = useSelectedGraph();
     const selectedBehavior = useSelectedBehavior();

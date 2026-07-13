@@ -1,5 +1,5 @@
 {
-    "title": "Workbench Layout Configuration A",
+    "title": "Debugging Layout",
     "layoutRoot": "root",
     "containers": {
         "root": {
@@ -8,9 +8,11 @@
             "orientation": "vertical",
             "children": [
                 {
-                    "containerId": "header",
+                    "containerId": "menuBar",
                     "type": "container",
-                    "size": { "initial": { "value": 0, "unit": "px", "type": "fixed" }}
+                    "size": { 
+                        "initial": { "value": 37, "unit": "px", "type": "fixed" }
+                    }
                 },
                 {
                     "containerId": "mainBody",
@@ -39,11 +41,38 @@
                     "containerId": "sidebar",
                     "type": "container",
                     "size": { "initial": { "value": 40, "unit": "px", "type": "fixed" }},
-                    "collapse": { "value": 400, "condition": "lessThan", "relative": "parent" },
-                    "showHandlebar": true
+                    "collapse": { "value": 400, "condition": "lessThan", "relative": "parent" }
+                },
+
+                {
+                    "containerId": "behaviorAnalaysisContainer",
+                    "type": "container",
+                    "size": { 
+                        "initial": { "value": 300, "unit": "px", "type": "fixed" },
+                        "min": { "value": 50, "unit": "px"}
+                    }
                 },
                 {
+                    "type": "handleBar",
+                    "sibling1": "behaviorAnalaysisContainer",
+                    "sibling2": "contentContainer"
+                },
+
+                {
                     "containerId": "contentContainer",
+                    "type": "container",
+                    "size": { 
+                        "initial": { "value": 500, "unit": "px", "type": "fixed" },
+                        "min": { "value": 50, "unit": "px"}
+                    }
+                },
+                {
+                    "type": "handleBar",
+                    "sibling1": "contentContainer",
+                    "sibling2": "transformOutputMetadataContainer"
+                },
+                {
+                    "containerId": "transformOutputMetadataContainer",
                     "type": "container",
                     "size": { "initial": { "type": "fill" }}
                 }
@@ -56,47 +85,32 @@
             "orientation": "vertical",
             "children": [
                 {
-                    "containerId": "content",
+                    "containerId": "body",
                     "type": "container",
                     "size": { "initial": { "type": "fill" }}
                 },
                 {
                     "type": "handleBar",
-                    "sibling1": "content",
-                    "sibling2": "terminalContainer"
+                    "sibling1": "body",
+                    "sibling2": "transformationLogContainer"
                 },
                 {
-                    "containerId": "terminalContainer",
+                    "containerId": "transformationLogContainer",
                     "type": "container",
                     "size": { 
-                        "initial": { "value": 200, "unit": "px", "type": "fixed" },
-                        "min": { "value": 100, "unit": "px"}
-                    },
-                    "collapse": { "value": 500, "condition": "lessThan", "relative": "parent" }
+                        "initial": { "value": 300, "unit": "px", "type": "fixed" },
+                        "min": { "value": 50, "unit": "px"}
+                    }
                 }
             ]
         },
-        "terminalContainer": {
-            "id": "terminalContainer",
+        "transformationLogContainer": {
+            "id": "transformationLogContainer",
             "type": "split",
             "orientation": "horizontal",
             "children": [
                 {
-                    "containerId": "traceViewer",
-                    "type": "container",
-                    "size": { 
-                        "initial": { "value": 270, "unit": "px", "type": "fixed" },
-                        "min": { "value": 150, "unit": "px"},
-                        "max": { "value": 400, "unit": "px"}
-                    }
-                },
-                {
-                    "type": "handleBar",
-                    "sibling1": "traceViewer",
-                    "sibling2": "terminal"
-                },
-                {
-                    "containerId": "terminal",
+                    "containerId": "behaviorScriptContainer",
                     "type": "container",
                     "size": { "initial": { "type": "fill" }}
                 }
@@ -104,12 +118,7 @@
             "background": "#252526"
         },
         "traceViewer": {
-            "id": "traceViewer",
-            "menuBar": {
-                "showClose": true,
-                "closeContainerId": "traceViewer",
-                "title": "Trace Selector"
-            },
+            "id": "traceViewer",    
             "component":"TraceSelector",
             "background": "#252526"
         },
@@ -127,48 +136,142 @@
             },
             "background": "#252526"
         },
+        "body": {
+            "id": "body",
+            "type": "split",
+            "orientation": "vertical",
+            "children": [
+                {
+                    "containerId": "content",
+                    "type": "container",
+                    "size": { "initial": { "type": "fill" }}
+                }
+            ]
+        },
         "content": {
             "id": "content",
             "background": "#007acc",
             "type": "split",
-            "orientation": "horizontal",
+            "orientation": "vertical",
             "children": [
                 {
-                    "containerId": "menuContainer",
-                    "type": "container",
-                    "size": { 
-                        "initial": { "value": 270, "unit": "px", "type": "fixed" },
-                        "min": { "value": 170, "unit": "px"},
-                        "max": { "value": 320, "unit": "px"}
-                    },
-                    "collapse": { "value": 900, "condition": "lessThan", "relative": "parent" }
-                },
-                {
-                    "type": "handleBar",
-                    "sibling1": "menuContainer",
-                    "sibling2": "designLayoutContainer"
-                },
-                {
-                    "containerId": "designLayoutContainer",
+                    "containerId": "topContent",
                     "type": "container",
                     "size": { "initial": { "type": "fill" }}
                 },
                 {
                     "type": "handleBar",
-                    "sibling1": "designLayoutContainer",
-                    "sibling2": "rightMenuContainer"
+                    "sibling1": "topContent",
+                    "sibling2": "bottomContent"
                 },
                 {
-                    "containerId": "rightMenuContainer",
+                    "containerId": "bottomContent",
                     "type": "container",
-                    "size": { 
-                        "initial": { "value": 270, "unit": "px", "type": "fixed" },
-                        "min": { "value": 170, "unit": "px"},
-                        "max": { "value": 320, "unit": "px"}
-                    },
-                    "collapse": { "value": 900, "condition": "lessThan", "relative": "parent" }
+                    "size": { "initial": { "type": "fill" }}
                 }
             ]
+        },
+        "topContent": {
+            "id": "topContent",
+            "background": "#007acc",
+            "type": "split",
+            "orientation": "horizontal",
+            "children": [
+                {
+                    "containerId": "initialArgs",
+                    "type": "container",
+                    "size": { "initial": { "type": "fill" }}
+                },
+                {
+                    "type": "handleBar",
+                    "sibling1": "initialArgs",
+                    "sibling2": "preWorldStateContainer"
+                },
+                {
+                    "containerId": "preWorldStateContainer",
+                    "type": "container",
+                    "size": { "initial": { "type": "fill" }}
+                }
+            ]
+        },
+        "bottomContent": {
+            "id": "bottomContent",
+            "background": "#007acc",
+            "type": "split",
+            "orientation": "horizontal",
+            "children": [
+                {
+                    "containerId": "expectedPostWorldStateEditor",
+                    "type": "container",
+                    "size": { "initial": { "type": "fill" }}
+                },
+                {
+                    "type": "handleBar",
+                    "sibling1": "expectedPostWorldStateEditor",
+                    "sibling2": "outputContainer"
+                },
+                {
+                    "containerId": "outputContainer",
+                    "type": "container",
+                    "size": { "initial": { "type": "fill" }}
+                }
+            ]
+        },
+        
+        "transformOutputMetadataContainer": {
+            "id": "transformOutputMetadataContainer",
+            "background": "#252526",
+            "component": "DebuggerTransformOutputMetadata", 
+            "menuBar": {
+                "showClose": false,
+                "title": "Transform Metadata"
+            }
+        },
+        "behaviorAnalaysisContainer": {
+            "id": "behaviorAnalaysisContainer",
+            "background": "#007acc",
+            "type": "split",
+            "orientation": "vertical",
+            "children": [
+                {
+                    "containerId": "traceBehaviorContainer",
+                    "type": "container",
+                    "size": { "initial": { "type": "fill" }}
+                },
+                {
+                    "type": "handleBar",
+                    "sibling1": "traceBehaviorContainer",
+                    "sibling2": "rootCauseContainer"
+                },
+                {
+                    "containerId": "rootCauseContainer",
+                    "type": "container",
+                    "size": { "initial": { "type": "fill" }}
+                }
+            ]
+        },
+        "traceBehaviorContainer": {
+            "id": "traceBehaviorContainer",
+            "component": "TraceBehaviorSelector",
+            "menuBar": {
+                "showClose": false,
+                "title": "Behavior Inspector"
+            },
+            "background": "#1e1e1e"
+        },
+        "rootCauseContainer": {
+            "id": "rootCauseContainer",
+            "component": "RootCauseContainer",
+            "menuBar": {
+                "showClose": false,
+                "title": "Root Cause(s)"
+            },
+            "background": "#1e1e1e"
+        },
+        "menuBar": {
+            "id": "menuBar",
+            "component": "DebuggingToolBar",
+            "background": "#4f3b55"
         },
         "footer": {
             "id": "footer",
@@ -180,119 +283,50 @@
             "component": "SideBarMenu",
             "background": "#333"
         },
-        "menuContainer": {
-            "id": "menuContainer",
-            "background": "#252526",
-            "type": "split",
-            "orientation": "vertical",
-            "children": [
-                {
-                    "containerId": "fileTabsContainer",
-                    "type": "container",
-                    "size": { 
-                        "initial": { "value": 200, "unit": "px", "type": "fixed" },
-                        "min": { "value": 51, "unit": "px"}
-                    },
-                    "collapse": { "value": 150, "condition": "lessThan", "relative": "parent" }
-                },
-                {
-                    "type": "handleBar",
-                    "sibling1": "fileTabsContainer",
-                    "sibling2": "leftMenuContainer2"
-                },
-                {
-                    "containerId": "leftMenuContainer2",
-                    "type": "container",
-                    "size": { "initial": { "type": "fill" }}
-                }
-            ]
-        },
-        "rightMenuContainer": {
-            "id": "rightMenuContainer",
-            "background": "#252526",
-            "type": "split",
-            "orientation": "vertical",
-            "children": [
-                {
-                    "containerId": "selectedInfoContainer",
-                    "type": "container",
-                    "size": { 
-                        "initial": { "value": 190, "unit": "px", "type": "fixed" }
-                    }
-                },
-                {
-                    "type": "handleBar",
-                    "sibling1": "selectedInfoContainer",
-                    "sibling2": "participantInfoContainer"
-                },
-                {
-                    "containerId": "participantInfoContainer",
-                    "type": "container",
-                    "size": { "initial": { "type": "fill" }}
-                }
-            ]
-        },
-        "fileTabsContainer": {
-            "id": "fileTabsContainer",
-            "component": "FileSelector",
+        "initialArgs": {
+            "id": "initialArgs",
+            "component": "DebuggerBehaviorInitialArgs",
             "menuBar": {
-                "showClose": true,
-                "closeContainerId": "menuContainer",
-                "title": "File Browser"
+                "showClose": false,
+                "title": "Arguments"
             },
-            "background": "#1e1e1e"
+            "background": "#222222"
         },
-        "editorContainer": {
-            "id": "editorContainer",
-            "component": "EditorContainer",
-            "background": "#1e1e1e"
+        "preWorldStateContainer": {
+            "id": "preWorldStateContainer",
+            "component": "DebuggerBehaviorInitialWorldState",
+            "menuBar": {
+                "showClose": false,
+                "title": "Initial World State"
+            },
+            "background": "#222222"
         },
-        "designLayoutContainer": {
-            "id": "designLayoutContainer",
-            "type": "split",
-            "orientation": "horizontal",
-            "children": [
-                {
-                    "containerId": "toolbarContainer",
-                    "type": "container",
-                    "size": { "initial": { "value": 40, "unit": "px", "type": "fixed" }},
-                    "collapse": { "value": 100, "condition": "lessThan", "relative": "parent" }
-                },
-                {
-                    "containerId": "FlowVerticalContainer",
-                    "type": "container",
-                    "size": { "initial": { "type": "fill" }}
-                }
-            ],
-            "background": "#1e1e1e"
+        "expectedPostWorldStateEditor": {
+            "id": "expectedPostWorldStateEditor",
+            "component": "DebuggerBehaviorExpectedPostWorldState",
+            "menuBar": {
+                "showClose": false,
+                "title": "Observed Post Transform World"
+            },
+            "background": "#222222"
         },
-        "FlowVerticalContainer": {
-            "id": "FlowVerticalContainer",
-            "type": "split",
-            "orientation": "vertical",
-            "children": [
-                {
-                    "containerId": "FlowContainer",
-                    "type": "container",
-                    "size": { "initial": { "type": "fill" }}
-
-                },
-                {
-                    "containerId": "graphMenuContainer",
-                    "type": "container",
-                    "size": { "initial": { "value": 30, "unit": "px", "type": "fixed" }}
-                }
-            ]
+        "outputContainer": {
+            "id": "outputContainer",
+            "component": "DebuggerBehaviorTransformOutput",
+            "menuBar": {
+                "showClose": false,
+                "title": "Computed Post Transform World"
+            },
+            "background": "#222222"
         },
-        "FlowContainer": {
-            "id": "FlowContainer",
-            "component": "BehavioralControlGraph",
-            "background": "#1e1e1e"
-        },
-        "leftMenuContainer2": {
-            "id": "leftMenuContainer2",
-            "component": "MappingInfo",
-            "background": "#1e1e1e"
+        "behaviorScriptContainer": {
+            "id": "behaviorScriptContainer",
+            "component": "DebuggerBehaviorScript",
+            "menuBar": {
+                "showClose": false,
+                "title": "Behavior Script"
+            },
+            "background": "#222222"
         },
         "selectedInfoContainer": {
             "id": "selectedInfoContainer",
@@ -303,15 +337,6 @@
             "id": "participantInfoContainer",
             "component": "NodeInfo",
             "background": "#1e1e1e"
-        },
-        "toolbarContainer": {
-            "id": "toolbarContainer",
-            "background": "#1e1e1e"
-        },
-        "graphMenuContainer": {
-            "id": "graphMenuContainer",
-            "component": "GraphMenuBar",
-            "background": "#222222"
         }
     }
 }

@@ -1,0 +1,48 @@
+#### Plans
+
+My plan for this mode is to allow the user to load either an execution trace or
+the output of a semantic model execution. Since both are represented through the
+behaviors and the conditions, it doesn't matter.
+
+If there is a failure and a root cause can't be identified, I want to allow the
+user to make behavioral changes directly in the debug mode. In this sense, the
+debugging is enabling the learning because the semantics that are added will be
+associated with that trace. 
+
+When I want to check if the implementation or the behavior of the design itself
+respects the invariant, I can simply use the environment in this trace.
+
+Obvioulsy there is missing step here, I need to make the semantic model executable
+and bring those traces into this mode. I will do that after I finish this visualization.
+I intend to make the output of the engine validation much more visually clean, instead of
+just a text file.
+
+Executable Semantic Model Plan:
+----
+I plan to make the semantic model executable in the design mode, in the same way that they
+can execute the implementation in the playground, they will have a button to execute the
+semantic model. Except, it can happen directly in the browser, I will load a worker that
+can play the necessary role. Everytime a behavior requires a participant that is an input,
+I will allow the user to enter it (although this is very simple, it is a good start). I will
+pass that into the worker, which will load it into the args and then execute the behavior.
+
+Details of debug mode
+----
+
+I think that the behavioral selector will contain all the behaviors for now and will be collapsible
+based on the atomic grouping. In the future, I will create a higher level that groups the atomic paths
+and lets you select one path at a time. Each of the behaviors will be color coded to show if it has
+invariant violations, if it is semantically invalid or if there is a failure. 
+
+When a behavior is selected, it will populate the containers with the conditions that were
+contained in the trace. The output of the validation process will be loaded into the validation
+output container, it will have details about the validation process, which invariants were violated,
+the transformation validity etc. Except it won't be text, it will be presented cleanly in the UI.
+
+If root cause can't be identified, I will allow the user to modify the semantics of a behavior to
+enable the design to learn. As part of that, the trace id will automatically get added to the invariant.
+
+If the root cause is identified, I will create a summary container which has the failure and the root cause.
+I will establish the nuances of this as I continue implementing, I do see a cool way to use the behavioral
+control graph to visualize the execution but I think I will start with just a boring visualization
+and then I will expand it to something cooler later.

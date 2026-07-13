@@ -1,0 +1,76 @@
+$status-bar-background-color: #1d455e;
+$darker-status-bar-color: #143244;
+$darkened-status-bar-color: #0d202c;
+
+.mainToolBar {
+  height: 100%;
+  display: flex;
+  padding: 0 5px;
+  gap: 10px;
+  color: white;
+  align-items: center;
+  display:flex;
+  justify-content:space-between;
+  background-color: $status-bar-background-color;
+}
+
+.mainToolBar > .mainToolBarLeft {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  height:100%;
+}
+
+
+
+.mainToolBarSelect > select {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+  cursor:pointer;
+  background-color: $darker-status-bar-color;
+  padding: 3px;
+  border-radius: 4px;
+  padding-right:10px;
+  min-height: 23px;
+  color:white;
+}
+
+.mainToolBarSelect > select:hover {
+  background-color: $darkened-status-bar-color;
+}
+
+.mainToolBarLabel {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+  padding: 3px;
+}
+
+.mainToolBarButton {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+  cursor:pointer;
+  background-color: $darker-status-bar-color;
+  padding: 3px;
+  border-radius: 4px;
+  padding-right:10px;
+  min-height: 23px;
+}
+
+.mainToolBarLabel {
+  font-size: 13px;
+  display:flex;
+  align-items:center;
+  padding: 3px;
+}
+
+.mainToolBarButton:hover {
+  background-color: $darkened-status-bar-color;
+}
+.mainToolBar > .mainToolBarRight {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}

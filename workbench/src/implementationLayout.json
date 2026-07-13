@@ -1,5 +1,5 @@
 {
-    "title": "Workbench Layout Configuration A",
+    "title": "ImplementationLayout",
     "layoutRoot": "root",
     "containers": {
         "root": {
@@ -8,9 +8,9 @@
             "orientation": "vertical",
             "children": [
                 {
-                    "containerId": "header",
+                    "containerId": "mainToolBar",
                     "type": "container",
-                    "size": { "initial": { "value": 0, "unit": "px", "type": "fixed" }}
+                    "size": { "initial": { "value": 37, "unit": "px", "type": "fixed" }}
                 },
                 {
                     "containerId": "mainBody",
@@ -89,11 +89,6 @@
             ],
             "background": "#252526"
         },
-        "traceViewer": {
-            "id": "traceViewer",
-            "component":"TraceSelector",
-            "background": "#252526"
-        },
         "terminal": {
             "id": "terminal",
             "tabsBar": {
@@ -147,19 +142,22 @@
                 {
                     "type": "handleBar",
                     "sibling1": "designLayoutContainer",
-                    "sibling2": "rightMenuContainer"
+                    "sibling2": "ImplementationScriptContainer"
                 },
                 {
-                    "containerId": "rightMenuContainer",
+                    "containerId": "ImplementationScriptContainer",
                     "type": "container",
                     "size": { 
-                        "initial": { "value": 270, "unit": "px", "type": "fixed" },
-                        "min": { "value": 170, "unit": "px"},
-                        "max": { "value": 320, "unit": "px"}
+                        "initial": { "value": 370, "unit": "px", "type": "fixed" }
                     },
                     "collapse": { "value": 900, "condition": "lessThan", "relative": "parent" }
                 }
             ]
+        },
+        "ImplementationScriptContainer": {
+            "id": "ImplementationScriptContainer",
+            "component": "ImplementationBehaviorScriptViewer",
+            "background": "#252526"
         },
         "footer": {
             "id": "footer",
@@ -179,20 +177,6 @@
             "children": [
                 {
                     "containerId": "fileTabsContainer",
-                    "type": "container",
-                    "size": { 
-                        "initial": { "value": 200, "unit": "px", "type": "fixed" },
-                        "min": { "value": 51, "unit": "px"}
-                    },
-                    "collapse": { "value": 150, "condition": "lessThan", "relative": "parent" }
-                },
-                {
-                    "type": "handleBar",
-                    "sibling1": "fileTabsContainer",
-                    "sibling2": "traceViewer"
-                },
-                {
-                    "containerId": "traceViewer",
                     "type": "container",
                     "size": { "initial": { "type": "fill" }}
                 }
@@ -298,6 +282,11 @@
         "graphMenuContainer": {
             "id": "graphMenuContainer",
             "component": "GraphMenuBar",
+            "background": "#222222"
+        },
+        "mainToolBar": {
+            "id": "mainToolBar",
+            "component": "ImplementationToolbar",
             "background": "#222222"
         }
     }

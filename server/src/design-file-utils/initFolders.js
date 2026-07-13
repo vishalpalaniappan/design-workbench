@@ -2,16 +2,16 @@ import fs from "fs/promises";
 import path from "node:path";
 
 /**
- * Clears the playground folder.
+ * Clears the folder.
  */
-async function clearPlaygroundFolder() {
-    // Remove contents of playground folder if it exists
-    const playgroundPath = path.join(process.cwd(), "playground");
-    const entries = await fs.readdir(playgroundPath);
+async function clearFolder(folder) {
+    // Remove contents of folder if it exists
+    const folderPath = path.join(process.cwd(), folder);
+    const entries = await fs.readdir(folderPath);
 
     await Promise.all(
         entries.map((entry) =>
-            fs.rm(path.join(playgroundPath, entry), {
+            fs.rm(path.join(folderPath, entry), {
                 recursive: true,
                 force: true
             })
@@ -45,11 +45,23 @@ async function createRequiredFolders() {
     } catch (err) {
         if (err.code === "EEXIST") {
             // Already exists, clear the folder
-            await clearPlaygroundFolder();
+            await clearFolder("playground");
+        } else {
+            throw err;
+        }
+    }
+    // Create TEMP folder if it doesn't exist
+    const tempPath = path.join(process.cwd(), "temp");
+    try {
+        await fs.mkdir(tempPath);
+    } catch (err) {
+        if (err.code === "EEXIST") {
+            // Already exists, clear the folder
+            await clearFolder("temp");
         } else {
             throw err;
         }
     }
 }
 
-export { clearPlaygroundFolder, createRequiredFolders };
+export { clearFolder, createRequiredFolders };

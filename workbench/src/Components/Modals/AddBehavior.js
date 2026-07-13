@@ -3,8 +3,7 @@ import React, {useCallback, useEffect, useRef, useState} from "react";
 import PropTypes from "prop-types";
 import {useDispatch} from "react-redux";
 
-import {useDalEngine} from "../../Providers/GlobalProviders";
-import {setSelectedBehavior} from "../../Store/appSlice";
+import {addBehaviorThunk} from "../../Store/appThunk";
 
 import "./AddValue.scss";
 
@@ -17,10 +16,7 @@ AddBehavior.propTypes = {
  * @return {JSX.Element}
  */
 export function AddBehavior ({close}) {
-    const {engine} = useDalEngine();
-
     const dispatch = useDispatch();
-
     const [behavior, setBehavior] = useState("");
     const [description, setDescription] = useState("");
     const [error, setError] = useState(null);
@@ -33,7 +29,7 @@ export function AddBehavior ({close}) {
         if (inputRef.current) {
             inputRef.current.focus();
         }
-    }, [engine]);
+    }, []);
 
     const handleSubmit = useCallback(() => {
         if (behavior.trim() === "") {
@@ -41,22 +37,22 @@ export function AddBehavior ({close}) {
             return;
         }
         try {
-            engine.addNode(behavior, description, [], isAtomic, isDesignFork);
-            dispatch(setSelectedBehavior(behavior));
+            dispatch(addBehaviorThunk({
+                name: behavior,
+                description, isAtomic,
+                isDesignFork,
+            }));
             close();
         } catch (err) {
             setError(err.toString());
         }
-    }, [engine, behavior, description, close, isAtomic, isDesignFork, dispatch]);
+    }, [behavior, description, close, isAtomic, isDesignFork, dispatch]);
 
     useEffect(() => {
         const handleKeyDown = (event) => {
             if (event.key === "Escape") {
                 event.preventDefault();
                 close();
-            } else if (event.key === "Enter") {
-                event.preventDefault();
-                handleSubmit();
             }
         };
         document.addEventListener("keydown", handleKeyDown);

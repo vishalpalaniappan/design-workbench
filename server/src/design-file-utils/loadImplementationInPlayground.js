@@ -1,15 +1,15 @@
 import path from 'path';
-import { clearPlaygroundFolder } from "./initFolders.js";
+import { clearFolder } from "./initFolders.js";
 import instrumentationRunner from '../runners/instrumentationRunner.js';
 import unzipper from "unzipper";
 import fs from 'fs/promises';
 
-async function loadDesignInPlayground(engine) {
+async function loadImplementationInPlayground(engine) {
     // Get files from engine.
     const files = engine.getFiles();
 
     // Clear playground folder
-    await clearPlaygroundFolder();
+    await clearFolder("playground");
 
     // Write engine files to playground folder
     const playgroundPath = path.join(process.cwd(), "playground");
@@ -34,4 +34,4 @@ async function loadDesignInPlayground(engine) {
 }
 
 
-export default loadDesignInPlayground;
+export default loadImplementationInPlayground;

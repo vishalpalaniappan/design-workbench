@@ -1,7 +1,7 @@
 import fs from 'fs/promises';
 import {DALEngine} from "dal-engine-core-js-lib-dev";
 import { resolveDesignPath } from "./validateDesignName.js";
-import loadDesignInPlayground from './loadDesignInPlayground.js';
+import loadImplementationInPlayground from './loadImplementationInPlayground.js';
 
 /**
  * Saves the design to the workspace. However, it first checks
@@ -32,7 +32,7 @@ async function saveDesign(designName,  data) {
         });
 
         // Write engine files to playground folder
-        await loadDesignInPlayground(engine);
+        await loadImplementationInPlayground(engine);
 
         const serializedEngine = engine.serialize();
         await fs.writeFile(filePath, serializedEngine);

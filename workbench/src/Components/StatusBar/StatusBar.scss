@@ -21,6 +21,7 @@ $darkened-status-bar-color: #481655;
   height: 100%;
   display: flex;
   align-items: center;
+  gap:10px;
 }
 
 .status-right {
@@ -29,6 +30,7 @@ $darkened-status-bar-color: #481655;
   flex-direction: row;
   height: 100%;
   align-items: center;
+  gap:10px;
 }
 
 .status-item {
@@ -69,6 +71,18 @@ $darkened-status-bar-color: #481655;
   background-color: $darkened-status-bar-color;
 }
 
+.status-left > .edit-name {
+  cursor: pointer;
+  height:100%;
+  display:flex;
+  align-items: center;
+  padding:0 10px;
+}
+
+.status-left > .edit-name:hover {
+  background-color: $darkened-status-bar-color;
+}
+
 .status-right > .status-message {
   margin-right:10px
 }
@@ -86,7 +100,7 @@ $darkened-status-bar-color: #481655;
   font-size: 14px;
   border:none;
   height:100%;
-  padding:0 10px
+  padding:0 10px;
 }
 
 .status-bar-select > select:hover {
