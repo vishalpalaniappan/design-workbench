@@ -51,7 +51,7 @@ export function ImplementationToolbar () {
                 sendMessage({
                     type: "terminal_run_entry_point",
                     payload: {
-                        data: `echo "${failureMsg}"`,
+                        data: `echo ${failureMsg}`,
                         designName: engine._name,
                         selectedTrace: selectedTrace,
                     },

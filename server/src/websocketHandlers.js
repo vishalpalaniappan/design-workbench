@@ -219,16 +219,23 @@ export class  WSMessageHandler {
          * 
          * TODO: Extend this to support more languages.
          */
-        const fileCmd = msg.payload.entryPoint.split(" ")[1];
+        let cmd;
+        if (msg?.payload?.entryPoint) {
+            const fileCmd = msg.payload.entryPoint.split(" ")[1];
 
-        let cmd = `node ../tools/design-runtime/src/index.js implementation`;
-        if (msg.payload.designName) cmd = cmd + ` ${fileCmd}`;    
-        if (msg.payload.selectedTrace) cmd = cmd + ` ../temp/${msg.payload.selectedTrace}`;
+            cmd = `node ../tools/design-runtime/src/index.js implementation`;
+            if (msg.payload.designName) cmd = cmd + ` ${fileCmd}`;    
+            if (msg.payload.selectedTrace) cmd = cmd + ` ../temp/${msg.payload.selectedTrace}`;
 
-        await clearTraceFilesInPlayground();
+            await clearTraceFilesInPlayground();
 
-        if (msg.payload.selectedTrace && msg.payload.selectedTrace !== "None") {
-            await loadTraceInTempFolder(msg.payload.designName, msg.payload.selectedTrace);
+            if (msg.payload.selectedTrace && msg.payload.selectedTrace !== "None") {
+                await loadTraceInTempFolder(msg.payload.designName, msg.payload.selectedTrace);
+            }
+        } else if (msg?.payload?.data) {
+            cmd = msg.payload.data;
+        } else {
+            cmd = `echo unknown_error`;
         }
 
         this.stopTerminalAndRemoveListeners();
