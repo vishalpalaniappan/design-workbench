@@ -243,6 +243,7 @@ export class  WSMessageHandler {
     handleDesignExecutionFinished = async () => {
         if (this.designExecutionFinishedSent) return;
 
+        this.designExecutionFinishedSent = true;
         try {
             const traceEntry = await saveTraceInEngine("design");
             if (traceEntry) {
@@ -253,7 +254,6 @@ export class  WSMessageHandler {
         } catch (err) {
             console.error("Failed to save trace:", err);
         }
-        this.designExecutionFinishedSent = true;
         this.startTerminalAndAddListeners();
     }
 
