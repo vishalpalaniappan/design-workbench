@@ -193,7 +193,7 @@ export function ScriptingToolBar () {
                 selectedTrace: selectedTrace,
             },
         });
-    }, [sendMessage, selectedTrace]);
+    }, [sendMessage, selectedTrace, engine]);
 
     return (
         // eslint-disable-next-line max-len
