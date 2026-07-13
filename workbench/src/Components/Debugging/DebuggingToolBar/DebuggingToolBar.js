@@ -7,6 +7,7 @@ import {useDispatch} from "react-redux";
 import {useModalManager} from "ui-layout-manager-dev";
 
 import {useDalEngine} from "../../../Providers/GlobalProviders";
+import {setStatusMsg} from "../../../Store/appSlice";
 import {setSelectedTraceIdThunk} from "../../../Store/appThunk";
 import {deleteTraceThunk} from "../../../Store/appThunk";
 import {useTraces} from "../../../Store/useAppSelection";
