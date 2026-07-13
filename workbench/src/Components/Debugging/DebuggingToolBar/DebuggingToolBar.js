@@ -57,6 +57,7 @@ export function DebuggingToolBar () {
             setSelectedTrace(filteredTraces[0].uid);
         } else {
             dispatch(setSelectedTraceIdThunk(null));
+            setSelectedTrace(null);
         }
     }, [filteredTraces]);
 
