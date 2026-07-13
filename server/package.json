@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "clp-ffi-js": "^0.6.1",
-    "dal-engine-core-js-lib-dev": "0.0.57-dev-2",
+    "dal-engine-core-js-lib-dev": "0.0.1-dev-3",
     "express": "^4.18.1",
     "mongo-watch": "^0.2.8",
     "mongodb": "^4.7.0",
