@@ -2,7 +2,7 @@
 import React, {useCallback, useEffect, useRef, useState} from "react";
 
 import PropTypes from "prop-types";
-import {Floppy, Play} from "react-bootstrap-icons";
+import {Code, Floppy, Play} from "react-bootstrap-icons";
 import {useDispatch} from "react-redux";
 
 import {useDalEngine} from "../../../Providers/GlobalProviders";
@@ -195,6 +195,16 @@ export function ScriptingToolBar () {
         });
     }, [sendMessage, selectedTrace, engine]);
 
+    const synthesizeDesign = useCallback(() => {
+        // Send design to server with the selected trace (if any)
+        sendMessage({
+            type: "synthesize_design",
+            payload: {
+                designName: engine._name,
+            },
+        });
+    }, [sendMessage, selectedTrace, engine]);
+
     return (
         // eslint-disable-next-line max-len
         <div className="scriptingToolBar">
@@ -206,12 +216,18 @@ export function ScriptingToolBar () {
                         style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
                     <span >Compute Behavior</span>
                 </span>
+                <span className="scriptingToolBarButton" onClick={synthesizeDesign}>
+                    <Code
+                        size={20}
+                        style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
+                    <span >Synthesize Design</span>
+                </span>
 
             </div>
             <div className="scriptingToolBarRight">
                 <span className="scriptingToolBarLabel">Select Environment:</span>
                 <span className="scriptingToolBarSelect" >
-                    <select 
+                    <select
                         value={selectedTrace}
                         onChange={(e) => setSelectedTrace(e.target.value)}>
                         <option key={"none"} value={null}>None</option>
