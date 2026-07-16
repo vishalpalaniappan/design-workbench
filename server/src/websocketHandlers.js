@@ -30,6 +30,7 @@ export class  WSMessageHandler {
             load_design: this.loadDesign.bind(this),
             terminal_run_entry_point: this.onTerminalRunEntryPoint.bind(this),
             terminal_run_design: this.onTerminalRunDesign.bind(this),
+            synthesize_design:this.onSynthesizeDesign.bind(this),
         };
     }
 
@@ -262,6 +263,10 @@ export class  WSMessageHandler {
             console.error("Failed to save trace:", err);
         }
         this.startTerminalAndAddListeners();
+    }
+
+    onSynthesizeDesign = async (msg) => {
+        console.log(msg);
     }
 
     onTerminalRunDesign = async (msg) => {     
