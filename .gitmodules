@@ -6,3 +6,7 @@
 	path = server/tools/design-runtime
 	url = https://github.com/vishalpalaniappan/design-runtime-node.git
 	branch = use-trace-input
+[submodule "server/tools/synthesizer"]
+	path = server/tools/synthesizer
+	url = https://github.com/vishalpalaniappan/program-synthesizer-python.git
+	branch = implement_synth
