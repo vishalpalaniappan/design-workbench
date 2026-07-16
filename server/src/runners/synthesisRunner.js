@@ -7,7 +7,6 @@ const SYNTHESIZER_PATH = path.resolve(__dirname, "../../tools/synthesizer/design
 
 function synthesisRunner(synthPackage, args = []) {
     return new Promise((resolve, reject) => {
-        // Testing default execution.
         const process = spawn("python3", [SYNTHESIZER_PATH]);
                 let settled = false;
 
