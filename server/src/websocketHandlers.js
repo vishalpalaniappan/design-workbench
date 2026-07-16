@@ -7,6 +7,7 @@ import saveDesign from "./design-file-utils/saveDesign.js";
 import {saveTraceInEngine} from "./design-file-utils/saveTraceInEngine.js";
 import {clearTraceFilesInPlayground} from "./design-file-utils/saveTraceInEngine.js";
 import loadTraceInTempFolder from "./design-file-utils/loadTraceInTempFolder.js";
+import synthesizeDesign from "./design-file-utils/synthesizeDesign.js";
 import { unpack, pack } from 'msgpackr';
 
 export class  WSMessageHandler {
@@ -266,7 +267,11 @@ export class  WSMessageHandler {
     }
 
     onSynthesizeDesign = async (msg) => {
-        console.log(msg);
+        try {
+            synthesizeDesign(msg.payload.designName)
+        } catch (err) {
+            console.error("Failed to synthesize design:", err);
+        }
     }
 
     onTerminalRunDesign = async (msg) => {     
