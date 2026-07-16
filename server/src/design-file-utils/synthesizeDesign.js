@@ -26,11 +26,13 @@ async function synthesizeDesign(designName) {
 
     try {
         const synthesizedOutput = await synthesisRunner(synthPkg);
-        console.log("Synthesis output:", synthesizedOutput.toString());
+        engine.addFile("synthesized.py", "synthesized.py", synthesizedOutput.toString())
     } catch (error) {
         throw error;
     }
-    
+
+    const serializedEngine = engine.serialize();
+    await fs.writeFile(filePath, serializedEngine);
 }
 
 
