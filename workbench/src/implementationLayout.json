@@ -128,35 +128,12 @@
                     "containerId": "editorContainer",
                     "type": "container",
                     "size": { "initial": { "type": "fill" }}
-                },
-                {
-                    "type": "handleBar",
-                    "sibling1": "editorContainer",
-                    "sibling2": "designLayoutContainer"
-                },
-                {
-                    "containerId": "designLayoutContainer",
-                    "type": "container",
-                    "size": { "initial": { "type": "fill" }}
-                },
-                {
-                    "type": "handleBar",
-                    "sibling1": "designLayoutContainer",
-                    "sibling2": "ImplementationScriptContainer"
-                },
-                {
-                    "containerId": "ImplementationScriptContainer",
-                    "type": "container",
-                    "size": { 
-                        "initial": { "value": 370, "unit": "px", "type": "fixed" }
-                    },
-                    "collapse": { "value": 900, "condition": "lessThan", "relative": "parent" }
                 }
             ]
         },
         "ImplementationScriptContainer": {
             "id": "ImplementationScriptContainer",
-            "component": "ImplementationBehaviorScriptViewer",
+            "component": "EditorContainer",
             "background": "#252526"
         },
         "footer": {
