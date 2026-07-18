@@ -6,7 +6,7 @@ const appSlice = createSlice({
         activeTab: null,
         counter: 0,
         lastSaved: null,
-        appMode: 1, // 1 = design,  2 = implementation, 3 = debugging
+        appMode: 2, // 1 = design,  2 = implementation, 3 = debugging
         designLoaded: false,
         hasEntryPoint: false,
         selectedBehavior: null,
