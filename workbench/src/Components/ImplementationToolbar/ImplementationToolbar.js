@@ -63,7 +63,8 @@ export function ImplementationToolbar () {
     return (
         <div className="mainToolBar">
             <div className="mainToolBarLeft">
-                <span className="mainToolBarLabel">Implementation</span>
+                {/* Temporary Changes to Name */}
+                <span className="mainToolBarLabel">Design</span>
             </div>
             <div className="mainToolBarRight">
                 <span className="mainToolBarLabel">Select Environment:</span>
