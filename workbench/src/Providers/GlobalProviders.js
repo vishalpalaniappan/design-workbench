@@ -9,6 +9,7 @@ import {incrementCounter, setActiveTab, setLastSaved} from "../Store/appSlice";
 import {setStatusMsg} from "../Store/appSlice";
 import {setDesignLoaded} from "../Store/appSlice";
 import {addTraceThunk} from "../Store/appThunk";
+import {useActiveTab} from "../Store/useAppSelection";
 import engine from "./DalEngine";
 import DalEngineContext from "./DalEngineContext";
 import ServerContext from "./ServerContext";
@@ -30,6 +31,7 @@ function GlobalProviders ({children}) {
     const [design, setDesign] = useState();
     const termWriteRef = useRef(null);
     const engineRef = useRef(null);
+    const activeTab = useActiveTab();
 
     const dispatch = useDispatch();
 
@@ -100,6 +102,9 @@ function GlobalProviders ({children}) {
                  */
                 engine.save();
                 break;
+            case "synthesize_design":
+                addSynthesizedDesign(msg.data);
+                break;
             case "error":
                 console.error("Error message from server:", msg.data);
                 break;
@@ -121,6 +126,30 @@ function GlobalProviders ({children}) {
     const setTermWriter = (fn) => {
         termWriteRef.current = fn;
     };
+
+    /**
+     * Add the synthesized source to the design.
+     * @param {String} source Synthesized Source
+     */
+    const addSynthesizedDesign = useCallback((source) => {
+        const files = engine.getFiles();
+
+        let found;
+        for (const file of files) {
+            if (file._name === "synthesized.py") {
+                found = true;
+                console.log(file);
+                file.setUpdatedContent(source);
+                dispatch(setActiveTab(file._uid));
+            }
+        }
+        if (!found) {
+            const f = engine.addFile("synthesized.py", "synthesized.py", source);
+            dispatch(setActiveTab(f._uid));
+        }
+        dispatch(incrementCounter());
+        engine.save();
+    }, [engine, dispatch]);
 
 
     /**
@@ -209,7 +238,7 @@ function GlobalProviders ({children}) {
         if (!design) return;
         engine.deserialize(new Uint8Array(design.data));
         const files = engine.getFiles();
-        if (files.length > 0) {
+        if (files.length > 0 && !activeTab) {
             dispatch(setActiveTab(files[0].uid));
         }
         console.log(engine);
