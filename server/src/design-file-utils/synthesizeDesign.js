@@ -24,15 +24,18 @@ async function synthesizeDesign(designName, ast) {
         synthPkg.push(behaviorSynth);
     }
 
+    let source;
     try {
         const synthesizedOutput = await synthesisRunner(JSON.stringify(ast));
-        engine.addFile("synthesized.py", "synthesized.py", synthesizedOutput.toString())
+        source = synthesizedOutput.toString()
     } catch (error) {
         throw error;
     }
 
     const serializedEngine = engine.serialize();
     await fs.writeFile(filePath, serializedEngine);
+
+    return source;
 }
 
 
