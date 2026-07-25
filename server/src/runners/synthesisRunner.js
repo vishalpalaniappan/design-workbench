@@ -1,13 +1,9 @@
 import { spawn } from "node:child_process";
-import { fileURLToPath } from "node:url";
-import path from "node:path";
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const SYNTHESIZER_PATH = path.resolve(__dirname, "../../tools/synthesizer/design_synthesizer.py");
 
 function synthesisRunner(synthPackage, args = []) {
     return new Promise((resolve, reject) => {
-        const process = spawn("python3", [SYNTHESIZER_PATH]);
+        const process = spawn("python3", ["dal_ast_synthesizer.py"]);
                 let settled = false;
 
         const stdoutChunks = [];
@@ -37,7 +33,7 @@ function synthesisRunner(synthPackage, args = []) {
             }
         });
 
-        process.stdin.write(JSON.stringify(synthPackage));
+        process.stdin.write(synthPackage);
         process.stdin.end();
     });
 }
