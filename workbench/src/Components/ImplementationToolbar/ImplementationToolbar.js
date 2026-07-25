@@ -68,6 +68,14 @@ export function ImplementationToolbar () {
             if (file._name === entryPoint) {
                 file.generateAst();
                 engine.save();
+                sendMessage({
+                    type: "synthesize_design",
+                    payload: {
+                        entryPoint: engine.implementation.getEntryPoint(),
+                        designName: engine._name,
+                        ast: file.getAst(),
+                    },
+                });
             }
         }
     }, [hasEntryPoint, engine]);

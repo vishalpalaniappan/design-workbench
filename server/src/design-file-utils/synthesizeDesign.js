@@ -5,7 +5,7 @@ import fs from 'fs/promises';
 
 import synthesisRunner from '../runners/synthesisRunner.js';
 
-async function synthesizeDesign(designName) {
+async function synthesizeDesign(designName, ast) {
     const filePath = resolveDesignPath(designName);
     const data = await fs.readFile(filePath);
 
@@ -25,7 +25,7 @@ async function synthesizeDesign(designName) {
     }
 
     try {
-        const synthesizedOutput = await synthesisRunner(synthPkg);
+        const synthesizedOutput = await synthesisRunner(JSON.stringify(ast));
         engine.addFile("synthesized.py", "synthesized.py", synthesizedOutput.toString())
     } catch (error) {
         throw error;
