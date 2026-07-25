@@ -116,6 +116,26 @@ export const useParticipants = () => {
 };
 
 /**
+ * Returns a list of participants from the selected behavior.
+ * @return {Object}
+ */
+export const useAst = () => {
+    const {engine} = useDalEngine();
+    const counter = useSelector(selectCounter);
+
+    return useMemo(() => {
+        const files = engine.implementation.getFiles();
+        const entryPoint = engine.implementation.getEntryPoint();
+
+        for (const file of files) {
+            if (file._name === entryPoint) {
+                return file.getAst();
+            }
+        }
+    }, [engine, counter]);
+};
+
+/**
  * Returns a list of invariants from the selected participant.
  * @return {Object} The list of invariants
  */

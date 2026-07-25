@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
-import React, {useCallback, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 
-import PropTypes from "prop-types";
 import {Floppy, Play} from "react-bootstrap-icons";
 import {useDispatch} from "react-redux";
 
@@ -60,6 +59,19 @@ export function ImplementationToolbar () {
         }
     }, [sendMessage, hasEntryPoint, engine, selectedTrace]);
 
+
+    const synthesizeDesign = useCallback(() => {
+        const files = engine.implementation.getFiles();
+        const entryPoint = engine.implementation.getEntryPoint();
+
+        for (const file of files) {
+            if (file._name === entryPoint) {
+                file.generateAst();
+                engine.save();
+            }
+        }
+    }, [hasEntryPoint, engine]);
+
     return (
         <div className="mainToolBar">
             <div className="mainToolBarLeft">
@@ -82,12 +94,19 @@ export function ImplementationToolbar () {
                         }
                     </select>
                 </span>
+                <span className="mainToolBarButton" onClick={synthesizeDesign}>
+                    <Play
+                        size={20}
+                        className="mainToolBarButton"
+                        style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
+                    <span >Synthesize Design</span>
+                </span>
                 <span className="mainToolBarButton" onClick={runDesign}>
                     <Play
                         size={20}
                         className="mainToolBarButton"
                         style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
-                    <span >Run Implementation</span>
+                    <span >Run Design</span>
                 </span>
 
                 <span className="mainToolBarButton" onClick={saveDesign}>
