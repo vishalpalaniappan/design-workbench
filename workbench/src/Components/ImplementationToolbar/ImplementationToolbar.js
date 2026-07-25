@@ -36,17 +36,24 @@ export function ImplementationToolbar () {
 
     const runDesign = useCallback(() => {
         if (sendMessage && engine) {
-            if (hasEntryPoint) {
+            const files = engine.getFiles();
+            let found;
+            for (const file of files) {
+                if (file.getName() === "synthesized.py") {
+                    found = true;
+                }
+            }
+            if (found) {
                 sendMessage({
                     type: "terminal_run_entry_point",
                     payload: {
-                        entryPoint: engine.implementation.getEntryPoint(),
+                        entryPoint: "python3 synthesized.py",
                         designName: engine._name,
                         selectedTrace: selectedTrace,
                     },
                 });
             } else {
-                const failureMsg = "Failed to run design. Please ensure an entry point is set.";
+                const failureMsg = "Failed to run design. Please ensure design has been synthesized into implementation.";
                 sendMessage({
                     type: "terminal_run_entry_point",
                     payload: {
