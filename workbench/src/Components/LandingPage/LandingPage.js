@@ -43,7 +43,7 @@ export function LandingPage () {
         const params = new URLSearchParams(window.location.search);
         const designMode = params.get("mode");
         if (designMode && designMode === "design") {
-            dispatch(setImplementationMode());
+            dispatch(setDesignMode());
         } else if (designMode && designMode === "debugging") {
             dispatch(setDebuggingMode());
         }
