@@ -3,6 +3,7 @@ import { clearFolder } from "./initFolders.js";
 import instrumentationRunner from '../runners/instrumentationRunner.js';
 import unzipper from "unzipper";
 import fs from 'fs/promises';
+import { json } from 'stream/consumers';
 
 async function loadImplementationInPlayground(engine) {
     // Get files from engine.
@@ -14,23 +15,20 @@ async function loadImplementationInPlayground(engine) {
     // Write engine files to playground folder
     const playgroundPath = path.join(process.cwd(), "playground");
 
-    const instrumentationPkg = engine.implementation.exportForInstrumentation();
+    let foundFile;
+    for (const file of files) {
+        if (file.getName() === "synthesized.py") {
+            foundFile = file;
+        }
+    }
 
-    // Temporarily write to temp folder for accesing instrumentation package
-    const filePath = path.join("temp", engine._name + ".json");
-    await fs.mkdir(path.dirname(filePath), { recursive: true });
-    await fs.writeFile(filePath, instrumentationPkg);
+    if (!foundFile) {
+        return null;
+    }
 
     const meta = {designName: engine._name};
     await fs.writeFile(path.join(playgroundPath, "meta.json"), JSON.stringify(meta));
-
-    try {
-        const zip = await instrumentationRunner(instrumentationPkg);
-        const directory = await unzipper.Open.buffer(zip);
-        await directory.extract({ path: playgroundPath });
-    } catch (error) {
-        throw error;
-    }
+    await fs.writeFile(path.join(playgroundPath, "synthesized.py"), foundFile.getUpdatedContent(), "utf8");
 }
 
 
