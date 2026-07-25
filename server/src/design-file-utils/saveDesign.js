@@ -28,7 +28,7 @@ async function saveDesign(designName,  data) {
         // the update content, then the file is considered dirty and the UI
         // will reflect this.
         engine.getFiles().forEach((file) => {
-            file.setContent(file.getUpdatedContent());
+            file.setContent(file.getUpdatedContent().replace(/[\t\r]/g, ""));
         });
 
         // Write engine files to playground folder
