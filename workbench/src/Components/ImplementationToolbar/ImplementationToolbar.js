@@ -9,6 +9,7 @@ import {useServer} from "../../Providers/GlobalProviders";
 import {setStatusMsg} from "../../Store/appSlice";
 import {useHasEntryPoint} from "../../Store/useAppSelection";
 import {useTraces} from "../../Store/useAppSelection";
+import { useActiveTab } from "../../Store/useAppSelection";
 
 import "./ImplementationToolbar.scss";
 
@@ -26,6 +27,7 @@ export function ImplementationToolbar () {
     const hasEntryPoint = useHasEntryPoint();
     const traces = useTraces();
     const [selectedTrace, setSelectedTrace] = useState(null);
+    const activeTab = useActiveTab();
 
     const saveDesign = useCallback(() => {
         if (engine) {
@@ -68,24 +70,23 @@ export function ImplementationToolbar () {
 
 
     const synthesizeDesign = useCallback(() => {
-        const files = engine.implementation.getFiles();
-        const entryPoint = engine.implementation.getEntryPoint();
-
-        for (const file of files) {
-            if (file._name === entryPoint) {
-                file.generateAst();
-                engine.save();
-                sendMessage({
-                    type: "synthesize_design",
-                    payload: {
-                        entryPoint: engine.implementation.getEntryPoint(),
-                        designName: engine._name,
-                        ast: file.getAst(),
-                    },
-                });
+        if (activeTab) {
+            for (const file of engine.getFiles()) {
+                if (activeTab == file._uid && file._name.endsWith(".dal")) {
+                    file.generateAst();
+                    engine.save();
+                    sendMessage({
+                        type: "synthesize_design",
+                        payload: {
+                            entryPoint: engine.implementation.getEntryPoint(),
+                            designName: engine._name,
+                            ast: file.getAst(),
+                        },
+                    });
+                }
             }
         }
-    }, [hasEntryPoint, engine]);
+    }, [hasEntryPoint, engine, activeTab]);
 
     return (
         <div className="mainToolBar">
