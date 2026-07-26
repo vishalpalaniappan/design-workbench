@@ -15,20 +15,11 @@ async function loadImplementationInPlayground(engine) {
     // Write engine files to playground folder
     const playgroundPath = path.join(process.cwd(), "playground");
 
-    let foundFile;
+    // Load all the files into the playground
     for (const file of files) {
-        if (file.getName() === "synthesized.py") {
-            foundFile = file;
-        }
+        await fs.writeFile(path.join(playgroundPath, file.getName()), file.getUpdatedContent(), "utf8");
     }
-
-    if (!foundFile) {
-        return null;
-    }
-
-    const meta = {designName: engine._name};
-    await fs.writeFile(path.join(playgroundPath, "meta.json"), JSON.stringify(meta));
-    await fs.writeFile(path.join(playgroundPath, "synthesized.py"), foundFile.getUpdatedContent(), "utf8");
+    await fs.writeFile(path.join(playgroundPath, "meta.json"), JSON.stringify({designName: engine._name}));
 }
 
 
