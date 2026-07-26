@@ -58,8 +58,6 @@ export function StatusBar () {
         const value = parseInt(event.target.value);
         if (value === 1 && appMode !== 1) {
             dispatch(setDesignMode());
-        } else if (value === 2) {
-            dispatch(setDebuggingMode());
         }
     };
 
@@ -90,7 +88,6 @@ export function StatusBar () {
                         (event) => selectMode(event)
                     }>
                         <option value={1}>Design</option>
-                        <option value={2}>Debugging</option>
                     </select>
                 </div>
                 <div className="status-connected">

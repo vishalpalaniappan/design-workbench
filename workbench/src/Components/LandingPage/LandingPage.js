@@ -44,8 +44,6 @@ export function LandingPage () {
         const designMode = params.get("mode");
         if (designMode && designMode === "design") {
             dispatch(setDesignMode());
-        } else if (designMode && designMode === "debugging") {
-            dispatch(setDebuggingMode());
         }
         setReady(true);
     }, [dispatch]);
@@ -57,10 +55,6 @@ export function LandingPage () {
             dispatch(setDesignLoaded(false));
             setChosenLayout(implementationLayout);
             params.set("mode", "design");
-        } else if (appMode === 2) {
-            dispatch(setDesignLoaded(false));
-            setChosenLayout(debuggingLayout);
-            params.set("mode", "debugging");
         } else {
             console.warn("Unknown app mode:", appMode);
             dispatch(setDesignLoaded(false));
