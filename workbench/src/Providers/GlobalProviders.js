@@ -1,7 +1,7 @@
 import React, {useCallback, useContext, useEffect, useRef, useState} from "react";
 
 import {pack, unpack} from "msgpackr";
-import PropTypes from "prop-types";
+import PropTypes, { object } from "prop-types";
 import {useDispatch} from "react-redux";
 import useWebSocket, {ReadyState} from "react-use-websocket";
 
@@ -134,18 +134,20 @@ function GlobalProviders ({children}) {
     const addSynthesizedDesign = useCallback((source) => {
         const files = engine.getFiles();
 
-        let found;
-        for (const file of files) {
-            if (file._name === "synthesized.py") {
-                found = true;
-                console.log(file);
-                file.setUpdatedContent(source);
+        const fileData = JSON.parse(new TextDecoder().decode(source));
+
+        // Either update existing file or save new files contents.
+        // Set synthesized.py to active tab.
+        for (const [name, value] of Object.entries(fileData)) {
+            let file = files.find((engineFile) => engineFile.getName() === name);
+            if (file) {
+                file.setUpdatedContent(value);
+            } else {
+                file = engine.addFile(name, name, value);
+            }
+            if (name === "synthesized.py") {
                 dispatch(setActiveTab(file._uid));
             }
-        }
-        if (!found) {
-            const f = engine.addFile("synthesized.py", "synthesized.py", source);
-            dispatch(setActiveTab(f._uid));
         }
         dispatch(incrementCounter());
         engine.save();

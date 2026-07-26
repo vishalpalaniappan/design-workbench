@@ -6,36 +6,14 @@ import fs from 'fs/promises';
 import synthesisRunner from '../runners/synthesisRunner.js';
 
 async function synthesizeDesign(designName, ast) {
-    const filePath = resolveDesignPath(designName);
-    const data = await fs.readFile(filePath);
-
-    const engine = new DALEngine({
-        name: designName,
-        description: "Default engine",
-    });
-
-    engine.deserialize(data);
-
-    const activeBehavior = engine.graphs.getActiveGraph();
-
-    let synthPkg = [];
-    for (const node of activeBehavior.nodes) {
-        const behaviorSynth = node.getBehavior().generateSynthesisPackage();
-        synthPkg.push(behaviorSynth);
-    }
-
-    let source;
+    let synthesizedOutput;
     try {
-        const synthesizedOutput = await synthesisRunner(JSON.stringify(ast));
-        source = synthesizedOutput.toString()
+        synthesizedOutput = await synthesisRunner(JSON.stringify(ast));
     } catch (error) {
         throw error;
     }
 
-    const serializedEngine = engine.serialize();
-    await fs.writeFile(filePath, serializedEngine);
-
-    return source;
+    return synthesizedOutput;
 }
 
 
