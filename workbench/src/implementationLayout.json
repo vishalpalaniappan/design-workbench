@@ -128,8 +128,23 @@
                     "containerId": "editorContainer",
                     "type": "container",
                     "size": { "initial": { "type": "fill" }}
+                },
+                {
+                    "type": "handleBar",
+                    "sibling1": "editorContainer",
+                    "sibling2": "registerContainer"
+                },
+                {
+                    "containerId": "registerContainer",
+                    "type": "container",
+                    "size": { "initial": { "type": "fill" }}
                 }
             ]
+        },
+        "registerContainer": {
+            "id": "registerContainer",
+            "component": "RegisterContainer",
+            "background": "#252526"
         },
         "ImplementationScriptContainer": {
             "id": "ImplementationScriptContainer",
