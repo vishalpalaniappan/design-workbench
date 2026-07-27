@@ -144,6 +144,10 @@
         "registerContainer": {
             "id": "registerContainer",
             "component": "RegisterContainer",
+            "menuBar": {
+                "closeContainerId": "registerContainer",
+                "title": "Register Implementation"
+            },
             "background": "#252526"
         },
         "ImplementationScriptContainer": {
