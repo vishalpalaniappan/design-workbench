@@ -108,10 +108,6 @@ export const registry = {
         import("./Components/Debugging/viewers/debuggingInfoViewers").then((m) => ({
             default: m.default || m.DebuggerTransformOutputMetadata,
         })),
-    RegisterContainer: () =>
-        import("./Components/RegisterContainer/RegisterContainer").then((m) => ({
-            default: m.default || m.RegisterContainer,
-        })),
     RootCauseContainer: () =>
         import("./Components/Debugging/RootCauseContainer/RootCauseContainer").then((m) => ({
             default: m.default || m.RootCauseContainer,
