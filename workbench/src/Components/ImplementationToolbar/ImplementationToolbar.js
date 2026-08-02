@@ -192,8 +192,7 @@ export function ImplementationToolbar () {
                     <Floppy
                         size={14}
                         className="mainToolBarButton"
-                        style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
-                    <span>Save</span>
+                        style={{"color": "white", "cursor": "pointer", "padding": "0 0 0 7px"}}/>
                 </span>
             </div>
         </div>
