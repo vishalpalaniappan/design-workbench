@@ -7,7 +7,7 @@ const SYNTHESIZER_PATH = path.resolve(__dirname, "../../tools/synthesizer/dal_as
 
 function synthesisRunner(synthPackage, args = []) {
     return new Promise((resolve, reject) => {
-        const process = spawn("python3", [SYNTHESIZER_PATH]);
+        const process = spawn("python3", [SYNTHESIZER_PATH, "--mode", "verbose"]);
                 let settled = false;
 
         const stdoutChunks = [];
