@@ -2,7 +2,7 @@
 import React, {useCallback, useEffect, useState} from "react";
 
 import clpFfiJsModuleInit from "clp-ffi-js";
-import {Code, Eye, Floppy, Play, Trash} from "react-bootstrap-icons";
+import {Code, Eye, Floppy, Pencil, Play, Trash} from "react-bootstrap-icons";
 import {useDispatch} from "react-redux";
 import {useModalManager} from "ui-layout-manager-dev";
 
@@ -13,6 +13,7 @@ import {deleteTraceThunk} from "../../Store/appThunk";
 import {useHasEntryPoint} from "../../Store/useAppSelection";
 import {useTraces} from "../../Store/useAppSelection";
 import {useActiveTab} from "../../Store/useAppSelection";
+import {AddTraceName} from "../Modals/AddTraceName";
 import {ShowTraceLog} from "../Modals/ShowTraceLog";
 
 import "./ImplementationToolbar.scss";
@@ -137,6 +138,21 @@ export function ImplementationToolbar () {
             console.warn("Trace does not have a valid UID:", selectedTrace);
         }
     };
+
+    const setTraceName = useCallback(() => {
+        if (selectedTrace) {
+            openModal({
+                title: "Set Trace Name",
+                args: {
+                    trace: selectedTrace,
+                },
+                render: ({close, args}) => {
+                    return <AddTraceName close={close} args={args} />;
+                },
+            });
+        }
+    }, [selectedTrace, traces, openModal]);
+
     return (
         <div className="mainToolBar">
             <div className="mainToolBarLeft">
@@ -158,6 +174,13 @@ export function ImplementationToolbar () {
                             ))
                         }
                     </select>
+                </span>
+                <span className="debuggingToolBarButton"
+                    onClick={setTraceName}
+                    style={{"padding": "3px"}}
+                    title="Set Trace Name">
+                    <Pencil size={14}
+                        style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
                 </span>
                 <span className="debuggingToolBarButton"
                     onClick={openTraceInEditor}
@@ -182,7 +205,7 @@ export function ImplementationToolbar () {
                         <option key={"minimal"} value={"minimal"}>Minimal Logging</option>
                         <option key={"verbose"} value={"verbose"}>Verbose Logging</option>
                     </select>
-                </span> 
+                </span>
                 <span className="mainToolBarButton" onClick={synthesizeDesign}>
                     <Code
                         size={15}
