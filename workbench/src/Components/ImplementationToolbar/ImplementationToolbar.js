@@ -159,7 +159,7 @@ export function ImplementationToolbar () {
                 </span>
                 <span className="debuggingToolBarButton"
                     onClick={openTraceInEditor}
-                    style={{"padding": "3px"}}
+                    style={{"padding": "3px 0"}}
                     title="View Raw Trace">
                     <Eye
                         size={14}
@@ -167,7 +167,7 @@ export function ImplementationToolbar () {
                 </span>
                 <span className="debuggingToolBarButton"
                     onClick={deleteTrace}
-                    style={{"padding": "3px"}}
+                    style={{"padding": "3px 0"}}
                     title="Delete Trace">
                     <Trash
                         size={14}
