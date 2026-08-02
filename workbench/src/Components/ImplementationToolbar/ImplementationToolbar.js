@@ -2,7 +2,7 @@
 import React, {useCallback, useEffect, useState} from "react";
 
 import clpFfiJsModuleInit from "clp-ffi-js";
-import {Eye, Floppy, Play, Trash} from "react-bootstrap-icons";
+import {Code, Eye, Floppy, Play, Trash} from "react-bootstrap-icons";
 import {useDispatch} from "react-redux";
 import {useModalManager} from "ui-layout-manager-dev";
 
@@ -174,11 +174,11 @@ export function ImplementationToolbar () {
                         style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
                 </span>
                 <span className="mainToolBarButton" onClick={synthesizeDesign}>
-                    <Play
-                        size={20}
+                    <Code
+                        size={15}
                         className="mainToolBarButton"
                         style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
-                    <span >Synthesize Design</span>
+                    <span >Synthesize</span>
                 </span>
                 <span className="mainToolBarButton" onClick={runDesign}>
                     <Play
