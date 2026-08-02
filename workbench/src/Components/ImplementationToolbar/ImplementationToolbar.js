@@ -32,6 +32,7 @@ export function ImplementationToolbar () {
     const hasEntryPoint = useHasEntryPoint();
     const traces = useTraces();
     const [selectedTrace, setSelectedTrace] = useState(null);
+    const [selectedVerbosity, setSelectedVerbosity] = useState("minimal");
     const activeTab = useActiveTab();
 
     const saveDesign = useCallback(() => {
@@ -119,12 +120,13 @@ export function ImplementationToolbar () {
                             entryPoint: engine.implementation.getEntryPoint(),
                             designName: engine._name,
                             ast: file.getAst(),
+                            verbosity: selectedVerbosity,
                         },
                     });
                 }
             }
         }
-    }, [hasEntryPoint, engine, activeTab]);
+    }, [hasEntryPoint, engine, activeTab, selectedVerbosity]);
 
 
     const deleteTrace = (e) => {
@@ -142,7 +144,7 @@ export function ImplementationToolbar () {
                 <span className="mainToolBarLabel">Design</span>
             </div>
             <div className="mainToolBarRight">
-                <span className="mainToolBarLabel">Select Environment:</span>
+                <span className="mainToolBarLabel">Environment:</span>
                 <span className="mainToolBarSelect" >
                     <select
                         value={selectedTrace}
@@ -173,6 +175,14 @@ export function ImplementationToolbar () {
                         size={14}
                         style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
                 </span>
+                <span className="mainToolBarSelect" >
+                    <select
+                        value={selectedVerbosity}
+                        onChange={(e) => setSelectedVerbosity(e.target.value)}>
+                        <option key={"minimal"} value={"minimal"}>Minimal Logging</option>
+                        <option key={"verbose"} value={"verbose"}>Verbose Logging</option>
+                    </select>
+                </span> 
                 <span className="mainToolBarButton" onClick={synthesizeDesign}>
                     <Code
                         size={15}
@@ -185,7 +195,7 @@ export function ImplementationToolbar () {
                         size={20}
                         className="mainToolBarButton"
                         style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
-                    <span >Run Design</span>
+                    <span >Run</span>
                 </span>
 
                 <span className="mainToolBarButton" onClick={saveDesign}>
