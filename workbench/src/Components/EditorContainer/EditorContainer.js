@@ -3,7 +3,6 @@ import React, {useCallback, useContext, useEffect, useRef, useState} from "react
 import {useDispatch} from "react-redux";
 import {Editor} from "sample-ui-component-library";
 import {useLayoutEventSubscription} from "ui-layout-manager-dev";
-import {useModalManager} from "ui-layout-manager-dev";
 
 import ServerContext from "../../Providers/ServerContext";
 import {setActiveTab} from "../../Store/appSlice";
@@ -23,7 +22,6 @@ export function EditorContainer () {
     const parentIdRef = useRef(null);
     const files = useEngineFiles();
     const lastSaved = useLastSaved();
-    const {openModal} = useModalManager();
     const [editorLoaded, setEditorLoaded] = useState(false);
 
     const activeTab = useActiveTab();

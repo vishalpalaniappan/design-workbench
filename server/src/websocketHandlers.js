@@ -144,7 +144,7 @@ export class  WSMessageHandler {
     saveFile = async (msg) => {
         try {
             await saveFile(msg.data.name, msg.data.path, msg.data.updatedContent);
-            this.sendMessage({ type: "save_file", path: msg.data.path });
+            this.sendMessage({ type: "save_file", data: msg.data.uid });
         } catch (err) {
             this.sendMessage({ type: "error", data: err.message });
         }

@@ -41,14 +41,12 @@ export function ImplementationToolbar () {
 
     const saveFile = useCallback(() => {
         if (workbench && activeTab) {
-            console.log(`Saving design: ${activeTab}`);
             const file = workbench.getFileUsingUid(activeTab);
-            console.log(file);
             sendMessage({
                 type: "save_file",
                 data: file,
             });
-            dispatch(setStatusMsg("Saving design..."));
+            dispatch(setStatusMsg(`Saving file ${file.name}`));
         }
     }, [workbench, activeTab, dispatch]);
 

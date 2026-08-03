@@ -80,7 +80,7 @@ export const useEngineFiles = () => {
                 name: file.name,
                 path: file.path,
                 content: file.content,
-                updatedContent: file.content,
+                updatedContent: file.updatedContent,
                 type: "file",
                 uid: file.uid,
             };

@@ -107,6 +107,9 @@ function GlobalProviders ({children}) {
             case "synthesize_design":
                 addSynthesizedDesign(msg.data);
                 break;
+            case "save_file":
+                fileSaved(msg.data);
+                break;
             case "error":
                 console.error("Error message from server:", msg.data);
                 break;
@@ -128,6 +131,13 @@ function GlobalProviders ({children}) {
     const setTermWriter = (fn) => {
         termWriteRef.current = fn;
     };
+
+    // Indicates that the file is saved.
+    const fileSaved = useCallback((uid) => {
+        const file = workbench.fileSaved(uid);
+        dispatch(incrementCounter());
+        dispatch(setStatusMsg(`Saved ${file.name}.`));
+    }, [workbench]);
 
     /**
      * Add the synthesized source to the design.

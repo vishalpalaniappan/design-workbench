@@ -1,4 +1,3 @@
-
 /**
  * This class is temporary and it stores the repo contents so that
  * it can be accessed by the workbench in a strucured way.
@@ -32,6 +31,9 @@ class WorkbenchApp {
      * @param {Object} files
      */
     addFiles (files) {
+        for (const file of files) {
+            file.updatedContent = file.content;
+        }
         this.files = files;
     }
 
@@ -63,7 +65,26 @@ class WorkbenchApp {
      */
     setUpdatedContent (uid, content) {
         const file = this.getFileUsingUid(uid);
-        file.updatedContent = content;
+        if (file) {
+            file.updatedContent = content;
+        } else {
+            throw new Error(`File with ${uid} was not found`);
+        }
+    }
+
+    /**
+     * Server says that file is saved.
+     * @param {String} uid uid of file.
+     * @return {Object}
+     */
+    fileSaved (uid) {
+        const file = this.getFileUsingUid(uid);
+        if (file) {
+            file.content = file.updatedContent;
+        } else {
+            throw new Error(`File with ${uid} was not found`);
+        }
+        return file;
     }
 }
 
