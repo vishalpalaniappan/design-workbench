@@ -25,15 +25,14 @@ export class TerminalSession extends EventEmitter {
         // If design name is provided, set the working directory to the design repo
         if ("designName" in args && args["designName"]) {
             this.cwd = path.join(process.cwd(), "workspace", args["designName"])
-            this.name = this.designName;
         } else {
             this.cwd = options.cwd || workspacePath;
-            this.name = options.name || "xterm-color";
         }
 
         this.env = options.env || process.env;
         this.cols = options.cols || 80;
         this.rows = options.rows || 24;
+        this.name = options.name || "xterm-color";
 
         this.ptyProcess = null;
         this.args = args;
