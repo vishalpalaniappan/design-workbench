@@ -79,9 +79,5 @@ export const registry = {
     ImplementationToolbar: () =>
         import("./Components/ImplementationToolbar/ImplementationToolbar").then((m) => ({
             default: m.default || m.ImplementationToolbar,
-        })),
-    ImplementationBehaviorScriptViewer: () =>
-        import("./Components/ImplementationBehaviorScriptViewer/ImplementationBehaviorScriptViewer").then((m) => ({
-            default: m.default || m.ImplementationBehaviorScriptViewer,
-        })),
+        }))
 };
