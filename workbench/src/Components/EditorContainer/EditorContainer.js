@@ -29,10 +29,6 @@ export function EditorContainer () {
     const {openModal} = useModalManager();
     const [editorLoaded, setEditorLoaded] = useState(false);
 
-    const selectedBehavior = useSelectedBehavior();
-    const selectedParticipant = useSelectedParticipant();
-    const selectedMapping = useSelectedMapping();
-
     const activeTab = useActiveTab();
     const dispatch = useDispatch();
 
@@ -52,22 +48,6 @@ export function EditorContainer () {
             editorRef.current.layoutEditor();
         }
     }, [files, editorLoaded]);
-
-    useEffect(() => {
-        if (selectedMapping) {
-            // Mapping selected in the mapping container.
-            const file = files.find((file) => file.uid === selectedMapping.fileUid);
-            editorRef.current.addTab(file, null, selectedMapping.lineNumber);
-        }
-    }, [selectedMapping]);
-
-    useEffect(() => {
-        if (selectedBehavior && editorRef.current) {
-            // Behvaior selected in graph by clicking on node.
-            editorRef.current.setCurrentBehavior(selectedBehavior.getName());
-            editorRef.current.layoutEditor();
-        }
-    }, [selectedBehavior]);
 
     useEffect(() => {
         if (lastSaved && files && editorRef.current) {

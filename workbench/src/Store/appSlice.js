@@ -9,10 +9,6 @@ const appSlice = createSlice({
         appMode: 1, // 1 = design,  2 = debugging
         designLoaded: false,
         hasEntryPoint: false,
-        selectedBehavior: null,
-        selectedParticipant: null,
-        selectedGraph: null,
-        selectedMapping: null,
         selectedInvariant: null,
         selectedTraceId: null,
         selectedTraceStmtId: null,
@@ -20,32 +16,6 @@ const appSlice = createSlice({
         tabs: null,
     },
     reducers: {
-        setSelectedBehavior(state, action) {
-            // console.log("Setting selected behavior to:", action.payload);
-            state.selectedParticipant = null;
-            state.selectedInvariant = null;
-            if (action.payload) {
-                state.selectedBehavior = action.payload;
-            } else {
-                state.selectedBehavior = null;
-            }
-        },
-        setSelectedParticipant(state, action) {
-            // console.log("Setting selected participant to:", action.payload);
-            state.selectedInvariant = null;
-            state.selectedParticipant = action.payload;
-        },
-        setSelectedGraph(state, action) {
-            // console.log("Setting selected graph to:", action.payload);
-            state.selectedBehavior = null;
-            state.selectedParticipant = null;
-            state.selectedInvariant = null;
-            state.selectedGraph = action.payload;
-        },
-        setSelectedInvariant(state, action) {
-            // console.log("Setting selected invariant to:", action.payload);
-            state.selectedInvariant = action.payload;
-        },
         setActiveTab(state, action) {
             // console.log("Setting active tab to:", action.payload);
             state.activeTab = action.payload;
@@ -65,9 +35,6 @@ const appSlice = createSlice({
         setDebuggingMode (state) {
             state.appMode = 2;
         },
-        setSelectedMapping (state, action) {
-            state.selectedMapping = action.payload;
-        },
         setDesignLoaded (state, action) {
             state.designLoaded = action.payload;
         },
@@ -84,18 +51,13 @@ const appSlice = createSlice({
 });
 
 export const {
-    setSelectedBehavior,
-    setSelectedParticipant,
     setActiveTab,
     setStatusMsg,
     setLastSaved,
     setImplementationMode,
     setDebuggingMode,
     setDesignMode,
-    setSelectedGraph,
-    setSelectedInvariant,
     incrementCounter,
-    setSelectedMapping,
     setDesignLoaded,
     setHasEntryPoint,
     setSelectedTraceId,
