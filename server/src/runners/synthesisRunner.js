@@ -5,9 +5,9 @@ import path from "node:path";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SYNTHESIZER_PATH = path.resolve(__dirname, "../../tools/synthesizer/dal_ast_synthesizer.py");
 
-function synthesisRunner(synthPackage, args = []) {
+function synthesisRunner(synthPackage, verbosity) {
     return new Promise((resolve, reject) => {
-        const process = spawn("python3", [SYNTHESIZER_PATH]);
+        const process = spawn("python3", [SYNTHESIZER_PATH, "--mode", verbosity]);
                 let settled = false;
 
         const stdoutChunks = [];

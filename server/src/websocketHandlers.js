@@ -268,7 +268,7 @@ export class  WSMessageHandler {
 
     onSynthesizeDesign = async (msg) => {
         try {
-            const source = await synthesizeDesign(msg.payload.designName, msg.payload.ast)
+            const source = await synthesizeDesign(msg.payload.designName, msg.payload.ast, msg.payload.verbosity)
             this.sendMessage({ type: "synthesize_design", data: source });
         } catch (err) {
             console.error("Failed to synthesize design:", err);

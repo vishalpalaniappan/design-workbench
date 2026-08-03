@@ -2,7 +2,8 @@
 import React, {useCallback, useEffect, useState} from "react";
 
 import clpFfiJsModuleInit from "clp-ffi-js";
-import {Eye, Floppy, Play, Trash} from "react-bootstrap-icons";
+import {DalAstGenerator} from "dal-ast-js";
+import {Code, Eye, Floppy, Pencil, Play, Trash} from "react-bootstrap-icons";
 import {useDispatch} from "react-redux";
 import {useModalManager} from "ui-layout-manager-dev";
 
@@ -13,6 +14,7 @@ import {deleteTraceThunk} from "../../Store/appThunk";
 import {useHasEntryPoint} from "../../Store/useAppSelection";
 import {useTraces} from "../../Store/useAppSelection";
 import {useActiveTab} from "../../Store/useAppSelection";
+import {AddTraceName} from "../Modals/AddTraceName";
 import {ShowTraceLog} from "../Modals/ShowTraceLog";
 
 import "./ImplementationToolbar.scss";
@@ -32,6 +34,7 @@ export function ImplementationToolbar () {
     const hasEntryPoint = useHasEntryPoint();
     const traces = useTraces();
     const [selectedTrace, setSelectedTrace] = useState(null);
+    const [selectedVerbosity, setSelectedVerbosity] = useState("minimal");
     const activeTab = useActiveTab();
 
     const saveDesign = useCallback(() => {
@@ -111,20 +114,21 @@ export function ImplementationToolbar () {
         if (activeTab) {
             for (const file of engine.getFiles()) {
                 if (activeTab == file._uid && file._name.endsWith(".dal")) {
-                    file.generateAst();
-                    engine.save();
+                    const content = file.getUpdatedContent();
+                    const ast = new DalAstGenerator().run(content);
                     sendMessage({
                         type: "synthesize_design",
                         payload: {
                             entryPoint: engine.implementation.getEntryPoint(),
                             designName: engine._name,
-                            ast: file.getAst(),
+                            ast: ast,
+                            verbosity: selectedVerbosity,
                         },
                     });
                 }
             }
         }
-    }, [hasEntryPoint, engine, activeTab]);
+    }, [hasEntryPoint, engine, activeTab, selectedVerbosity]);
 
 
     const deleteTrace = (e) => {
@@ -135,6 +139,21 @@ export function ImplementationToolbar () {
             console.warn("Trace does not have a valid UID:", selectedTrace);
         }
     };
+
+    const setTraceName = useCallback(() => {
+        if (selectedTrace) {
+            openModal({
+                title: "Set Trace Name",
+                args: {
+                    trace: selectedTrace,
+                },
+                render: ({close, args}) => {
+                    return <AddTraceName close={close} args={args} />;
+                },
+            });
+        }
+    }, [selectedTrace, traces, openModal]);
+
     return (
         <div className="mainToolBar">
             <div className="mainToolBarLeft">
@@ -142,7 +161,7 @@ export function ImplementationToolbar () {
                 <span className="mainToolBarLabel">Design</span>
             </div>
             <div className="mainToolBarRight">
-                <span className="mainToolBarLabel">Select Environment:</span>
+                <span className="mainToolBarLabel">Environment:</span>
                 <span className="mainToolBarSelect" >
                     <select
                         value={selectedTrace}
@@ -158,8 +177,15 @@ export function ImplementationToolbar () {
                     </select>
                 </span>
                 <span className="debuggingToolBarButton"
-                    onClick={openTraceInEditor}
+                    onClick={setTraceName}
                     style={{"padding": "3px"}}
+                    title="Set Trace Name">
+                    <Pencil size={14}
+                        style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
+                </span>
+                <span className="debuggingToolBarButton"
+                    onClick={openTraceInEditor}
+                    style={{"padding": "3px 0"}}
                     title="View Raw Trace">
                     <Eye
                         size={14}
@@ -167,33 +193,40 @@ export function ImplementationToolbar () {
                 </span>
                 <span className="debuggingToolBarButton"
                     onClick={deleteTrace}
-                    style={{"padding": "3px"}}
+                    style={{"padding": "3px 0"}}
                     title="Delete Trace">
                     <Trash
                         size={14}
                         style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
                 </span>
+                <span className="mainToolBarSelect" >
+                    <select
+                        value={selectedVerbosity}
+                        onChange={(e) => setSelectedVerbosity(e.target.value)}>
+                        <option key={"minimal"} value={"minimal"}>Minimal Logging</option>
+                        <option key={"verbose"} value={"verbose"}>Verbose Logging</option>
+                    </select>
+                </span>
                 <span className="mainToolBarButton" onClick={synthesizeDesign}>
-                    <Play
-                        size={20}
+                    <Code
+                        size={15}
                         className="mainToolBarButton"
                         style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
-                    <span >Synthesize Design</span>
+                    <span >Synthesize</span>
                 </span>
                 <span className="mainToolBarButton" onClick={runDesign}>
                     <Play
                         size={20}
                         className="mainToolBarButton"
                         style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
-                    <span >Run Design</span>
+                    <span >Run</span>
                 </span>
 
                 <span className="mainToolBarButton" onClick={saveDesign}>
                     <Floppy
                         size={14}
                         className="mainToolBarButton"
-                        style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
-                    <span>Save</span>
+                        style={{"color": "white", "cursor": "pointer", "padding": "0 0 0 7px"}}/>
                 </span>
             </div>
         </div>
