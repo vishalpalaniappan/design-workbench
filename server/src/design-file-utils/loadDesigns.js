@@ -9,16 +9,14 @@ async function loadDesigns() {
     try {
         const workspacePath = path.join(process.cwd(), "workspace");
         const entries = await fs.readdir(workspacePath, { withFileTypes: true });
-        const designs = entries.map((entry) => {
-            if (!entry.isDirectory() && entry.name.endsWith(".dal")) {
-                return {
+        const folders = entries
+            .filter(entry => entry.isDirectory())
+            .map(entry => ({
                     name: entry.name,
-                    type: 'file',
+                    type: 'folder',
                     uid: entry.name
-                };
-            }
-        }).filter(Boolean);
-        return designs;
+            }));
+        return folders;
     } catch (err) {
         throw new Error(err);
     }

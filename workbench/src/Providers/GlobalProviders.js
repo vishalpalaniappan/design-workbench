@@ -238,21 +238,22 @@ function GlobalProviders ({children}) {
     // When the workspace is first loaded, find the engine and deserialize it.
     useEffect(() => {
         if (!design) return;
-        engine.deserialize(new Uint8Array(design.data));
-        const files = engine.getFiles();
-        if (files.length > 0 && !activeTab) {
-            dispatch(setActiveTab(files[0].uid));
-        }
-        console.log(engine);
+        console.log(design);
+        // engine.deserialize(new Uint8Array(design.data));
+        // const files = engine.getFiles();
+        // if (files.length > 0 && !activeTab) {
+        //     dispatch(setActiveTab(files[0].uid));
+        // }
+        // console.log(engine);
 
-        document.title = design.fileName.split(".")[0] + " - Design Workbench";
+        // document.title = design.fileName.split(".")[0] + " - Design Workbench";
 
-        const params = new URLSearchParams(window.location.search);
-        params.set("design", design.fileName);
-        const newUrl = `${window.location.pathname}?${params.toString()}`;
-        window.history.pushState({}, "", newUrl);
+        // const params = new URLSearchParams(window.location.search);
+        // params.set("design", design.fileName);
+        // const newUrl = `${window.location.pathname}?${params.toString()}`;
+        // window.history.pushState({}, "", newUrl);
 
-        dispatch(setDesignLoaded(true));
+        // dispatch(setDesignLoaded(true));
     }, [design, engine]);
 
     // Set the engine ref and save fn for use in msg handler and other contexts.

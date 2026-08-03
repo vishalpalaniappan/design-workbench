@@ -28,9 +28,7 @@ export function LoadDesign () {
     // Update designs when workspace changes and check design to load from URL
     useEffect(() => {
         if (workspace) {
-            setDesigns(workspace.filter((item) =>
-                item.type === "file" && item.name.endsWith(".dal")
-            ));
+            setDesigns(workspace);
 
             const params = new URLSearchParams(window.location.search);
             const designName = params.get("design");
