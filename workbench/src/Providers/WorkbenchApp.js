@@ -45,6 +45,26 @@ class WorkbenchApp {
             return file.type === "file";
         });
     }
+
+    /**
+     * Get the file using the UID of the file.
+     * @param {String} uid UID of file.
+     * @return {Object} file
+     */
+    getFileUsingUid (uid) {
+        const file = this.files.find((file) => file.uid === uid);
+        return file;
+    }
+
+    /**
+     * Set the updated content of file
+     * @param {String} uid File UID
+     * @param {String} content Updated Content
+     */
+    setUpdatedContent (uid, content) {
+        const file = this.getFileUsingUid(uid);
+        file.updatedContent = content;
+    }
 }
 
 const workbench = new WorkbenchApp();

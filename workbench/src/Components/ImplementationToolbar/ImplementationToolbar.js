@@ -9,6 +9,7 @@ import {useModalManager} from "ui-layout-manager-dev";
 
 import {useDalEngine} from "../../Providers/GlobalProviders";
 import {useServer} from "../../Providers/GlobalProviders";
+import {useWorkbench} from "../../Providers/GlobalProviders";
 import {setStatusMsg} from "../../Store/appSlice";
 import {deleteTraceThunk} from "../../Store/appThunk";
 import {useHasEntryPoint} from "../../Store/useAppSelection";
@@ -36,13 +37,24 @@ export function ImplementationToolbar () {
     const [selectedTrace, setSelectedTrace] = useState(null);
     const [selectedVerbosity, setSelectedVerbosity] = useState("minimal");
     const activeTab = useActiveTab();
+    const {workbench} = useWorkbench();
 
-    const saveDesign = useCallback(() => {
-        if (engine) {
-            engine.save();
+    const saveFile = useCallback(() => {
+        if (workbench && activeTab) {
+            console.log(`Saving design: ${activeTab}`);
+            const file = workbench.getFileUsingUid(activeTab);
+            console.log(file);
+            sendMessage({
+                type: "save_file",
+                data: file,
+            });
             dispatch(setStatusMsg("Saving design..."));
         }
-    }, [engine, dispatch]);
+    }, [workbench, activeTab, dispatch]);
+
+    useEffect(() => {
+        console.log("Active Tab:", activeTab);
+    }, [activeTab]);
 
     const openTraceInEditor = useCallback(async (e) => {
         e.stopPropagation();
@@ -222,7 +234,7 @@ export function ImplementationToolbar () {
                     <span >Run</span>
                 </span>
 
-                <span className="mainToolBarButton" onClick={saveDesign}>
+                <span className="mainToolBarButton" onClick={saveFile}>
                     <Floppy
                         size={14}
                         className="mainToolBarButton"

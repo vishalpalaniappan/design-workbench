@@ -1,6 +1,7 @@
 import {configureStore} from "@reduxjs/toolkit";
 
 import engine from "../Providers/DalEngine";
+import workbench from "../Providers/WorkbenchApp";
 import appReducer from "./appSlice";
 
 export const store = configureStore({
@@ -10,7 +11,7 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({
             thunk: {
-                extraArgument: {engine},
+                extraArgument: {engine, workbench},
             },
         }),
 });

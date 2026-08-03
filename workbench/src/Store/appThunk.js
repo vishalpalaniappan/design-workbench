@@ -51,15 +51,13 @@ export const setHasEntryPointThunk = (hasEntryPoint) => (dispatch, getState, {en
  * @param {String} content Updated content for the file.
  * @return {Function} Thunk function.
  */
-export const setUpdatedContentThunk = (fileId, content) => (dispatch, getState, {engine}) => {
-    let file;
+export const setUpdatedContentThunk = (fileId, content) => (dispatch, getState, {workbench}) => {
     try {
-        file = engine.getFile(fileId);
+        workbench.setUpdatedContent(fileId, content);
     } catch (e) {
-        console.error("File not found in engine files");
+        console.error("Failed to save updated content");
         return;
     }
-    file.setUpdatedContent(content);
 };
 
 

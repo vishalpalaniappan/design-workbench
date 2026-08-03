@@ -2,7 +2,7 @@ import fs from 'fs/promises';
 import path from "node:path";
 
 async function saveFile(fileName, folderPath, data) {
-    const filePath = path.join(folderPath, fileName);
+    const filePath = path.join(process.cwd(), "workspace", folderPath);
     await fs.writeFile(filePath, data);
 }
 

@@ -8,6 +8,7 @@ import {saveTraceInEngine} from "./design-file-utils/saveTraceInEngine.js";
 import {clearTraceFilesInPlayground} from "./design-file-utils/saveTraceInEngine.js";
 import loadTraceInTempFolder from "./design-file-utils/loadTraceInTempFolder.js";
 import synthesizeDesign from "./design-file-utils/synthesizeDesign.js";
+import saveFile from "./design-file-utils/saveFile.js";
 import { unpack, pack } from 'msgpackr';
 
 export class  WSMessageHandler {
@@ -30,6 +31,7 @@ export class  WSMessageHandler {
             create_design: this.createDesign.bind(this),
             delete_design: this.deleteDesign.bind(this),
             load_design: this.loadDesign.bind(this),
+            save_file: this.saveFile.bind(this),
             terminal_run_entry_point: this.onTerminalRunEntryPoint.bind(this),
             terminal_run_design: this.onTerminalRunDesign.bind(this),
             synthesize_design:this.onSynthesizeDesign.bind(this),
@@ -137,6 +139,15 @@ export class  WSMessageHandler {
         result.set(a, 0);
         result.set(b, a.length);
         return result;
+    }
+
+    saveFile = async (msg) => {
+        try {
+            await saveFile(msg.data.name, msg.data.path, msg.data.updatedContent);
+            this.sendMessage({ type: "save_file", path: msg.data.path });
+        } catch (err) {
+            this.sendMessage({ type: "error", data: err.message });
+        }
     }
 
     saveEngine = async (msg) => {
