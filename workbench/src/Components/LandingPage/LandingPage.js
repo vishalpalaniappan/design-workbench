@@ -5,7 +5,6 @@ import {LayoutManager} from "ui-layout-manager-dev";
 
 import implementationLayout from "../../implementationLayout.json";
 import {registry} from "../../Registry";
-import scriptingLayout from "../../scriptingLayout.json";
 import {setDesignMode} from "../../Store/appSlice";
 import {setImplementationMode} from "../../Store/appSlice";
 import {setDesignLoaded} from "../../Store/appSlice";
