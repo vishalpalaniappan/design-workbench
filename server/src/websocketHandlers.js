@@ -13,9 +13,10 @@ import { unpack, pack } from 'msgpackr';
 export class  WSMessageHandler {
     constructor(ws) {
         this.ws = ws;
+        this.loadedDesign = null;
 
         // TODO: Add support for multiple terminals (identified using UID)
-        this.startTerminalAndAddListeners();
+        this.startTerminalAndAddListeners({ designName: this.loadedDesign });
 
         this.ws.on("close", () => {
             this.stopTerminalAndRemoveListeners();
@@ -108,6 +109,9 @@ export class  WSMessageHandler {
 
     loadDesign = async (msg) => {
         try {
+            // Load the design into the terminal path
+            this.loadedDesign = msg.payload.fileName;
+            this.startTerminalAndAddListeners({ designName: this.loadedDesign });
             const file = await loadDesign(msg.payload.fileName)
             msg.type = "load_design";
             msg.data = file;
@@ -241,7 +245,7 @@ export class  WSMessageHandler {
         }
 
         this.stopTerminalAndRemoveListeners();
-        this.terminal = new TerminalSession({ command: cmd });
+        this.terminal = new TerminalSession({ command: cmd, designName: this.loadedDesign });
         this.terminal.on("data", this.onTerminalData);
         this.terminal.on("exit", this.handleEntryPointFinished);
         this.terminal.on("start", this.onTerminalStart);
