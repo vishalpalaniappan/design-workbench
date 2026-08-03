@@ -2,6 +2,7 @@
 import React, {useCallback, useEffect, useState} from "react";
 
 import clpFfiJsModuleInit from "clp-ffi-js";
+import {DalAstGenerator} from "dal-ast-js";
 import {Code, Eye, Floppy, Pencil, Play, Trash} from "react-bootstrap-icons";
 import {useDispatch} from "react-redux";
 import {useModalManager} from "ui-layout-manager-dev";
@@ -113,14 +114,14 @@ export function ImplementationToolbar () {
         if (activeTab) {
             for (const file of engine.getFiles()) {
                 if (activeTab == file._uid && file._name.endsWith(".dal")) {
-                    file.generateAst();
-                    engine.save();
+                    const content = file.getUpdatedContent();
+                    const ast = new DalAstGenerator().run(content);
                     sendMessage({
                         type: "synthesize_design",
                         payload: {
                             entryPoint: engine.implementation.getEntryPoint(),
                             designName: engine._name,
-                            ast: file.getAst(),
+                            ast: ast,
                             verbosity: selectedVerbosity,
                         },
                     });
