@@ -1,7 +1,9 @@
 import fs from 'fs/promises';
+import path from "node:path";
 import { resolveDesignPath } from "./validateDesignName.js";
 import {DALEngine} from "dal-engine-core-js-lib-dev";
 import loadImplementationInPlayground from './loadImplementationInPlayground.js';
+import loadDir from './loadDir.js';
 
 /**
  * Loads a design from the workspace with the given name.
@@ -10,23 +12,15 @@ import loadImplementationInPlayground from './loadImplementationInPlayground.js'
  */
 async function loadDesign(designName) {
     try {
-        const filePath = resolveDesignPath(designName);
-        const data = await fs.readFile(filePath);
-
-        // Create engine and deserialize data from file
-        const engine = new DALEngine({
-            name: designName,
-            description: "Default engine",
-        });
-        engine.deserialize(data);
+        const designPath = path.join(process.cwd(), "workspace", designName);
+        const files = await loadDir(designPath, designPath)
 
         // Write engine files to playground folder
-        await loadImplementationInPlayground(engine);
+        // await loadImplementationInPlayground(engine);
 
         return {
             fileName: designName,
-            path: filePath,
-            data: data
+            files: files
         };
     } catch (err) {
         console.error(err);
