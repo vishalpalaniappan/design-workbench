@@ -8,7 +8,6 @@ import {registry} from "../../Registry";
 import scriptingLayout from "../../scriptingLayout.json";
 import {setDesignMode} from "../../Store/appSlice";
 import {setImplementationMode} from "../../Store/appSlice";
-import {setDebuggingMode} from "../../Store/appSlice";
 import {setDesignLoaded} from "../../Store/appSlice";
 import {useDesignLoaded} from "../../Store/useAppSelection";
 import {useAppMode} from "../../Store/useAppSelection";

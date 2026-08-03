@@ -7,7 +7,6 @@ import {setSelectedBehavior} from "./appSlice";
 import {setSelectedInvariant} from "./appSlice";
 import {setHasEntryPoint} from "./appSlice";
 import {setSelectedTraceId} from "./appSlice";
-import {setSelectedTraceEntryIndex} from "./debuggingSlice/debuggingSlice";
 
 /**
  * Called to delete a file given a file ID.
@@ -387,7 +386,6 @@ export const addTraceThunk = (trace) => (dispatch, getState, {engine}) => {
  */
 export const deleteTraceThunk = (traceId) => (dispatch, getState, {engine}) => {
     dispatch(setSelectedTraceId(null));
-    dispatch(setSelectedTraceEntryIndex(null));
     engine.traces.deleteTrace(traceId);
     dispatch(incrementCounter());
     engine.save();
