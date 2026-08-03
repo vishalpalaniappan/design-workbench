@@ -13,7 +13,6 @@ import {useEngineFiles} from "../../Store/useAppSelection";
 import {useActiveTab, useLastSaved, useSelectedBehavior} from "../../Store/useAppSelection";
 import {useSelectedParticipant} from "../../Store/useAppSelection";
 import {useSelectedMapping} from "../../Store/useAppSelection";
-import {MapParticipant} from "../Modals/MapParticipant";
 
 import "./EditorContainer.scss";
 
