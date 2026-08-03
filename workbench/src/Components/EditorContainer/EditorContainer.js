@@ -148,23 +148,6 @@ export function EditorContainer () {
         }
     }, [dispatch, activeTab, editorLoaded]);
 
-    const onSelectAbstraction = useCallback((abstraction, shiftKey) => {
-        if (shiftKey && abstraction?.behaviorId == selectedBehavior.getName()) {
-            if (!selectedParticipant) return;
-            openModal({
-                title: "Map Variable Onto Participant",
-                args: {
-                    abstraction: abstraction,
-                },
-                render: ({close, args}) => {
-                    return <MapParticipant close={close} args={args}/>;
-                },
-            });
-        } else {
-            dispatch(mapStatementToBehaviorThunk(abstraction));
-        }
-    }, [dispatch, selectedBehavior, selectedParticipant]);
-
     useEffect(() => {
         parentIdRef.current = crypto.randomUUID();
         editorRef.current.setTabGroupId(parentIdRef.current);
@@ -178,7 +161,6 @@ export function EditorContainer () {
         <Editor
             ref={editorRef}
             onContentChange={onContentChange}
-            onSelectAbstraction={onSelectAbstraction}
             onSelectTab={onSelectTab}/>
     );
 }
