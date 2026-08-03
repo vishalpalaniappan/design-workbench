@@ -7,12 +7,9 @@ import {useModalManager} from "ui-layout-manager-dev";
 
 import ServerContext from "../../Providers/ServerContext";
 import {setActiveTab} from "../../Store/appSlice";
-import {mapStatementToBehaviorThunk} from "../../Store/appThunk";
 import {setUpdatedContentThunk} from "../../Store/appThunk";
 import {useEngineFiles} from "../../Store/useAppSelection";
-import {useActiveTab, useLastSaved, useSelectedBehavior} from "../../Store/useAppSelection";
-import {useSelectedParticipant} from "../../Store/useAppSelection";
-import {useSelectedMapping} from "../../Store/useAppSelection";
+import {useActiveTab, useLastSaved} from "../../Store/useAppSelection";
 
 import "./EditorContainer.scss";
 
