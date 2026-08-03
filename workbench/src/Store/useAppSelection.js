@@ -3,6 +3,7 @@ import {useMemo} from "react";
 import {useSelector} from "react-redux";
 
 import {useDalEngine} from "../Providers/GlobalProviders";
+import { useWorkbench } from "../Providers/GlobalProviders";
 import {
     selectActiveTab,
     selectAppMode,
@@ -68,36 +69,24 @@ export const useActiveTab = () => {
  * @return {Object}
  */
 export const useEngineFiles = () => {
-    const {engine} = useDalEngine();
+    const {workbench} = useWorkbench();
     const counter = useSelector(selectCounter);
     const activeTab = useSelector(selectActiveTab);
 
     return useMemo(() => {
-        if (!engine) return null;
-        return [];
-        // return engine.getFiles().map((file) => {
-        //     // Convert map into format accepted by UI.
-        //     const index = file.getStatementIndex().map((entry) => {
-        //         return {
-        //             uid: entry._uid,
-        //             start_line: entry._start_line,
-        //             end_line: entry._end_line,
-        //             source: entry._source,
-        //             behaviorId: entry._behaviorId,
-        //         };
-        //     });
-        //     // Return file info in format accepted by UI.
-        //     return {
-        //         name: file._name,
-        //         path: file.getKey(),
-        //         content: file.getContent(),
-        //         updatedContent: file.getUpdatedContent(),
-        //         type: "file",
-        //         uid: file._uid,
-        //         mapping: index,
-        //     };
-        // });
-    }, [engine, activeTab, counter]);
+        if (!workbench) return null;
+        const mapped = workbench.getFiles().map((file) => {
+            return {
+                name: file.name,
+                path: file.path,
+                content: file.content,
+                updatedContent: file.content,
+                type: "file",
+                uid: file.uid,
+            };
+        });
+        return mapped;
+    }, [workbench, activeTab, counter]);
 };
 
 /**

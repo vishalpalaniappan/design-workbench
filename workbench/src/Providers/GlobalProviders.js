@@ -1,7 +1,7 @@
 import React, {useCallback, useContext, useEffect, useRef, useState} from "react";
 
 import {pack, unpack} from "msgpackr";
-import PropTypes, { object } from "prop-types";
+import PropTypes, {object} from "prop-types";
 import {useDispatch} from "react-redux";
 import useWebSocket, {ReadyState} from "react-use-websocket";
 
@@ -14,7 +14,9 @@ import engine from "./DalEngine";
 import DalEngineContext from "./DalEngineContext";
 import ServerContext from "./ServerContext";
 import TerminalContext from "./TerminalContext";
+import workbench from "./WorkbenchApp";
 import WorkspaceContext from "./WorkspaceContext";
+import WorkbenchContext from "./WorkbenchContext";
 
 
 GlobalProviders.propTypes = {
@@ -239,6 +241,8 @@ function GlobalProviders ({children}) {
     useEffect(() => {
         if (!design) return;
         console.log(design);
+        workbench.setName(design.designName);
+        workbench.addFiles(design.files);
         // engine.deserialize(new Uint8Array(design.data));
         // const files = engine.getFiles();
         // if (files.length > 0 && !activeTab) {
@@ -253,7 +257,7 @@ function GlobalProviders ({children}) {
         // const newUrl = `${window.location.pathname}?${params.toString()}`;
         // window.history.pushState({}, "", newUrl);
 
-        // dispatch(setDesignLoaded(true));
+        dispatch(setDesignLoaded(true));
     }, [design, engine]);
 
     // Set the engine ref and save fn for use in msg handler and other contexts.
@@ -266,11 +270,13 @@ function GlobalProviders ({children}) {
         // eslint-disable-next-line max-len
         <ServerContext.Provider value={{sendMessage, connectionStatus}}>
             <DalEngineContext.Provider value={{engine}}>
-                <WorkspaceContext.Provider value={{workspace, design}}>
-                    <TerminalContext.Provider value={{setTermWriter}}>
-                        {children}
-                    </TerminalContext.Provider>
-                </WorkspaceContext.Provider>
+                <WorkbenchContext.Provider value={{workbench}}>
+                    <WorkspaceContext.Provider value={{workspace, design}}>
+                        <TerminalContext.Provider value={{setTermWriter}}>
+                            {children}
+                        </TerminalContext.Provider>
+                    </WorkspaceContext.Provider>
+                </WorkbenchContext.Provider>
             </DalEngineContext.Provider>
         </ServerContext.Provider>
     );
@@ -288,6 +294,14 @@ export const useWorkspace = function () {
     const context = useContext(WorkspaceContext);
     if (!context) {
         throw new Error("useWorkspace must be used within a GlobalProvider");
+    }
+    return context;
+};
+
+export const useWorkbench = function () {
+    const context = useContext(WorkbenchContext);
+    if (!context) {
+        throw new Error("useWorkbench must be used within a GlobalProvider");
     }
     return context;
 };
