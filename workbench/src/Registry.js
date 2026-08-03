@@ -1,9 +1,5 @@
 /* eslint-disable max-len */
 export const registry = {
-    BehavioralControlGraph: () =>
-        import("./Components/BehavioralControlGraph/BehavioralControlGraph").then((m) => ({
-            default: m.default || m.BehavioralControlGraph,
-        })),
     EditorContainer: () =>
         import("./Components/EditorContainer/EditorContainer").then((m) => ({
             default: m.default || m.EditorContainer,
@@ -24,22 +20,6 @@ export const registry = {
         import("./Components/StatusBar/StatusBar").then((m) => ({
             default: m.default || m.StatusBar,
         })),
-    GraphMenuBar: () =>
-        import("./Components/GraphMenuBar/GraphMenuBar").then((m) => ({
-            default: m.default || m.GraphMenuBar,
-        })),
-    NodeInfo: () =>
-        import("./Components/NodeInfo/NodeInfo").then((m) => ({
-            default: m.default || m.NodeInfo,
-        })),
-    SelectedInfo: () =>
-        import("./Components/SelectedInfo/SelectedInfo").then((m) => ({
-            default: m.default || m.SelectedInfo,
-        })),
-    MappingInfo: () =>
-        import("./Components/MappingInfo/MappingInfo").then((m) => ({
-            default: m.default || m.MappingInfo,
-        })),
     SideBarMenu: () =>
         import("./Components/SideBarMenu/SideBarMenu").then((m) => ({
             default: m.default || m.SideBarMenu,
@@ -47,5 +27,5 @@ export const registry = {
     ImplementationToolbar: () =>
         import("./Components/ImplementationToolbar/ImplementationToolbar").then((m) => ({
             default: m.default || m.ImplementationToolbar,
-        }))
+        })),
 };
