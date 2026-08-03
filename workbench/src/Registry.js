@@ -44,38 +44,6 @@ export const registry = {
         import("./Components/SideBarMenu/SideBarMenu").then((m) => ({
             default: m.default || m.SideBarMenu,
         })),
-    InitialArgsEditor: () =>
-        import("./Components/Scripting/editors/scriptingEditors").then((m) => ({
-            default: m.default || m.InitialArgsEditor,
-        })),
-    InitialWorldStateEditor: () =>
-        import("./Components/Scripting/editors/scriptingEditors").then((m) => ({
-            default: m.default || m.InitialWorldStateEditor,
-        })),
-    PrimitivesEditor: () =>
-        import("./Components/Scripting/primitivesEditor/primitivesEditor").then((m) => ({
-            default: m.default || m.PrimitivesEditor,
-        })),
-    ExpectedPostWorldStateEditor: () =>
-        import("./Components/Scripting/editors/scriptingEditors").then((m) => ({
-            default: m.default || m.ExpectedPostWorldStateEditor,
-        })),
-    ScriptingToolBar: () =>
-        import("./Components/Scripting/ScriptingToolBar/ScriptingToolBar").then((m) => ({
-            default: m.default || m.ScriptingToolBar,
-        })),
-    TransformationOutputViewer: () =>
-        import("./Components/Scripting/outputViewer/transformationOutputViewer").then((m) => ({
-            default: m.default || m.TransformationOutputViewer,
-        })),
-    TransformationOutputLogViewer: () =>
-        import("./Components/Scripting/outputLogViewer/transformationOutputLogViewer").then((m) => ({
-            default: m.default || m.TransformationOutputLogViewer,
-        })),
-    TransformOutputMeta: () =>
-        import("./Components/Scripting/transformOutputMeta/transformOutputMeta").then((m) => ({
-            default: m.default || m.TransformOutputMeta,
-        })),
     ImplementationToolbar: () =>
         import("./Components/ImplementationToolbar/ImplementationToolbar").then((m) => ({
             default: m.default || m.ImplementationToolbar,
