@@ -22,6 +22,7 @@ export class TerminalSession extends EventEmitter {
             ? "powershell.exe"
             : process.env.SHELL || "bash");
 
+        // If design name is provided, set the working directory to the design repo
         if ("designName" in args && args["designName"]) {
             this.cwd = path.join(process.cwd(), "workspace", args["designName"])
             this.name = this.designName;
