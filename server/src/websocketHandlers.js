@@ -7,6 +7,7 @@ import saveDesign from "./design-file-utils/saveDesign.js";
 import {saveTraceInEngine} from "./design-file-utils/saveTraceInEngine.js";
 import {clearTraceFilesInPlayground} from "./design-file-utils/saveTraceInEngine.js";
 import loadTraceInTempFolder from "./design-file-utils/loadTraceInTempFolder.js";
+import synthesizeDesign from "./design-file-utils/synthesizeDesign.js";
 import { unpack, pack } from 'msgpackr';
 
 export class  WSMessageHandler {
@@ -30,6 +31,7 @@ export class  WSMessageHandler {
             load_design: this.loadDesign.bind(this),
             terminal_run_entry_point: this.onTerminalRunEntryPoint.bind(this),
             terminal_run_design: this.onTerminalRunDesign.bind(this),
+            synthesize_design:this.onSynthesizeDesign.bind(this),
         };
     }
 
@@ -262,6 +264,15 @@ export class  WSMessageHandler {
             console.error("Failed to save trace:", err);
         }
         this.startTerminalAndAddListeners();
+    }
+
+    onSynthesizeDesign = async (msg) => {
+        try {
+            const source = await synthesizeDesign(msg.payload.designName, msg.payload.ast, msg.payload.verbosity)
+            this.sendMessage({ type: "synthesize_design", data: source });
+        } catch (err) {
+            console.error("Failed to synthesize design:", err);
+        }
     }
 
     onTerminalRunDesign = async (msg) => {     
