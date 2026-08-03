@@ -76,42 +76,6 @@ export const registry = {
         import("./Components/Scripting/transformOutputMeta/transformOutputMeta").then((m) => ({
             default: m.default || m.TransformOutputMeta,
         })),
-    DebuggingToolBar: () =>
-        import("./Components/Debugging/DebuggingToolBar/DebuggingToolBar").then((m) => ({
-            default: m.default || m.DebuggingToolBar,
-        })),
-    TraceBehaviorSelector: () =>
-        import("./Components/Debugging/TraceBehaviorSelector/TraceBehaviorSelector").then((m) => ({
-            default: m.default || m.TraceBehaviorSelector,
-        })),
-    DebuggerBehaviorInitialArgs: () =>
-        import("./Components/Debugging/viewers/debuggingInfoViewers").then((m) => ({
-            default: m.default || m.DebuggerBehaviorInitialArgs,
-        })),
-    DebuggerBehaviorInitialWorldState: () =>
-        import("./Components/Debugging/viewers/debuggingInfoViewers").then((m) => ({
-            default: m.default || m.DebuggerBehaviorInitialWorldState,
-        })),
-    DebuggerBehaviorExpectedPostWorldState: () =>
-        import("./Components/Debugging/viewers/debuggingInfoViewers").then((m) => ({
-            default: m.default || m.DebuggerBehaviorExpectedPostWorldState,
-        })),
-    DebuggerBehaviorTransformOutput: () =>
-        import("./Components/Debugging/viewers/debuggingInfoViewers").then((m) => ({
-            default: m.default || m.DebuggerBehaviorTransformOutput,
-        })),
-    DebuggerBehaviorScript: () =>
-        import("./Components/Debugging/viewers/debuggingInfoViewers").then((m) => ({
-            default: m.default || m.DebuggerBehaviorScript,
-        })),
-    DebuggerTransformOutputMetadata: () =>
-        import("./Components/Debugging/viewers/debuggingInfoViewers").then((m) => ({
-            default: m.default || m.DebuggerTransformOutputMetadata,
-        })),
-    RootCauseContainer: () =>
-        import("./Components/Debugging/RootCauseContainer/RootCauseContainer").then((m) => ({
-            default: m.default || m.RootCauseContainer,
-        })),
     ImplementationToolbar: () =>
         import("./Components/ImplementationToolbar/ImplementationToolbar").then((m) => ({
             default: m.default || m.ImplementationToolbar,

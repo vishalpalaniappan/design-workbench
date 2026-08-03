@@ -3,7 +3,6 @@ import React, {useCallback, useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {LayoutManager} from "ui-layout-manager-dev";
 
-import debuggingLayout from "../../debuggingLayout.json";
 import implementationLayout from "../../implementationLayout.json";
 import {registry} from "../../Registry";
 import scriptingLayout from "../../scriptingLayout.json";
