@@ -11,8 +11,7 @@ import { randomUUID } from 'crypto';
  */
 const loadDir = async function (rootPath, folderPath, level) {
     const entries = await fs.readdir(folderPath, { withFileTypes: true });
-    const visibleEntries = entries.filter(entry => !entry.name.startsWith("."));
-    return Promise.all(visibleEntries.map(async (entry) => {
+    return Promise.all(entries.map(async (entry) => {
         const fullPath = path.join(folderPath, entry.name);
 
         const relativePath = path.join(
@@ -22,7 +21,6 @@ const loadDir = async function (rootPath, folderPath, level) {
         );
 
         if (entry.isDirectory()) {
-            // Ignore hidden directories
             return {
                 name: entry.name,
                 type: 'folder',
