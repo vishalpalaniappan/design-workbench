@@ -1,12 +1,13 @@
 import React, {useCallback, useContext, useEffect, useState} from "react";
 
-import {ArrowRightSquare, Trash} from "react-bootstrap-icons";
+import {ArrowRightSquare, List, Terminal, Trash} from "react-bootstrap-icons";
 import {useDispatch} from "react-redux";
 
 import splashScreen from "../../../Assets/splash_screen.png";
 import {useWorkspace} from "../../../Providers/GlobalProviders";
 import ServerContext from "../../../Providers/ServerContext";
 import {setDesignLoaded} from "../../../Store/appSlice";
+import {PtyTerminal} from "../../PtyTerminal/PtyTerminal";
 
 import "./LoadDesign.scss";
 
@@ -22,6 +23,7 @@ export function LoadDesign () {
     const {sendMessage, connectionStatus} = useContext(ServerContext);
     const [fileName, setFileName] = useState("");
     const [error, setErrror] = useState(null);
+    const [showTerminal, setShowTerminal] = useState(false);
     const [lastUpdated, setLastUpdated] = useState("");
     const dispatch = useDispatch();
 
@@ -67,48 +69,6 @@ export function LoadDesign () {
         }
     }, [design, dispatch]);
 
-    // Create design (workspace is updated after creation by server)
-    const newDesign = useCallback((e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        setErrror(null);
-
-        // Note connected to server.
-        if (connectionStatus !== "Connected") return;
-
-        // No file name provided.
-        if (!fileName || !fileName.trim()) return;
-
-        // Validate file name.
-        const fName = fileName.endsWith(".dal")
-            ? fileName
-            : `${fileName}.dal`;
-        if (!/^[A-Za-z0-9_-]+\.dal$/.test(fName)) {
-            setErrror("Use letters, numbers, underscores, or dashes only.");
-            return;
-        }
-
-        // Check if design with same name already exists.
-        const fExists = designs.some((design) => design.name === fName);
-        if (fExists) {
-            setErrror(`Design named ${fName} already exists`);
-            return;
-        }
-
-        // If all checks pass, create design.
-        sendMessage({"type": "create_design", "payload": {"fileName": fName}});
-        setSelectedDesign(null);
-    }, [fileName, sendMessage, connectionStatus]);
-
-    // Delete the design from server (workspace is updated after deletion)
-    const deleteDesign = useCallback((e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        if (connectionStatus !== "Connected") return;
-        if (!selectedDesign) return;
-        sendMessage({"type": "delete_design", "payload": {"fileName": selectedDesign.name}});
-    }, [selectedDesign, sendMessage, connectionStatus]);
-
     // Select file and load if flag is set (ex. double click)
     const selectFile = (e, design, load) => {
         e.stopPropagation();
@@ -150,6 +110,11 @@ export function LoadDesign () {
         }
     }, [connectionStatus, selectFile, designs]);
 
+    const toggleShowTerminal = useCallback(() => {
+        setShowTerminal(!showTerminal);
+        sendMessage({"type": "workspaces"});
+    }, [showTerminal, sendMessage]);
+
     return (
         <div className="landing-page">
             <div className="splash">
@@ -157,38 +122,41 @@ export function LoadDesign () {
                     <img src={splashScreen} alt="Blueprint city" />
                 </div>
                 <div className="right">
-                    <div className="title-container">Design Workbench</div>
-                    <div className="create-design-row">
-                        <input
-                            className="file-name-input"
-                            placeholder="Enter design name..."
-                            value={fileName}
-                            onKeyDown={(e) => (e.key === "Enter") && newDesign(e)}
-                            onChange={(e) => setFileName(e.target.value)}
-                        />
-                        <div className="create-btn" onClick={newDesign}>+ Create</div>
+                    <div className="topBar">
+                        {
+                            showTerminal?
+                                <List className="topIcon" onClick={toggleShowTerminal}/>:
+                                <Terminal className="topIcon" onClick={toggleShowTerminal}/>
+                        }
                     </div>
-                    {error && <div className="error">{error}</div>}
-                    <div
-                        className="file-selector-container"
-                        onClick={(e) => selectFile(e, null)}>
-                        {getDesignList()}
-                    </div>
-                    <div className="button-row">
-                        <div className="buttons-left">
-                            <div className="last-updated">
-                                Last updated: {lastUpdated && <span>{lastUpdated}</span>}
-                            </div>
-                        </div>
-                        {selectedDesign &&
-                            <div className="buttons-right">
-                                <div className="icon-btn">
-                                    <Trash size={16} onClick={deleteDesign} />
-                                </div>
-                                <div className="icon-btn" onClick={loadDesign}>
-                                    <ArrowRightSquare size={16} />
-                                </div>
-                            </div>
+                    <div className="content">
+                        {
+                            showTerminal?
+                                <div style={{position: "relative", width: "100%", height: "100%"}}>
+                                    <PtyTerminal />
+                                </div>:
+                                <>
+                                    <div className="title-container">Design Workbench</div>
+                                    <div
+                                        className="file-selector-container"
+                                        onClick={(e) => selectFile(e, null)}>
+                                        {getDesignList()}
+                                    </div>
+                                    <div className="button-row">
+                                        <div className="buttons-left">
+                                            <div className="last-updated">
+                                            Last updated: {lastUpdated && <span>{lastUpdated}</span>}
+                                            </div>
+                                        </div>
+                                        {selectedDesign &&
+                                            <div className="buttons-right">
+                                                <div className="icon-btn" onClick={loadDesign}>
+                                                    <ArrowRightSquare size={16} />
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </>
                         }
                     </div>
                 </div>
