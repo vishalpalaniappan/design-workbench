@@ -121,24 +121,21 @@ export function ImplementationToolbar () {
 
 
     const synthesizeDesign = useCallback(() => {
-        if (activeTab) {
-            for (const file of engine.getFiles()) {
-                if (activeTab == file._uid && file._name.endsWith(".dal")) {
-                    const content = file.getUpdatedContent();
-                    const ast = new DalAstGenerator().run(content);
-                    sendMessage({
-                        type: "synthesize_design",
-                        payload: {
-                            entryPoint: engine.implementation.getEntryPoint(),
-                            designName: engine._name,
-                            ast: ast,
-                            verbosity: selectedVerbosity,
-                        },
-                    });
-                }
+        for (const file of workbench.getFiles()) {
+            if (file.name.endsWith(".dal")) {
+                const content = file.content;
+                const ast = new DalAstGenerator().run(content);
+                console.log(ast);
+                sendMessage({
+                    type: "synthesize_design",
+                    payload: {
+                        ast: ast,
+                        verbosity: selectedVerbosity,
+                    },
+                });
             }
         }
-    }, [hasEntryPoint, engine, activeTab, selectedVerbosity]);
+    }, [hasEntryPoint, workbench, activeTab, selectedVerbosity]);
 
 
     const deleteTrace = (e) => {

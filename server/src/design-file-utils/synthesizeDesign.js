@@ -17,6 +17,12 @@ async function synthesizeDesign(designName, ast, verbosity) {
         throw error;
     }
 
+    const synthObj = JSON.parse(synthesizedOutput.toString());
+    for (const [name, value] of Object.entries(synthObj)) {
+        const filePath = path.join(process.cwd(), "workspace", designName, name);
+        await fs.writeFile(filePath, value);
+    }
+
     return synthesizedOutput;
 }
 

@@ -268,6 +268,7 @@ function GlobalProviders ({children}) {
         // window.history.pushState({}, "", newUrl);
 
         dispatch(setDesignLoaded(true));
+        dispatch(incrementCounter());
     }, [design, engine]);
 
     // Set the engine ref and save fn for use in msg handler and other contexts.

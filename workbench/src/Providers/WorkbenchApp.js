@@ -13,6 +13,12 @@
  */
 class WorkbenchApp {
     /**
+     *
+     */
+    constructor () {
+        this.files = [];
+    }
+    /**
      * Sets the name of the workbench.
      */
     setName () {
@@ -32,9 +38,16 @@ class WorkbenchApp {
      */
     addFiles (files) {
         for (const file of files) {
-            file.updatedContent = file.content;
+            const foundFile = this.files.find((_file) => _file.name === file.name);
+            if (foundFile) {
+                foundFile.content = file.content;
+                foundFile.updatedContent = file.content;
+            } else {
+                file.updatedContent = file.content;
+                this.files.push(file);
+            }
         }
-        this.files = files;
+        console.log(this.files);
     }
 
     /**
