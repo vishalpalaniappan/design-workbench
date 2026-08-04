@@ -34,7 +34,6 @@ export function FileSelector () {
 
     useEffect(() => {
         if (files) {
-            console.log(files);
             fileBrowserRef.current.addFileTree(files);
             if (activeTab) {
                 // TODO: Update component API to use uid for selection.
@@ -42,7 +41,7 @@ export function FileSelector () {
                 fileBrowserRef.current.selectNode(file);
             }
         }
-    }, [files, activeTab, workbench]);
+    }, [files, workbench]);
 
     const onSelectFile = useCallback((node) => {
         dispatch(setActiveTab(node.uid));
