@@ -6,6 +6,7 @@ import {FileBrowser} from "sample-ui-component-library";
 import {useModalManager} from "ui-layout-manager-dev";
 
 import {useDalEngine} from "../../Providers/GlobalProviders";
+import {useWorkbench} from "../../Providers/GlobalProviders";
 import {setActiveTab, setStatusMsg} from "../../Store/appSlice";
 import {deleteFileThunk} from "../../Store/appThunk";
 import {useActiveTab, useEngineFiles} from "../../Store/useAppSelection";
@@ -29,17 +30,19 @@ export function FileSelector () {
     const dispatch = useDispatch();
     const activeTab = useActiveTab();
     const fileBrowserRef = useRef();
+    const {workbench} = useWorkbench();
 
     useEffect(() => {
         if (files) {
+            console.log(files);
             fileBrowserRef.current.addFileTree(files);
             if (activeTab) {
                 // TODO: Update component API to use uid for selection.
-                const file = files.find((file) => file.uid === activeTab);
+                const file = workbench.getFileUsingUid(activeTab);
                 fileBrowserRef.current.selectNode(file);
             }
         }
-    }, [files, activeTab]);
+    }, [files, activeTab, workbench]);
 
     const onSelectFile = useCallback((node) => {
         dispatch(setActiveTab(node.uid));

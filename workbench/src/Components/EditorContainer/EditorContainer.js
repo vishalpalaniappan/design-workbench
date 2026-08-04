@@ -4,6 +4,7 @@ import {useDispatch} from "react-redux";
 import {Editor} from "sample-ui-component-library";
 import {useLayoutEventSubscription} from "ui-layout-manager-dev";
 
+import {useWorkbench} from "../../Providers/GlobalProviders";
 import ServerContext from "../../Providers/ServerContext";
 import {setActiveTab} from "../../Store/appSlice";
 import {setUpdatedContentThunk} from "../../Store/appThunk";
@@ -26,6 +27,7 @@ export function EditorContainer () {
 
     const activeTab = useActiveTab();
     const dispatch = useDispatch();
+    const {workbench} = useWorkbench();
 
     useEffect(() => {
         if (files) {
@@ -33,7 +35,7 @@ export function EditorContainer () {
             const _tabs = editorRef.current.getTabs();
             for (let i = 0; i < _tabs.length; i++) {
                 const _tab = _tabs[i];
-                const file = files.find((file) => file.uid === _tab.uid);
+                const file = workbench.getFileUsingUid(_tab.uid);
                 if (!file) {
                     editorRef.current.closeTab(_tab.uid);
                 } else {
@@ -42,30 +44,11 @@ export function EditorContainer () {
             }
             editorRef.current.layoutEditor();
         }
-    }, [files, editorLoaded]);
-
-    useEffect(() => {
-        if (lastSaved && files && editorRef.current) {
-            /**
-             * Inside editor, the content of the tab is saved in
-             * updatedContent key. When updatedContent and content keys are
-             * not the same, it means the file is dirty (shows icon on tab).
-             * When the file is saved onto the server, the updated content
-             * is set to the content key of the file, so we need to update
-             * the content of the tab to reflect that.
-             */
-            const tabs = editorRef.current.getTabs();
-            files.forEach((file) => {
-                if (tabs.some((tab) => tab.uid === file.uid)) {
-                    editorRef.current.updateTab(file);
-                }
-            });
-        }
-    }, [lastSaved]);
+    }, [files, lastSaved, editorLoaded, workbench]);
 
     useEffect(() => {
         if (activeTab && editorRef.current) {
-            const foundFile = files.find((file) => file.uid === activeTab);
+            const foundFile = workbench.getFileUsingUid(activeTab);
             if (!foundFile) {
                 console.error("Active tab file not found in engine files");
                 return;
@@ -77,7 +60,7 @@ export function EditorContainer () {
             }
             editorRef.current.addTab(foundFile);
         }
-    }, [activeTab, editorLoaded]);
+    }, [activeTab, editorLoaded, workbench]);
 
     useLayoutEventSubscription("drag:drop", (event) => {
         const drop = event.payload;

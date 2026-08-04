@@ -109,6 +109,7 @@ function GlobalProviders ({children}) {
                 break;
             case "save_file":
                 fileSaved(msg.data);
+                dispatch(setLastSaved(new Date().toISOString()));
                 break;
             case "error":
                 console.error("Error message from server:", msg.data);

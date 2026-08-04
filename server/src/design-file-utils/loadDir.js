@@ -9,10 +9,10 @@ import { randomUUID } from 'crypto';
  * @param {String} Path to the directory being read.
  * @returns {Object} Directory JSON
  */
-const loadDir = async function (rootPath, folderPath) {
+const loadDir = async function (rootPath, folderPath, level) {
     const entries = await fs.readdir(folderPath, { withFileTypes: true });
-
-    return Promise.all(entries.map(async (entry) => {
+    const visibleEntries = entries.filter(entry => !entry.name.startsWith("."));
+    return Promise.all(visibleEntries.map(async (entry) => {
         const fullPath = path.join(folderPath, entry.name);
 
         const relativePath = path.join(
@@ -22,20 +22,26 @@ const loadDir = async function (rootPath, folderPath) {
         );
 
         if (entry.isDirectory()) {
+            // Ignore hidden directories
             return {
                 name: entry.name,
                 type: 'folder',
                 uid: "dir-" + randomUUID(),
                 path: relativePath,
-                children: await loadDir(rootPath, fullPath),
+                children: await loadDir(rootPath, fullPath, level + 1),
+                collapsed: true,
+                level: level
             };
         } else {
+            const content =  await fs.readFile(fullPath, 'utf-8');
             return {
                 name: entry.name,
                 type: 'file',
                 uid: "file-" + randomUUID(),
                 path: relativePath,
-                content: await fs.readFile(fullPath, 'utf-8'),
+                content: content,
+                updatedContent: content,
+                level: level
             };
         }
     }));

@@ -13,7 +13,7 @@ import loadDir from './loadDir.js';
 async function loadDesign(designName) {
     try {
         const designPath = path.join(process.cwd(), "workspace", designName);
-        const files = await loadDir(designPath, designPath)
+        const files = await loadDir(designPath, designPath, 0)
 
         // Write engine files to playground folder
         // await loadImplementationInPlayground(engine);

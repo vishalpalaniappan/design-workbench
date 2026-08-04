@@ -75,17 +75,7 @@ export const useEngineFiles = () => {
 
     return useMemo(() => {
         if (!workbench) return null;
-        const mapped = workbench.getFiles().map((file) => {
-            return {
-                name: file.name,
-                path: file.path,
-                content: file.content,
-                updatedContent: file.updatedContent,
-                type: "file",
-                uid: file.uid,
-            };
-        });
-        return mapped;
+        return workbench.getFiles();
     }, [workbench, activeTab, counter]);
 };
 

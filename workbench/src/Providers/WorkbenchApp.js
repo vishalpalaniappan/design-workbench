@@ -47,15 +47,15 @@ class WorkbenchApp {
                 this.files.push(file);
             }
         }
-        console.log(this.files);
     }
 
     /**
      * Get the files
-     * 
+     *
      * @return {Array} Files
      */
     getFiles () {
+        return this.files;
         return this.files.filter((file) => {
             return file.type === "file";
         });
@@ -67,8 +67,25 @@ class WorkbenchApp {
      * @return {Object} file
      */
     getFileUsingUid (uid) {
-        const file = this.files.find((file) => file.uid === uid);
-        return file;
+        // const file = this.files.find((file) => file.uid === uid);
+        this.visitTree(this.files, uid);
+        return this.foundFile;
+    }
+
+    /**
+     * Visits the node in the tree.
+     * @param {Object} tree
+     * @param {String} uid
+     */
+    visitTree (tree, uid) {
+        for (const node of tree) {
+            if (node.type === "folder") {
+                this.visitTree(node["children"], uid);
+            } else if (node.uid === uid) {
+                this.foundFile = node;
+                break;
+            }
+        }
     }
 
     /**
