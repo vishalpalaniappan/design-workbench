@@ -128,6 +128,16 @@ class WorkbenchApp {
         }
         return file;
     }
+
+    /**
+     * TODO: Implement this method to get the run command from the
+     * metadata.json file in the synthesized output folder. This is
+     * useful because it will provide the command to run the synthesized
+     * program or programs (for concurrent designs).
+     */
+    getRunSyntax () {
+
+    }
 }
 
 const workbench = new WorkbenchApp();
