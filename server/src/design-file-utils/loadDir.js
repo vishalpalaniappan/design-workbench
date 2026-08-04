@@ -24,7 +24,7 @@ const loadDir = async function (rootPath, folderPath, level) {
             return {
                 name: entry.name,
                 type: 'folder',
-                uid: "dir-" + randomUUID(),
+                uid: relativePath,
                 path: relativePath,
                 children: await loadDir(rootPath, fullPath, level + 1),
                 collapsed: true,
@@ -35,7 +35,7 @@ const loadDir = async function (rootPath, folderPath, level) {
             return {
                 name: entry.name,
                 type: 'file',
-                uid: "file-" + randomUUID(),
+                uid: relativePath,
                 path: relativePath,
                 content: content,
                 updatedContent: content,
