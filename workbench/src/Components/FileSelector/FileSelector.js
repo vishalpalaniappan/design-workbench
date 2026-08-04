@@ -1,6 +1,6 @@
 import React, {useCallback, useEffect, useRef} from "react";
 
-import {Floppy, PlusSquare, TerminalPlus, Trash} from "react-bootstrap-icons";
+import {ArrowClockwise, Floppy, PlusSquare, TerminalPlus, Trash} from "react-bootstrap-icons";
 import {useDispatch} from "react-redux";
 import {FileBrowser} from "sample-ui-component-library";
 import {useModalManager} from "ui-layout-manager-dev";
@@ -92,6 +92,11 @@ export function FileSelector () {
         });
     }, []);
 
+    const refresh = useCallback(() => {
+        const name = workbench.getName();
+        sendMessage({"type": "load_design", "payload": {"fileName": name}});
+    }, [workbench, sendMessage]);
+
     return (
         <div className="filebrowser-container">
             <div className="browser-container">
@@ -102,6 +107,7 @@ export function FileSelector () {
                     <TerminalPlus onClick={setEntryPoint} className="icon"/>
                 </div>
                 <div className="right-menu">
+                    <ArrowClockwise onClick={refresh} className="icon"/>
                     <Floppy onClick={saveFiles} className="icon"/>
                     <PlusSquare onClick={createFile} className="icon"/>
                     <Trash onClick={deleteFile} className="icon"/>

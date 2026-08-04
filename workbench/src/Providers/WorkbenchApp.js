@@ -20,15 +20,20 @@ class WorkbenchApp {
     }
     /**
      * Sets the name of the workbench.
+     * 
+     * @param {String} name
      */
-    setName () {
+    setName (name) {
+        this.designName = name;
     }
 
     /**
      * Gets the design name
+     *
+     * @return {String}
      */
     getName () {
-
+        return this.designName;
     }
 
     /**

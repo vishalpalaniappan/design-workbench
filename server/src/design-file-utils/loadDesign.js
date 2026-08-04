@@ -19,7 +19,7 @@ async function loadDesign(designName) {
         // await loadImplementationInPlayground(engine);
 
         return {
-            fileName: designName,
+            designName: designName,
             files: files
         };
     } catch (err) {
