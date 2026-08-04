@@ -2,6 +2,7 @@ import path from 'path';
 import { resolveDesignPath } from "./validateDesignName.js";
 import {DALEngine} from "dal-engine-core-js-lib-dev";
 import fs from 'fs/promises';
+import { rm, mkdir } from "fs/promises";
 
 import synthesisRunner from '../runners/synthesisRunner.js';
 
@@ -18,10 +19,11 @@ async function synthesizeDesign(designName, ast, verbosity) {
     }
 
     const synthObj = JSON.parse(synthesizedOutput.toString());
-    for (const [name, value] of Object.entries(synthObj)) {
-        const synthPath = path.join(process.cwd(), "workspace", designName, "synthesized");
-        await fs.mkdir(synthPath, { recursive: true });
+    const synthPath = path.join(process.cwd(), "workspace", designName, "synthesized");
+    await rm(synthPath, { recursive: true, force: true });
+    await mkdir(synthPath, { recursive: true });
 
+    for (const [name, value] of Object.entries(synthObj)) {
         const filePath = path.join(process.cwd(), "workspace", designName, "synthesized", name);
         await fs.writeFile(filePath, value);
     }
