@@ -20,7 +20,7 @@ class WorkbenchApp {
     }
     /**
      * Sets the name of the workbench.
-     * 
+     *
      * @param {String} name
      */
     setName (name) {
@@ -83,6 +83,22 @@ class WorkbenchApp {
             }
         }
     }
+
+    flattenTree = (tree, level) => {
+        if (!level) {
+            level = 0;
+        }
+        let rows = [];
+        for (let i = 0; i < tree.length; i++) {
+            const node = tree[i];
+            node.level = level;
+            rows.push(node);
+            if (node?.children) {
+                rows = rows.concat(flattenTree(node.children, level + 1));
+            }
+        }
+        return rows;
+    };
 
     /**
      * Set the updated content of file

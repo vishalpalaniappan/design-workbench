@@ -34,17 +34,36 @@ export function EditorContainer () {
             // Close tabs of files that were deleted
             const _tabs = editorRef.current.getTabs();
             for (let i = 0; i < _tabs.length; i++) {
-                const _tab = _tabs[i];
-                const file = workbench.getFileUsingUid(_tab.uid);
-                if (!file) {
-                    editorRef.current.closeTab(_tab.uid);
+                const foundFile = flattenTree(files).find((file) => file.uid === _tabs[i].uid);
+                if (!foundFile) {
+                    editorRef.current.closeTab(_tabs[i].uid);
                 } else {
-                    editorRef.current.updateTab(file);
+                    editorRef.current.updateTab(foundFile);
                 }
             }
             editorRef.current.layoutEditor();
         }
-    }, [files, lastSaved, editorLoaded, workbench]);
+    }, [files, lastSaved, editorLoaded]);
+
+    /**
+     * Flatterns the tree so its easier to search it.
+     * @param {Object} tree
+     * @param {Number} level
+     * @return {Array} Flattened Tree.
+     */
+    const flattenTree = (tree, level) => {
+        if (!level) {
+            level = 0;
+        }
+        let rows = [];
+        for (let i = 0; i < tree.length; i++) {
+            rows.push(tree[i]);
+            if (tree[i]?.children) {
+                rows = rows.concat(flattenTree(tree[i].children, tree[i].level + 1));
+            }
+        }
+        return rows;
+    };
 
     useEffect(() => {
         if (activeTab && editorRef.current) {
