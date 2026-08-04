@@ -102,7 +102,7 @@ export class  WSMessageHandler {
 
     deleteDesign = async (msg) => {
         try {
-            await deleteDesign(msg.payload.fileName);
+            await deleteDesign(msg.payload.designName);
             const folders = await loadDesigns();
             msg.type = "workspaces";
             msg.data = folders;

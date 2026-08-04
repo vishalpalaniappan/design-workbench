@@ -69,6 +69,15 @@ export function LoadDesign () {
         }
     }, [design, dispatch]);
 
+    // Delete the design repo from server (workspace is updated after deletion)
+    const deleteDesign = useCallback((e) => {
+        e.stopPropagation();
+        e.preventDefault();
+        if (connectionStatus !== "Connected") return;
+        if (!selectedDesign) return;
+        sendMessage({"type": "delete_design", "payload": {"designName": selectedDesign.name}});
+    }, [selectedDesign, sendMessage, connectionStatus]);
+
     // Select file and load if flag is set (ex. double click)
     const selectFile = (e, design, load) => {
         e.stopPropagation();
@@ -150,6 +159,9 @@ export function LoadDesign () {
                                         </div>
                                         {selectedDesign &&
                                             <div className="buttons-right">
+                                                <div className="icon-btn">
+                                                    <Trash size={16} onClick={deleteDesign} />
+                                                </div>
                                                 <div className="icon-btn" onClick={loadDesign}>
                                                     <ArrowRightSquare size={16} />
                                                 </div>

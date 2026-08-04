@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { resolveDesignPath } from "./validateDesignName.js";
+import path from "node:path";
 
 /**
  * Deletes the design with the name from the workspace.
@@ -7,8 +7,11 @@ import { resolveDesignPath } from "./validateDesignName.js";
  */
 async function deleteDesign(designName) {
     try {
-        const filePath = resolveDesignPath(designName);
-        await fs.unlink(filePath);
+        const workspaceDir = path.join(process.cwd(), "workspace", designName);
+        await fs.rm(workspaceDir, {
+            recursive: true,
+            force: true,
+        });
     } catch (err) {
         throw new Error(err);
     }
