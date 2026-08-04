@@ -19,7 +19,10 @@ async function synthesizeDesign(designName, ast, verbosity) {
 
     const synthObj = JSON.parse(synthesizedOutput.toString());
     for (const [name, value] of Object.entries(synthObj)) {
-        const filePath = path.join(process.cwd(), "workspace", designName, name);
+        const synthPath = path.join(process.cwd(), "workspace", designName, "synthesized");
+        await fs.mkdir(synthPath, { recursive: true });
+
+        const filePath = path.join(process.cwd(), "workspace", designName, "synthesized", name);
         await fs.writeFile(filePath, value);
     }
 
