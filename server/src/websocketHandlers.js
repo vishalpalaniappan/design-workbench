@@ -10,6 +10,8 @@ import loadTraceInTempFolder from "./design-file-utils/loadTraceInTempFolder.js"
 import synthesizeDesign from "./design-file-utils/synthesizeDesign.js";
 import saveFile from "./design-file-utils/saveFile.js";
 import { unpack, pack } from 'msgpackr';
+import path from "node:path";
+import { setTimeout as sleep } from "node:timers/promises";
 
 export class  WSMessageHandler {
     constructor(ws) {
@@ -34,6 +36,7 @@ export class  WSMessageHandler {
             save_file: this.saveFile.bind(this),
             terminal_run_entry_point: this.onTerminalRunEntryPoint.bind(this),
             terminal_run_design: this.onTerminalRunDesign.bind(this),
+            terminal_run_file_cmd: this.onTerminalRunFileCmd.bind(this),
             synthesize_design:this.onSynthesizeDesign.bind(this),
         };
     }
@@ -314,5 +317,16 @@ export class  WSMessageHandler {
         this.terminal.on("start", this.onTerminalStart);
         this.terminal.on("stop", this.handleDesignExecutionFinished);
         this.terminal.start();
+    }
+
+    onTerminalRunFileCmd = async (msg) => {
+        const filePath = path.join(process.cwd(), "workspace", this.loadedDesign);
+        this.terminal.write(`cd ${filePath} \n`);
+        this.terminal.write(msg.payload.cmd);
+        await sleep(100);
+        this.sendMessage({
+            type: "load_design",
+            data: await loadDesign(this.loadedDesign)
+        });
     }
 }

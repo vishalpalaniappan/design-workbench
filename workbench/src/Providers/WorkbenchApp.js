@@ -37,16 +37,7 @@ class WorkbenchApp {
      * @param {Object} files
      */
     addFiles (files) {
-        for (const file of files) {
-            const foundFile = this.files.find((_file) => _file.name === file.name);
-            if (foundFile) {
-                foundFile.content = file.content;
-                foundFile.updatedContent = file.content;
-            } else {
-                file.updatedContent = file.content;
-                this.files.push(file);
-            }
-        }
+        this.files = files;
     }
 
     /**

@@ -72,6 +72,7 @@ function GlobalProviders ({children}) {
                 break;
             case "load_design":
                 setDesign(msg.data);
+                dispatch(incrementCounter());
                 break;
             case "terminal_output":
                 termWriteRef.current?.(msg.data);
