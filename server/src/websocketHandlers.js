@@ -212,16 +212,6 @@ export class  WSMessageHandler {
         if (this.entryPointFinishedSent) return;
 
         this.entryPointFinishedSent = true;
-        try {
-            const traceEntry = await saveTraceInEngine("implementation");
-            if (traceEntry) {
-                this.sendMessage({ type: "add_trace", data: traceEntry });
-            } else {
-                console.warn("No trace entry to send to front end.");
-            }
-        } catch (err) {
-            console.error("Failed to save trace:", err);
-        }
         this.startTerminalAndAddListeners();
     }
 
@@ -241,17 +231,10 @@ export class  WSMessageHandler {
          */
         let cmd;
         if (msg?.payload?.entryPoint) {
-            const fileCmd = msg.payload.entryPoint.split(" ")[1];
-
-            cmd = `node ../tools/design-runtime/src/index.js implementation`;
-            if (msg.payload.designName) cmd = cmd + ` ${fileCmd}`;    
-            if (msg.payload.selectedTrace) cmd = cmd + ` ../temp/${msg.payload.selectedTrace}`;
-
-            await clearTraceFilesInPlayground();
-
-            if (msg.payload.selectedTrace && msg.payload.selectedTrace !== "None") {
-                await loadTraceInTempFolder(msg.payload.designName, msg.payload.selectedTrace);
-            }
+            cmd = msg.payload.entryPoint;
+            // if (msg.payload.selectedTrace && msg.payload.selectedTrace !== "None") {
+            //     await loadTraceInTempFolder(msg.payload.designName, msg.payload.selectedTrace);
+            // }
         } else if (msg?.payload?.data) {
             cmd = msg.payload.data;
         } else {
@@ -259,7 +242,7 @@ export class  WSMessageHandler {
         }
 
         this.stopTerminalAndRemoveListeners();
-        this.terminal = new TerminalSession({ command: cmd, designName: this.loadedDesign });
+        this.terminal = new TerminalSession({ command: cmd, designName: this.loadedDesign + "/synthesized"});
         this.terminal.on("data", this.onTerminalData);
         this.terminal.on("exit", this.handleEntryPointFinished);
         this.terminal.on("start", this.onTerminalStart);

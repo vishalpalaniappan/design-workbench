@@ -51,10 +51,9 @@ class WorkbenchApp {
      * @return {Array} Files
      */
     getFiles () {
+        this.flatTree = this.flattenTree(this.files);
+        this.getRunSyntax();
         return this.files;
-        return this.files.filter((file) => {
-            return file.type === "file";
-        });
     }
 
     /**
@@ -94,7 +93,7 @@ class WorkbenchApp {
             node.level = level;
             rows.push(node);
             if (node?.children) {
-                rows = rows.concat(flattenTree(node.children, level + 1));
+                rows = rows.concat(this.flattenTree(node.children, level + 1));
             }
         }
         return rows;
@@ -136,7 +135,21 @@ class WorkbenchApp {
      * program or programs (for concurrent designs).
      */
     getRunSyntax () {
+        const path = this.designName + "/synthesized/metadata.json";
+        const found = this.flatTree.find((file) => file.path == path);
+        const metadata = JSON.parse(found.content);
+        const commands = metadata["commands"];
+        if (commands.length === 1) {
+            this.runCommand = commands[0];
+        }
+    }
 
+    /**
+     * Returns the command to run the design.
+     * @return {String|null}
+     */
+    getRunCommand () {
+        return this.runCommand;
     }
 }
 

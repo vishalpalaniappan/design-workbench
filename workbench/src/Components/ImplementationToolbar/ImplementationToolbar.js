@@ -88,20 +88,13 @@ export function ImplementationToolbar () {
     }, [selectedTrace, traces]);
 
     const runDesign = useCallback(() => {
-        if (sendMessage && engine) {
-            const files = engine.getFiles();
-            let found;
-            for (const file of files) {
-                if (file.getName() === "synthesized.py") {
-                    found = true;
-                }
-            }
-            if (found) {
+        if (sendMessage && workbench) {
+            const cmd = workbench.getRunCommand();
+            if (cmd) {
                 sendMessage({
                     type: "terminal_run_entry_point",
                     payload: {
-                        entryPoint: "python3 synthesized.py",
-                        designName: engine._name,
+                        entryPoint: cmd,
                         selectedTrace: null,
                     },
                 });
@@ -111,13 +104,12 @@ export function ImplementationToolbar () {
                     type: "terminal_run_entry_point",
                     payload: {
                         data: `echo ${failureMsg}`,
-                        designName: engine._name,
                         selectedTrace: null,
                     },
                 });
             }
         }
-    }, [sendMessage, hasEntryPoint, engine, selectedTrace]);
+    }, [sendMessage, workbench, selectedTrace]);
 
 
     const synthesizeDesign = useCallback(() => {
