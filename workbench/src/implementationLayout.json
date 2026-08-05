@@ -128,6 +128,16 @@
                     "containerId": "editorContainer",
                     "type": "container",
                     "size": { "initial": { "type": "fill" }}
+                },
+                {
+                    "type": "handleBar",
+                    "sibling1": "editorContainer",
+                    "sibling2": "graphContainer"
+                },
+                {
+                    "containerId": "graphContainer",
+                    "type": "container",
+                    "size": { "initial": { "type": "fill" }}
                 }
             ]
         },
@@ -135,6 +145,11 @@
             "id": "ImplementationScriptContainer",
             "component": "EditorContainer",
             "background": "#252526"
+        },
+        "graphContainer": {
+            "id": "graphContainer",
+            "component": "Graph",
+            "background": "#007acc"
         },
         "footer": {
             "id": "footer",

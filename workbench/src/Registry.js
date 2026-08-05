@@ -1,3 +1,5 @@
+import { Graph } from "./Components/Graph/Graph";
+
 /* eslint-disable max-len */
 export const registry = {
     EditorContainer: () =>
@@ -23,6 +25,10 @@ export const registry = {
     SideBarMenu: () =>
         import("./Components/SideBarMenu/SideBarMenu").then((m) => ({
             default: m.default || m.SideBarMenu,
+        })),
+    Graph: () =>
+        import("./Components/Graph/Graph").then((m) => ({
+            default: m.default || m.Graph,
         })),
     ImplementationToolbar: () =>
         import("./Components/ImplementationToolbar/ImplementationToolbar").then((m) => ({
