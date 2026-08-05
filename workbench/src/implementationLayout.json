@@ -138,6 +138,21 @@
                     "containerId": "graphContainer",
                     "type": "container",
                     "size": { "initial": { "type": "fill" }}
+                },
+                {
+                    "type": "handleBar",
+                    "sibling1": "graphContainer",
+                    "sibling2": "inspectorContainer"
+                },
+                {
+                    "containerId": "inspectorContainer",
+                    "type": "container",
+                    "size": { 
+                        "initial": { "value": 270, "unit": "px", "type": "fixed" },
+                        "min": { "value": 170, "unit": "px"},
+                        "max": { "value": 320, "unit": "px"}
+                    },
+                    "collapse": { "value": 900, "condition": "lessThan", "relative": "parent" }
                 }
             ]
         },
@@ -149,6 +164,11 @@
         "graphContainer": {
             "id": "graphContainer",
             "component": "Graph",
+            "background": "#007acc"
+        },
+        "inspectorContainer": {
+            "id": "inspectorContainer",
+            "component": "BehaviorInspector",
             "background": "#007acc"
         },
         "footer": {

@@ -4,3 +4,15 @@
     display:flex;
     flex-direction: column;
 }
+
+.inspectorContainer {
+    width:100%;
+    height:100%;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+    scrollbar-color: #47474766 #252526;
+    scrollbar-width: thin;
+    font-size:12px;
+    padding-left: 10px;
+    background-color: #1e1e1e;
+}

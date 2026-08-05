@@ -58,6 +58,7 @@ export class DesignValidator {
         this.currentBehavior = {
             name: behavior["behaviorName"],
             createdParticipants: [],
+            participants: [],
             primitiveTransformations: [],
             opaqueTransformations: [],
             nextBehaviors: [],
@@ -71,6 +72,8 @@ export class DesignValidator {
     processChild (child) {
         if (child["type"] === "cmd" && child["command"] === "select") {
             this.currentBehavior.nextBehaviors.push(child.args[0].value);
+        } else if (child["type"] === "cmd" && child["command"] === "create") {
+            this.currentBehavior.createdParticipants.push(child.args);
         }
     }
 }

@@ -30,6 +30,10 @@ export const registry = {
         import("./Components/Graph/Graph").then((m) => ({
             default: m.default || m.Graph,
         })),
+    BehaviorInspector: () =>
+        import("./Components/Graph/Graph").then((m) => ({
+            default: m.default || m.BehaviorInspector,
+        })),
     ImplementationToolbar: () =>
         import("./Components/ImplementationToolbar/ImplementationToolbar").then((m) => ({
             default: m.default || m.ImplementationToolbar,

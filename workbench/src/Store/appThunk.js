@@ -95,4 +95,5 @@ export const deleteTraceThunk = (traceId) => (dispatch, getState, {engine}) => {
 
 export const selectBehaviorThunk = (behavior) => (dispatch, getState, {workbench}) => {
     dispatch(setSelectedBehavior(behavior));
+    console.log("Selected bheavior:", behavior);
 };

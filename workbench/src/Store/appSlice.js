@@ -9,7 +9,7 @@ const appSlice = createSlice({
         appMode: 1, // 1 = design,  2 = debugging
         designLoaded: false,
         hasEntryPoint: false,
-        selectedBehavior: null,
+        selectedBehavior: {},
         selectedTraceId: null,
         selectedTraceStmtId: null,
         statusMsg: null,
