@@ -3,7 +3,8 @@ import React, {useCallback, useEffect, useRef, useState} from "react";
 import {DALEngine} from "dal-engine-core-js-lib-dev";
 import {BehavioralGraphBuilder} from "sample-ui-component-library";
 
-import { useWorkbenchRedux } from "../../Store/useAppSelection";
+import {useWorkbenchRedux} from "../../Store/useAppSelection";
+import {DesignValidator} from "./DesignValidator/DesignValidator";
 
 import "./Graph.scss";
 
@@ -21,22 +22,17 @@ export function Graph () {
     const workbench = useWorkbenchRedux();
 
     useEffect(() => {
-        console.log("Workbench Updated:", workbench.workbench.getAst());
-    }, [workbench]);
-
-    useEffect(() => {
-        if (editorRef.current) {
+        if (workbench && workbench.workbench.getAst()) {
             const engine = new DALEngine({name: "testEngine", description: ""});
             setEngine(engine);
+            const ast = workbench.workbench.getAst();
+            const behaviors = new DesignValidator(ast).run();
+            for (const behavior of behaviors) {
+                engine.addNode(behavior["name"], "", behavior["nextBehaviors"]);
+            }
             editorRef.current.updateEngine(engine);
-            const timerId = setTimeout(() => {
-                engine.addNode("testBehavior", []);
-                engine.addNode("testBehavior2", []);
-                editorRef.current.updateEngine(engine);
-            }, 1000);
-            return () => clearTimeout(timerId);
         }
-    }, []);
+    }, [workbench]);
 
     const connectBehaviors = useCallback(
         (from, to) => {

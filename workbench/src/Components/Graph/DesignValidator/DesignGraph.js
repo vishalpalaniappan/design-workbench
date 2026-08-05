@@ -11,7 +11,9 @@
  * identify the semantic validity and the invariants it reveals.
  */
 export class DesignGraph {
-
+    /**
+     * Initialize design graph.
+     */
     constructor () {
         this.behaviors = {};
         this.currBehavior;
