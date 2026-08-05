@@ -113,11 +113,12 @@ export function ImplementationToolbar () {
 
 
     const synthesizeDesign = useCallback(() => {
+        // TODO: There can be multiple dal files, use the entry point.
         for (const file of workbench.getFiles()) {
             if (file.name.endsWith(".dal")) {
                 const content = file.content;
                 const ast = new DalAstGenerator().run(content);
-                console.log(ast);
+                workbench.saveAst(ast);
                 sendMessage({
                     type: "synthesize_design",
                     payload: {

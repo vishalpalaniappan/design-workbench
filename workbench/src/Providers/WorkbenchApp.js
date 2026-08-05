@@ -151,6 +151,14 @@ class WorkbenchApp {
     getRunCommand () {
         return this.runCommand;
     }
+
+    /**
+     * Saves the AST in the workbench app.
+     * @param {Object} ast
+     */
+    saveAst (ast) {
+        this.ast = ast;
+    }
 }
 
 const workbench = new WorkbenchApp();
