@@ -255,19 +255,12 @@ function GlobalProviders ({children}) {
         console.log(design);
         workbench.setName(design.designName);
         workbench.addFiles(design.files);
-        // engine.deserialize(new Uint8Array(design.data));
-        // const files = engine.getFiles();
-        // if (files.length > 0 && !activeTab) {
-        //     dispatch(setActiveTab(files[0].uid));
-        // }
-        // console.log(engine);
+        document.title = design.designName + " - Design Workbench";
 
-        // document.title = design.fileName.split(".")[0] + " - Design Workbench";
-
-        // const params = new URLSearchParams(window.location.search);
-        // params.set("design", design.fileName);
-        // const newUrl = `${window.location.pathname}?${params.toString()}`;
-        // window.history.pushState({}, "", newUrl);
+        const params = new URLSearchParams(window.location.search);
+        params.set("design", design.designName);
+        const newUrl = `${window.location.pathname}?${params.toString()}`;
+        window.history.pushState({}, "", newUrl);
 
         dispatch(setDesignLoaded(true));
         dispatch(incrementCounter());
