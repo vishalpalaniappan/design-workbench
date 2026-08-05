@@ -2,6 +2,7 @@ import {setActiveTab} from "./appSlice";
 import {incrementCounter} from "./appSlice";
 import {setHasEntryPoint} from "./appSlice";
 import {setSelectedTraceId} from "./appSlice";
+import {setSelectedBehavior} from "./appSlice";
 
 /**
  * Called to delete a file given a file ID.
@@ -90,4 +91,8 @@ export const deleteTraceThunk = (traceId) => (dispatch, getState, {engine}) => {
     engine.traces.deleteTrace(traceId);
     dispatch(incrementCounter());
     engine.save();
+};
+
+export const selectBehaviorThunk = (behavior) => (dispatch, getState, {workbench}) => {
+    dispatch(setSelectedBehavior(behavior));
 };

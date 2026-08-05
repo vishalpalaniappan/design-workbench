@@ -6,3 +6,4 @@ export const selectAppMode = (state) => state.app.appMode;
 export const selectDesignLoaded = (state) => state.app.designLoaded;
 export const selectHasEntryPoint = (state) => state.app.hasEntryPoint;
 export const selectSelectedTraceId = (state) => state.app.selectedTraceId;
+export const selectSelectedBehavior = (state) => state.app.selectedBehavior;

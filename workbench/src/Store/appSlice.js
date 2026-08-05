@@ -9,7 +9,7 @@ const appSlice = createSlice({
         appMode: 1, // 1 = design,  2 = debugging
         designLoaded: false,
         hasEntryPoint: false,
-        selectedInvariant: null,
+        selectedBehavior: null,
         selectedTraceId: null,
         selectedTraceStmtId: null,
         statusMsg: null,
@@ -46,6 +46,9 @@ const appSlice = createSlice({
         },
         setSelectedTraceStmtId (state, action) {
             state.selectedTraceStmtId = action.payload;
+        },
+        setSelectedBehavior (state, action) {
+            state.selectedBehavior = action.payload;
         }
     },
 });
@@ -62,6 +65,7 @@ export const {
     setHasEntryPoint,
     setSelectedTraceId,
     setSelectedTraceStmtId,
+    setSelectedBehavior,
 } = appSlice.actions;
 
 export default appSlice.reducer;

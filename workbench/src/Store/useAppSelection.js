@@ -3,7 +3,7 @@ import {useMemo} from "react";
 import {useSelector} from "react-redux";
 
 import {useDalEngine} from "../Providers/GlobalProviders";
-import { useWorkbench } from "../Providers/GlobalProviders";
+import {useWorkbench} from "../Providers/GlobalProviders";
 import {
     selectActiveTab,
     selectAppMode,
@@ -11,7 +11,8 @@ import {
     selectDesignLoaded,
     selectHasEntryPoint,
     selectLastSaved,
-    selectSelectedTraceId, 
+    selectSelectedBehavior,
+    selectSelectedTraceId,
     selectStatusMsg} from "./appSelectors";
 
 
@@ -144,4 +145,17 @@ export const useWorkbenchRedux = () => {
     return useMemo(() => {
         return workbench;
     }, [counter, workbench]);
+};
+
+
+/**
+ * Returns the selected trace ID.
+ * @return {String} The selected trace ID
+ */
+export const useSelectedBehavior = () => {
+    const selectedBehavior = useSelector(selectSelectedBehavior);
+
+    return useMemo(() => {
+        return selectedBehavior;
+    }, [selectedBehavior]);
 };
