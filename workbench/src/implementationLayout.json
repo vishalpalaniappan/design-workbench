@@ -148,11 +148,10 @@
                     "containerId": "inspectorContainer",
                     "type": "container",
                     "size": { 
-                        "initial": { "value": 270, "unit": "px", "type": "fixed" },
+                        "initial": { "value": 300, "unit": "px", "type": "fixed" },
                         "min": { "value": 170, "unit": "px"},
-                        "max": { "value": 320, "unit": "px"}
-                    },
-                    "collapse": { "value": 900, "condition": "lessThan", "relative": "parent" }
+                        "max": { "value": 400, "unit": "px"}
+                    }
                 }
             ]
         },
