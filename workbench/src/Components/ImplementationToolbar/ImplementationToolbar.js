@@ -10,7 +10,7 @@ import {useModalManager} from "ui-layout-manager-dev";
 import {useDalEngine} from "../../Providers/GlobalProviders";
 import {useServer} from "../../Providers/GlobalProviders";
 import {useWorkbench} from "../../Providers/GlobalProviders";
-import {setStatusMsg} from "../../Store/appSlice";
+import {incrementCounter, setStatusMsg} from "../../Store/appSlice";
 import {deleteTraceThunk} from "../../Store/appThunk";
 import {useHasEntryPoint} from "../../Store/useAppSelection";
 import {useTraces} from "../../Store/useAppSelection";
@@ -128,7 +128,8 @@ export function ImplementationToolbar () {
                 });
             }
         }
-    }, [hasEntryPoint, workbench, activeTab, selectedVerbosity]);
+        dispatch(incrementCounter());
+    }, [hasEntryPoint, workbench, dispatch, activeTab, selectedVerbosity]);
 
 
     const deleteTrace = (e) => {

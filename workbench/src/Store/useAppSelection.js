@@ -132,3 +132,16 @@ export const useSelectedTraceId = () => {
         return selectedTraceId;
     }, [selectedTraceId, counter]);
 };
+
+/**
+ * Returns the selected trace ID.
+ * @return {String} The selected trace ID
+ */
+export const useWorkbenchRedux = () => {
+    const counter = useSelector(selectCounter);
+    const workbench = useWorkbench();
+
+    return useMemo(() => {
+        return workbench;
+    }, [counter, workbench]);
+};

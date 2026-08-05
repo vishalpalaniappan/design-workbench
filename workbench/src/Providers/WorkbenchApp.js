@@ -159,6 +159,14 @@ class WorkbenchApp {
     saveAst (ast) {
         this.ast = ast;
     }
+
+    /**
+     * Returns the AST for this design.
+     * @return {Object}
+     */
+    getAst () {
+        return this.ast;
+    }
 }
 
 const workbench = new WorkbenchApp();
