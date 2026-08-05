@@ -62,7 +62,7 @@ export function Graph () {
     const selectBehavior = useCallback(
         (nodeId) => {
             if (nodeId) {
-                const behavior = behaviors.find((_behavior) => _behavior.name = nodeId);
+                const behavior = behaviors.find((_behavior) => _behavior.name == nodeId);
                 dispatch(selectBehaviorThunk({...behavior}));
             } else {
                 dispatch(selectBehaviorThunk({}));
