@@ -118,13 +118,7 @@ export function ImplementationToolbar () {
             if (file.name.endsWith(".dal")) {
                 const content = file.content;
                 const ast = new DalAstGenerator().run(content);
-                console.log(ast);
-                // Uncomment to save file to workbench and on server
-                // const f = workbench.saveAst(ast);
-                // sendMessage({
-                //     type: "save_file",
-                //     data: f,
-                // });
+                workbench.saveAst(ast);
                 sendMessage({
                     type: "synthesize_design",
                     payload: {
