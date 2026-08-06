@@ -176,12 +176,11 @@ class WorkbenchApp {
     /**
      * Saves the AST in the workbench app.
      * @param {Object} ast
-     * 
-     * @return {Object}
+     *
      */
     saveAst (ast) {
         this.ast = ast;
-        return this.addFile("ast.json", JSON.stringify(ast, null, 1));
+        // return this.addFile("ast.json", JSON.stringify(ast, null, 1));
     }
 
     /**
