@@ -46,6 +46,27 @@ class WorkbenchApp {
     }
 
     /**
+     * Add a file
+     * @param {String} fileName
+     * @param {String} content
+     *
+     * @return {Object}
+     */
+    addFile (fileName, content) {
+        const f = {
+            name: fileName,
+            type: "file",
+            uid: this.designName + "/" + fileName,
+            path: this.designName + "/" + fileName,
+            content: content,
+            updatedContent: content,
+            level: 0,
+        };
+        this.files.push(f);
+        return f;
+    }
+
+    /**
      * Get the files
      *
      * @return {Array} Files
@@ -155,9 +176,12 @@ class WorkbenchApp {
     /**
      * Saves the AST in the workbench app.
      * @param {Object} ast
+     * 
+     * @return {Object}
      */
     saveAst (ast) {
         this.ast = ast;
+        return this.addFile("ast.json", JSON.stringify(ast, null, 1));
     }
 
     /**
