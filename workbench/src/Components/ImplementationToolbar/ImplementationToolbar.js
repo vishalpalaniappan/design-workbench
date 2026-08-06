@@ -119,6 +119,7 @@ export function ImplementationToolbar () {
                 const content = file.content;
                 const ast = new DalAstGenerator().run(content);
                 workbench.saveAst(ast);
+                console.log(ast);
                 sendMessage({
                     type: "synthesize_design",
                     payload: {
