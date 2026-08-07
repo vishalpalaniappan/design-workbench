@@ -91,4 +91,32 @@ export class DesignValidator {
             });
         }
     }
+
+    /**
+     * Find where the participant was added to the behavior.
+     * @param {String} participant
+     * 
+     * @return {Object|null}
+     */
+    getAdditionBehavior (participant) {
+        console.log("Inspecting participant:", participant);
+        for (const behavior of this.behaviors) {
+            for (const transform of behavior.participants) {
+                if (transform.type === "add" && transform.participant === participant) {
+                    return behavior;
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Checks that a path exists from behavior A to B
+     * @param {String} fromBehavior
+     * @param {String} toBehavior
+     */
+    pathExists (fromBehavior, toBehavior) {
+        // Walk every path to see if it reaches target
+        // Terminate if an already visited behavior is visited again
+    }
 }

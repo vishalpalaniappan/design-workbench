@@ -194,6 +194,25 @@ class WorkbenchApp {
     getAst () {
         return this.ast;
     }
+
+    /**
+     * Find the provenance of the participant.
+     * @param {String} behavior
+     * @param {String} participant
+     *
+     * @return {String|null}
+     */
+    findProvenanceOfParticipant (behavior, participant) {
+        // CAN TRIGGER THIS BY CLICKING THE PARTICIANT IN THE PARTICIPANTS KEY
+        // IN THE RIGHT DATA VIEW SHOWN AFTER SELECTING A BEHAVIOR
+        console.log(`Selected Participant ${participant} in behavior ${behavior}.`);
+        const additionBehavior = this.validator.getAdditionBehavior(participant);
+        if (additionBehavior) {
+            this.highlightedBehavior = additionBehavior["name"];
+            // Find path from addition behavior to the target behavior
+            return additionBehavior["name"];
+        }
+    }
 }
 
 const workbench = new WorkbenchApp();

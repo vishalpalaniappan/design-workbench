@@ -89,6 +89,7 @@ export function Graph () {
 export function BehaviorInspector () {
     const [localVariables, setLocalVariables] = useState({});
     const behavior = useSelectedBehavior();
+    const {workbench} = useWorkbenchRedux();
 
     useEffect(() => {
         setLocalVariables(behavior);
@@ -113,9 +114,11 @@ export function BehaviorInspector () {
         base0F: "#a7ce8a",
     };
 
-    const select = (selection) => {
-        console.log(selection);
-    }
+    const select = useCallback((selection) => {
+        if (selection.name === "participant") {
+            workbench.findProvenanceOfParticipant(behavior.name, selection.value);
+        }
+    }, [workbench, behavior]);
     return (
         <div className="inspectorContainer w-100 h-100 ">
             <ReactJsonView
