@@ -57,6 +57,7 @@ export class DesignValidator {
     processBehavior (behavior) {
         this.currentBehavior = {
             name: behavior["behaviorName"],
+            uid: crypto.randomUUID(),
             createdParticipants: [],
             participants: [],
             transformations: [],
@@ -99,6 +100,7 @@ export class DesignValidator {
      * @return {Object|null}
      */
     getPossibleProvenanceBehavior (participant) {
+        // TODO: Multiple behaviors can be origin.
         console.log("Inspecting participant:", participant);
         for (const behavior of this.behaviors) {
             for (const transform of behavior.participants) {
