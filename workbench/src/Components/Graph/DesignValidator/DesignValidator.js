@@ -59,8 +59,7 @@ export class DesignValidator {
             name: behavior["behaviorName"],
             createdParticipants: [],
             participants: [],
-            primitiveTransformations: [],
-            opaqueTransformations: [],
+            transformations: [],
             nextBehaviors: [],
         };
     }
@@ -70,16 +69,26 @@ export class DesignValidator {
      * @param {Object} child 
      */
     processChild (child) {
-        if (child["type"] === "cmd" && child["command"] === "select") {
-            this.currentBehavior.nextBehaviors.push(child.args[0].value);
-        } else if (child["type"] === "cmd" && child["command"] === "create") {
-            this.currentBehavior.createdParticipants.push(child.args);
-        } else if (child["type"] === "cmd" && child["command"] === "worldStateManager") {
-            const v = child.args[1].value;
-            if (v === "getValue" || v === "get" || v === "add") {
-                const p = child.args[2].value;
-                this.currentBehavior.participants.push(p);
+        const t = child["type"];
+        const c = child["command"];
+        if (t === "cmd") {
+            if (c === "select") {
+                this.currentBehavior.nextBehaviors.push(child.args[0].value);
+            } else if (c === "create") {
+                this.currentBehavior.createdParticipants.push(child.args);
+            } else if (c === "worldStateManager") {
+                this.currentBehavior.participants.push({
+                    type: child.args[1].value,
+                    participant: child.args[2].value,
+                });
             }
+        } else if (t === "registeredCmd") {
+            const output = child.args[0].value;
+            this.currentBehavior.transformations.push({
+                command: child.command,
+                output: output,
+                participants: child.args.slice(1),
+            });
         }
     }
 }
