@@ -203,8 +203,24 @@ class WorkbenchApp {
      * @return {String|null}
      */
     findProvenanceOfParticipant (behavior, participant) {
-        // CAN TRIGGER THIS BY CLICKING THE PARTICIANT IN THE PARTICIPANTS KEY
-        // IN THE RIGHT DATA VIEW SHOWN AFTER SELECTING A BEHAVIOR
+        /**
+         * Currently, in the right side of the UI, there is a panel that shows
+         * the metadata of the behavior. If you click on the name of a
+         * paricipant, it will trigger this function and find its provenance,
+         * if there is one.
+         *
+         * I am using this as a convenient way for me to explore but in the end
+         * this will be automated by visiting each behavior, finding its
+         * provenance, establishing the semantic validity of the transofmation
+         * and placing invariants as needed.
+         *
+         * This algorithm is being implemented.
+         *
+         * Also note that, when name is added to a book and it is accessed,
+         * its provenance is still when name entered the world. Not when the
+         * book was created with the name, so the algorithm will have to 
+         * establish this.
+         */
         console.log(`Selected Participant ${participant} in behavior ${behavior}.`);
         const additionBehavior = this.validator.getPossibleProvenanceBehavior(participant);
         if (additionBehavior) {
