@@ -8,7 +8,6 @@ import {BehavioralGraphBuilder} from "sample-ui-component-library";
 import {selectBehaviorThunk} from "../../Store/appThunk";
 import {useWorkbenchRedux} from "../../Store/useAppSelection";
 import {useSelectedBehavior} from "../../Store/useAppSelection";
-import {DesignValidator} from "./DesignValidator/DesignValidator";
 
 import "./Graph.scss";
 
@@ -30,9 +29,7 @@ export function Graph () {
     useEffect(() => {
         if (workbench && workbench.workbench.getAst()) {
             const engine = new DALEngine({name: "testEngine", description: ""});
-            setEngine(engine);
-            const ast = workbench.workbench.getAst();
-            const behaviors = new DesignValidator(ast).run();
+            const behaviors = workbench.workbench.validator.behaviors;
             setBehaviors(behaviors);
             for (const behavior of behaviors) {
                 engine.addNode(behavior["name"], "", behavior["nextBehaviors"]);
@@ -115,6 +112,10 @@ export function BehaviorInspector () {
         base0E: "#bbb18c", // indent arrow
         base0F: "#a7ce8a",
     };
+
+    const select = (selection) => {
+        console.log(selection);
+    }
     return (
         <div className="inspectorContainer w-100 h-100 ">
             <ReactJsonView
@@ -126,7 +127,9 @@ export function BehaviorInspector () {
                 sortKeys={true}
                 displayDataTypes={false}
                 quotesOnKeys={true}
-                collapseStringsAfterLength={30}>
+                collapseStringsAfterLength={30}
+                enableClipboard={false}
+                onSelect={select}>
             </ReactJsonView>
         </div>
     );

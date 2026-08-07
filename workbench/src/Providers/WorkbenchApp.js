@@ -1,3 +1,5 @@
+import { DesignValidator } from "./DesignValidator/DesignValidator";
+
 /**
  * This class is temporary and it stores the repo contents so that
  * it can be accessed by the workbench in a strucured way.
@@ -179,6 +181,8 @@ class WorkbenchApp {
      *
      */
     saveAst (ast) {
+        this.validator = new DesignValidator(ast);
+        this.validator.run();
         this.ast = ast;
         // return this.addFile("ast.json", JSON.stringify(ast, null, 1));
     }
