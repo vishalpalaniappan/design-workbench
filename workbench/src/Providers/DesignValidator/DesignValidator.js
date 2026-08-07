@@ -98,7 +98,7 @@ export class DesignValidator {
      * 
      * @return {Object|null}
      */
-    getAdditionBehavior (participant) {
+    getPossibleProvenanceBehavior (participant) {
         console.log("Inspecting participant:", participant);
         for (const behavior of this.behaviors) {
             for (const transform of behavior.participants) {
@@ -108,7 +108,6 @@ export class DesignValidator {
             }
         }
     }
-
 
     /**
      * Checks that a path exists from behavior A to B

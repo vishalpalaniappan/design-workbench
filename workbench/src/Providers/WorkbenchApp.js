@@ -206,7 +206,7 @@ class WorkbenchApp {
         // CAN TRIGGER THIS BY CLICKING THE PARTICIANT IN THE PARTICIPANTS KEY
         // IN THE RIGHT DATA VIEW SHOWN AFTER SELECTING A BEHAVIOR
         console.log(`Selected Participant ${participant} in behavior ${behavior}.`);
-        const additionBehavior = this.validator.getAdditionBehavior(participant);
+        const additionBehavior = this.validator.getPossibleProvenanceBehavior(participant);
         if (additionBehavior) {
             this.highlightedBehavior = additionBehavior["name"];
             // Find path from addition behavior to the target behavior
