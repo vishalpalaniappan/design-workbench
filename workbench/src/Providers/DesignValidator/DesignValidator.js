@@ -144,7 +144,6 @@ export class DesignValidator {
     walkPath (startBehavior, endBehavior, path) {
         const currBehavior = this.getBehavior(startBehavior);
         const targetBehavior = this.getBehavior(endBehavior);
-        // console.log(currBehavior, targetBehavior);
 
         if (!currBehavior || !targetBehavior) {
             console.warn("Behavior not found");
