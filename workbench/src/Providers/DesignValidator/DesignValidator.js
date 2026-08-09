@@ -111,6 +111,16 @@ export class DesignValidator {
         }
     }
 
+
+    /**
+     * Get the behavior.
+     * @param {String} behaviorName Name of the behavior.
+     * @return {null|String}
+     */
+    getBehavior (behaviorName) {
+        return this.behaviors.find((value) => value.name === behaviorName);
+    }
+
     /**
      * Checks that a path exists from behavior A to B
      * @param {String} fromBehavior
@@ -119,5 +129,47 @@ export class DesignValidator {
     pathExists (fromBehavior, toBehavior) {
         // Walk every path to see if it reaches target
         // Terminate if an already visited behavior is visited again
+        console.log(`Finding path from ${fromBehavior} to ${toBehavior}`);
+        this.walkPath(fromBehavior, toBehavior, []);
+    }
+
+    /**
+     * Walk path from behavior to behavior and save in path.
+     * @param {String} startBehavior
+     * @param {String} endBehavior
+     * @param {Array} path
+     *
+     * @return {Null|Array}
+     */
+    walkPath (startBehavior, endBehavior, path) {
+        const currBehavior = this.getBehavior(startBehavior);
+        const targetBehavior = this.getBehavior(endBehavior);
+        // console.log(currBehavior, targetBehavior);
+
+        if (!currBehavior || !targetBehavior) {
+            console.warn("Behavior not found");
+            return;
+        }
+
+        if (path.includes(startBehavior)) {
+            path.push(startBehavior);
+            console.log("Looped Path:");
+            console.log(path);
+            return path;
+        } else if (startBehavior === endBehavior) {
+            path.push(startBehavior);
+            console.log("Valid Path from create to transform:");
+            console.log(path);
+            return path;
+        }
+
+        path.push(startBehavior);
+        if (currBehavior.nextBehaviors.length > 1) {
+            for (const next of currBehavior.nextBehaviors) {
+                this.walkPath(next, endBehavior, path);
+            }
+        } else if (currBehavior.nextBehaviors.length === 1) {
+            this.walkPath(currBehavior.nextBehaviors[0], endBehavior, path);
+        }
     }
 }

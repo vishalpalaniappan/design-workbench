@@ -226,6 +226,7 @@ class WorkbenchApp {
         if (additionBehavior) {
             this.highlightedBehavior = additionBehavior["name"];
             // Find path from addition behavior to the target behavior
+            const pathExists = this.validator.pathExists(additionBehavior["name"], behavior);
             return additionBehavior["name"];
         }
     }
