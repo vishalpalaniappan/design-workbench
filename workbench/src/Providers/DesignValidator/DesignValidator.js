@@ -61,6 +61,7 @@ export class DesignValidator {
         this.currentBehavior = {
             name: behavior["behaviorName"],
             uid: crypto.randomUUID(),
+            creation: [],
             participants: [],
             worldState: [],
             transformations: [],
@@ -97,6 +98,10 @@ export class DesignValidator {
                 }
             }
             if (isAdd) {
+                this.currentBehavior["creation"].push({
+                    name: name,
+                    role: role,
+                });
                 this.currentBehavior["participants"].push({
                     name: name,
                     role: role,
