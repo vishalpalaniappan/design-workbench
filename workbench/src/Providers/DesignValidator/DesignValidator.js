@@ -63,8 +63,7 @@ export class DesignValidator {
     createBehavior (behavior) {
         this.currentBehavior = {
             name: behavior["behaviorName"],
-            uid: crypto.randomUUID(),
-            creation: [],
+            // creation: [],
             worldState: [],
             transformations: [],
             nextBehaviors: [],
@@ -107,7 +106,7 @@ export class DesignValidator {
             }
             if (isCreate) {
                 const nameRole = {name: name, role: role, behavior: this.currentBehavior.name};
-                this.currentBehavior["creation"].push(nameRole);
+                // this.currentBehavior["creation"].push(nameRole);
                 this.created.push(nameRole);
             }
 
@@ -143,10 +142,15 @@ export class DesignValidator {
                     for (const acessedP of behavior["accessedParticipants"]) {
                         if (acessedP.name === name) {
                             p.role = acessedP.role;
+                            p.provenanceBehavior = this.created.find(
+                                (val) => val.role == acessedP.role
+                            )?.behavior;
                         }
                     }
                 }
             });
+            delete behavior.worldState;
+            delete behavior.accessedParticipants;
         }
     }
 
