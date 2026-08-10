@@ -114,11 +114,6 @@ export function BehaviorInspector () {
         base0F: "#a7ce8a",
     };
 
-    const select = useCallback((selection) => {
-        if (selection.name === "participant") {
-            workbench.findProvenanceOfParticipant(behavior.name, selection.value);
-        }
-    }, [workbench, behavior]);
     return (
         <div className="inspectorContainer w-100 h-100 ">
             <ReactJsonView
@@ -131,8 +126,7 @@ export function BehaviorInspector () {
                 displayDataTypes={false}
                 quotesOnKeys={true}
                 collapseStringsAfterLength={30}
-                enableClipboard={false}
-                onSelect={select}>
+                enableClipboard={false}>
             </ReactJsonView>
         </div>
     );
