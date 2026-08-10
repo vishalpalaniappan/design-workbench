@@ -123,7 +123,7 @@ export function ImplementationToolbar () {
                 sendMessage({
                     type: "synthesize_design",
                     payload: {
-                        ast: ast,
+                        ast: workbench.ast,
                         verbosity: selectedVerbosity,
                     },
                 });

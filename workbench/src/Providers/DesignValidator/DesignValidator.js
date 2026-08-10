@@ -18,6 +18,7 @@ export class DesignValidator {
         this.currentBehavior;
         this.behaviors = [];
         this.semanticGraph = new DesignGraph();
+        this.invariants = [];
         this.created = [];
     }
 
@@ -30,6 +31,8 @@ export class DesignValidator {
         console.log(this.behaviors);
         console.log("Created:", this.created);
         this.identifyProvenance();
+        this.addInvariants(this.ast);
+        console.log(this.ast);
         return this.behaviors;
     }
 
@@ -55,6 +58,31 @@ export class DesignValidator {
             }
         }
     }
+
+
+    /**
+     * Process the child
+     * @param {Object} child
+     */
+    processChild (child) {
+        const t = child["type"];
+        const c = child["command"];
+        if (t === "cmd") {
+            if (c === "select") {
+                this.currentBehavior.nextBehaviors.push(child.args[0].value);
+            } else if (c === "worldStateManager") {
+                this.currentBehavior.worldState.push(child.args);
+            }
+        } else if (t === "registeredCmd") {
+            const output = child.args[0].value;
+            this.currentBehavior.transformations.push({
+                command: child.command,
+                output: output,
+                participants: child.args.slice(1),
+            });
+        }
+    }
+
 
     /**
      * Process a node in the tree.
@@ -145,6 +173,12 @@ export class DesignValidator {
                             p.provenanceBehavior = this.created.find(
                                 (val) => val.role == acessedP.role
                             )?.behavior;
+                            this.invariants.push({
+                                behavior: p.provenanceBehavior,
+                                transformBehavior: behavior.name,
+                                transformation: transformation.command,
+                                participant: name,
+                            });
                         }
                     }
                 }
@@ -155,25 +189,47 @@ export class DesignValidator {
     }
 
     /**
-     * Process the child
-     * @param {Object} child
+     * Visits nodes in the tree and adds invariant in the behavior block.
+     * @param {Object} node 
      */
-    processChild (child) {
-        const t = child["type"];
-        const c = child["command"];
-        if (t === "cmd") {
-            if (c === "select") {
-                this.currentBehavior.nextBehaviors.push(child.args[0].value);
-            } else if (c === "worldStateManager") {
-                this.currentBehavior.worldState.push(child.args);
+    addInvariants (node) {
+        if ("body" in node) {
+            for (const child of node["body"]) {
+                if (child["type"] === "behavior") {
+                    this.addInvariants(child);
+
+                    const invariant = this.invariants.find(
+                        (val) => val.behavior === child["behaviorName"]
+                    );
+                    if (invariant) {
+                        const printVal = "f'Invariant for transformation " +
+                            invariant["transformation"] +
+                            " in behavior " +
+                            invariant["transformBehavior"] +
+                            "'";
+                        const invariantBlock = {
+                            "type": "invariant",
+                            "args": [],
+                            "body": [
+                                {
+                                    "type": "cmd",
+                                    "command": "display",
+                                    "args": [
+                                        {
+                                            "arg": null,
+                                            "type": "string",
+                                            "value": printVal,
+                                        },
+                                    ],
+                                },
+                            ],
+                        };
+                        child.body.splice(0, 0, invariantBlock);
+                    };
+                } else {
+                    this.addInvariants(child);
+                }
             }
-        } else if (t === "registeredCmd") {
-            const output = child.args[0].value;
-            this.currentBehavior.transformations.push({
-                command: child.command,
-                output: output,
-                participants: child.args.slice(1),
-            });
         }
     }
 }

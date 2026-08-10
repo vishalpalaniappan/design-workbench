@@ -183,7 +183,7 @@ class WorkbenchApp {
     saveAst (ast) {
         this.validator = new DesignValidator(ast);
         this.validator.run();
-        this.ast = ast;
+        this.ast = this.validator.ast;
         // return this.addFile("ast.json", JSON.stringify(ast, null, 1));
     }
 
