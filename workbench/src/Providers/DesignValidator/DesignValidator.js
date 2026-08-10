@@ -29,6 +29,7 @@ export class DesignValidator {
         this.processTree(this.ast);
         console.log(this.behaviors);
         console.log("Created:", this.created);
+        this.identifyProvenance();
         return this.behaviors;
     }
 
@@ -106,6 +107,7 @@ export class DesignValidator {
             }
             if (isCreate) {
                 const nameRole = {name: name, role: role, behavior: this.currentBehavior.name};
+                this.currentBehavior["creation"].push(nameRole);
                 this.created.push(nameRole);
             }
 
@@ -124,6 +126,28 @@ export class DesignValidator {
                 this.currentBehavior["accessedParticipants"].push({name: name, role: role});
             }
         });
+    }
+
+    /**
+     * Identifies the provenance of the participants involved in
+     * each transformation in a behavior.
+     */
+    identifyProvenance () {
+        for (const behavior of this.behaviors) {
+            behavior.transformations.forEach((transformation, index)=> {
+                for (const p of transformation.participants) {
+                    if (p.type !== "name") {
+                        continue;
+                    }
+                    const name = p.value;
+                    for (const acessedP of behavior["accessedParticipants"]) {
+                        if (acessedP.name === name) {
+                            p.role = acessedP.role;
+                        }
+                    }
+                }
+            });
+        }
     }
 
     /**
