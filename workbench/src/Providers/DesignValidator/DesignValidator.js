@@ -136,7 +136,7 @@ export class DesignValidator {
                 const nameRole = {name: name, role: role, behavior: this.currentBehavior.name};
                 // this.currentBehavior["creation"].push(nameRole);
                 this.created.push(nameRole);
-            }
+            }   
 
             // Saves all the participant that were accessed in the behavior.
             let isGet = false;
@@ -198,10 +198,10 @@ export class DesignValidator {
                 if (child["type"] === "behavior") {
                     this.addInvariants(child);
 
-                    const invariant = this.invariants.find(
-                        (val) => val.behavior === child["behaviorName"]
-                    );
-                    if (invariant) {
+                    for (const invariant of this.invariants) {
+                        if (invariant.behavior !== child["behaviorName"]) {
+                            continue;
+                        }
                         const printVal = "f'Invariant for transformation " +
                             invariant["transformation"] +
                             " in behavior " +
