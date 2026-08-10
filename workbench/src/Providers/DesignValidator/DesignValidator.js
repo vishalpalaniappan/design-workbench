@@ -18,15 +18,17 @@ export class DesignValidator {
         this.currentBehavior;
         this.behaviors = [];
         this.semanticGraph = new DesignGraph();
+        this.created = [];
     }
 
     /**
      * Runs the validator.
      * @return {Object}
      */
-    run() {
+    run () {
         this.processTree(this.ast);
         console.log(this.behaviors);
+        console.log("Created:", this.created);
         return this.behaviors;
     }
 
@@ -62,7 +64,6 @@ export class DesignValidator {
             name: behavior["behaviorName"],
             uid: crypto.randomUUID(),
             creation: [],
-            participants: [],
             worldState: [],
             transformations: [],
             nextBehaviors: [],
@@ -85,27 +86,18 @@ export class DesignValidator {
      */
     processBehavior () {
         this.currentBehavior.worldState.forEach((p, index)=> {
-            let isAdd;
+            let isAdd = false;
             let name;
             let role;
             for (const t of p) {
-                if (t.arg === "transformation" && t.value === "add") {
-                    isAdd = true;
-                } else if (t.arg === "name") {
-                    name = t.value;
-                } else if (t.arg === "p_role") {
-                    role = t.value;
-                }
+                isAdd = (t.arg === "transformation" && t.value === "create")?true:isAdd;
+                name = (t.arg === "name")?t.value:name;
+                role = (t.arg === "p_role")?t.value:role;
             }
             if (isAdd) {
-                this.currentBehavior["creation"].push({
-                    name: name,
-                    role: role,
-                });
-                this.currentBehavior["participants"].push({
-                    name: name,
-                    role: role,
-                });
+                const nameRole = {name: name, role: role, behavior: this.currentBehavior.name};
+                this.currentBehavior["creation"].push(nameRole);
+                this.created.push(nameRole);
             }
         });
     }
