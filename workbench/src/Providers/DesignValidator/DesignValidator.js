@@ -38,8 +38,11 @@ export class DesignValidator {
         if ("body" in node) {
             for (const child of node["body"]) {
                 if (child["type"] === "behavior") {
-                    this.processBehavior(child);
+                    // TODO: This would break for nested behaviors.
+                    // I would have to add them to a stack.
+                    this.createBehavior(child);
                     this.processTree(child);
+                    this.processBehavior();
                     this.behaviors.push({...this.currentBehavior});
                     this.currentBehavior = null;
                 } else {
@@ -54,15 +57,54 @@ export class DesignValidator {
      * Process a node in the tree.
      * @param {Object} behavior
      */
-    processBehavior (behavior) {
+    createBehavior (behavior) {
         this.currentBehavior = {
             name: behavior["behaviorName"],
             uid: crypto.randomUUID(),
-            createdParticipants: [],
             participants: [],
+            worldState: [],
             transformations: [],
             nextBehaviors: [],
         };
+    }
+
+    /**
+     * Currently this function accesses the participant that were
+     * created and saves their role.
+     *
+     * Next step is, every participant that was accessed for the
+     * transformation in this behavior will be saved along with
+     * their roles.
+     *
+     * Using the point where the participant with that role was
+     * added into the world state, the relevant invariant will
+     * be added automatically.
+     *
+     * @param {Object} behavior Behavior Info
+     */
+    processBehavior () {
+        this.currentBehavior["participants"] = [];
+        this.currentBehavior.worldState.forEach((p, index)=> {
+            console.log("");
+            let isAdd;
+            let name;
+            let role;
+            for (const t of p) {
+                if (t.arg === "transformation" && t.value === "add") {
+                    isAdd = true;
+                } else if (t.arg === "name") {
+                    name = t.value;
+                } else if (t.arg === "p_role") {
+                    role = t.value;
+                }
+            }
+            if (isAdd) {
+                this.currentBehavior["participants"].push({
+                    name: name,
+                    role: role,
+                });
+            }
+        });
     }
 
     /**
@@ -75,13 +117,8 @@ export class DesignValidator {
         if (t === "cmd") {
             if (c === "select") {
                 this.currentBehavior.nextBehaviors.push(child.args[0].value);
-            } else if (c === "create") {
-                this.currentBehavior.createdParticipants.push(child.args);
             } else if (c === "worldStateManager") {
-                this.currentBehavior.participants.push({
-                    type: child.args[1].value,
-                    participant: child.args[2].value,
-                });
+                this.currentBehavior.worldState.push(child.args);
             }
         } else if (t === "registeredCmd") {
             const output = child.args[0].value;
