@@ -74,30 +74,54 @@ export class DesignValidator {
      * Currently this function accesses the participant that were
      * created and saves their role.
      *
-     * Next step is, every participant that was accessed for the
-     * transformation in this behavior will be saved along with
-     * their roles.
+     * It then saves every participant that was accessed along with
+     * their roles into the behavior.
      *
-     * Using the point where the participant with that role was
-     * added into the world state, the relevant invariant will
-     * be added automatically.
+     * In the next pass, it will identify every participant used in
+     * a transformation and then use the role to identify when it
+     * was introduced into the world.This will then be used to automatically
+     * the releavnt invariant in the correct location.
      *
      * @param {Object} behavior Behavior Info
      */
     processBehavior () {
-        this.currentBehavior.worldState.forEach((p, index)=> {
-            let isAdd = false;
-            let name;
-            let role;
-            for (const t of p) {
-                isAdd = (t.arg === "transformation" && t.value === "create")?true:isAdd;
+        this.currentBehavior["accessedParticipants"] = [];
+        this.currentBehavior.worldState.forEach((worldStateTransformArgs, index)=> {
+            /**
+             * The arguments for the world state transform are stored in a list
+             * with each entry having a arg type. I identify if the transform
+             * is a create or get, or getValue and then I also save the name and
+             * role.
+             */
+
+            // Saves all the participants that were created in the behavior.
+            let isCreate = false;
+            let name = null;
+            let role = null;
+            for (const t of worldStateTransformArgs) {
+                const isTransformation = (t.arg === "transformation");
+                isCreate = (isTransformation && t.value === "create")?true:isCreate;
                 name = (t.arg === "name")?t.value:name;
                 role = (t.arg === "p_role")?t.value:role;
             }
-            if (isAdd) {
+            if (isCreate) {
                 const nameRole = {name: name, role: role, behavior: this.currentBehavior.name};
-                this.currentBehavior["creation"].push(nameRole);
                 this.created.push(nameRole);
+            }
+
+            // Saves all the participant that were accessed in the behavior.
+            let isGet = false;
+            name = null;
+            role = null;
+            for (const t of worldStateTransformArgs) {
+                const isTransformation = (t.arg === "transformation");
+                const v = t.value;
+                isGet = (isTransformation && (v === "get" || v === "getValue"))?true:isGet;
+                name = (t.arg === "name")?t.value:name;
+                role = (t.arg === "p_role")?t.value:role;
+            }
+            if (isGet) {
+                this.currentBehavior["accessedParticipants"].push({name: name, role: role});
             }
         });
     }
