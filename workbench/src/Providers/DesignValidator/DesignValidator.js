@@ -209,8 +209,7 @@ export class DesignValidator {
                             invariant["transformBehavior"] + "'";
 
                         /**
-                         * For the invariant block, this approach:
-                         * - Get participants from world state
+                         * For the invariant block, initial approach:
                          * - Invariant at position 1
                          *      - get value of arg 1
                          *      - command_invariant_1()
