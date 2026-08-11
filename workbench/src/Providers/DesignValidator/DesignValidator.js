@@ -238,6 +238,7 @@ export class DesignValidator {
                         const sB = invariant["behavior"];
                         const tB = invariant["transformBehavior"];
                         console.log(`Finding path from ${sB} to ${tB}`);
+
                         this.validPaths = [];
                         this.walkPath(sB, tB, []);
 
@@ -384,15 +385,11 @@ export class DesignValidator {
             return;
         }
 
-        if (path.includes(startBehavior)) {
-            path.push(startBehavior);
-            // console.log("Looped Path:");
-            // console.log([...path]);
+        if (path.length > 100) {
+            console.warn("Path wasn't closing, termianting");
             return path;
         } else if (startBehavior === endBehavior) {
             path.push(startBehavior);
-            // console.log("Valid Path from create to transform:");
-            // console.log([...path]);
             this.validPaths.push([...path]);
             return path;
         }
@@ -400,7 +397,9 @@ export class DesignValidator {
         path.push(startBehavior);
         if (currBehavior.nextBehaviors.length > 1) {
             for (const next of currBehavior.nextBehaviors) {
-                this.walkPath(next, endBehavior, [...path]);
+                if (!path.includes(next)) {
+                    this.walkPath(next, endBehavior, [...path]);
+                }
             }
         } else if (currBehavior.nextBehaviors.length === 1) {
             this.walkPath(currBehavior.nextBehaviors[0], endBehavior, [...path]);
