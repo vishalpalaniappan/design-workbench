@@ -202,7 +202,9 @@ export class DesignValidator {
                         if (invariant.behavior !== child["behaviorName"]) {
                             continue;
                         }
-                        const printVal = "f'Invariant for transformation " +
+                        const printVal = "f'Invariant for " +
+                            invariant["participant"] +
+                            " in transformation " +
                             invariant["transformation"] +
                             " in behavior " +
                             invariant["transformBehavior"] +
@@ -224,7 +226,7 @@ export class DesignValidator {
                                 },
                             ],
                         };
-                        child.body.splice(0, 0, invariantBlock);
+                        child.body.splice(child.body.length - 1, 0, invariantBlock);
                     };
                 } else {
                     this.addInvariants(child);
