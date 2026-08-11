@@ -251,7 +251,7 @@ export class DesignValidator {
                                         {
                                             "arg": "cmd",
                                             "type": "string",
-                                            "value": "get",
+                                            "value": "getValue",
                                         },
                                         {
                                             "arg": "participant",
@@ -266,7 +266,7 @@ export class DesignValidator {
                                         {
                                             "arg": "role",
                                             "type": "string",
-                                            "value": `${invariant["participant"]}`,
+                                            "value": "",
                                         },
                                     ],
                                 },
