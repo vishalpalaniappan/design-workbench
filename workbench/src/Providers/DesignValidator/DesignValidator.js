@@ -208,7 +208,7 @@ export class DesignValidator {
                             invariant["transformation"] + " in behavior" +
                             invariant["transformBehavior"] + "'";
 
-                        const invCmd = invariant["transformation"] +
+                        const invCmd = invariant["transformation"].slice(1) +
                              "_invariant_" + invariant["index"];
 
                         /**
@@ -272,12 +272,17 @@ export class DesignValidator {
                                 },
                                 {
                                     "type": "registeredCmd",
-                                    "command": invCmd,
+                                    "command": "_callIfExist",
                                     "args": [
                                         {
                                             "arg": null,
                                             "type": "string",
                                             "value": "inv_result",
+                                        },
+                                        {
+                                            "arg": null,
+                                            "type": "string",
+                                            "value": invCmd,
                                         },
                                         {
                                             "arg": null,
