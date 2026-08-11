@@ -185,25 +185,48 @@ export class DesignValidator {
         for (const behavior of this.behaviors) {
             behavior.transformations.forEach((transformation, index)=> {
                 for (const [index, p] of transformation.participants.entries()) {
+                    // If participant is not type name, skip it.
                     if (p.type !== "name") {
                         continue;
                     }
+
+                    // Find participant role
                     const name = p.value;
-                    for (const acessedP of behavior["accessedParticipants"]) {
-                        if (acessedP.name === name) {
-                            p.role = acessedP.role;
-                            p.provenanceBehavior = this.created.find(
-                                (val) => val.role == acessedP.role
-                            )?.behavior;
-                            this.invariants.push({
-                                behavior: p.provenanceBehavior,
-                                transformBehavior: behavior.name,
-                                transformation: transformation.command,
-                                participant: name,
-                                index: index + 1,
-                            });
-                        }
+                    const participantMeta = behavior["accessedParticipants"].find(
+                        (p) => p.name == name
+                    );
+                    if (!participantMeta) {
+                        continue;
                     }
+                    p.role = participantMeta.role;
+
+                    // Find where the role was created
+                    p.provenanceBehavior = this.created.find(
+                        (val) => val.role == participantMeta.role
+                    )?.behavior;
+
+                    // Find all the valid paths from creation to trasformation
+                    this.validPaths = [];
+                    const sB = p.provenanceBehavior;
+                    const tB = behavior.name;
+                    console.log("");
+                    console.log(`Finding path from ${sB} to ${tB}`);
+                    this.walkPath(sB, tB, []);
+                    console.log(this.validPaths);
+
+                    /**
+                     * TODO: Walk the path backward to find the behavior where
+                     * the participant was last modified.
+                     */
+
+                    // Add the invariants
+                    this.invariants.push({
+                        behavior: p.provenanceBehavior,
+                        transformBehavior: behavior.name,
+                        transformation: transformation.command,
+                        participant: name,
+                        index: index + 1,
+                    });
                 }
             });
             delete behavior.worldState;
@@ -234,15 +257,6 @@ export class DesignValidator {
                         if (invariant.behavior !== child["behaviorName"]) {
                             continue;
                         }
-
-                        const sB = invariant["behavior"];
-                        const tB = invariant["transformBehavior"];
-                        console.log(`Finding path from ${sB} to ${tB}`);
-
-                        this.validPaths = [];
-                        this.walkPath(sB, tB, []);
-
-                        console.log(this.validPaths);
 
                         const invCmd = invariant["transformation"].slice(1) +
                              "_invariant_" + invariant["index"];
