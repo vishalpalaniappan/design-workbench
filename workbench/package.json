@@ -31,7 +31,7 @@
     "buffer": "^6.0.3",
     "clp-ffi-js": "^0.5.2",
     "crypto-browserify": "^3.12.1",
-    "dal-ast-js": "^0.0.17-dev",
+    "dal-ast-js": "^0.0.18-dev",
     "dal-engine-core-js-lib-dev": "0.0.32-dev-3",
     "msgpackr": "^1.11.9",
     "path": "^0.12.7",
