@@ -229,9 +229,11 @@ export class DesignValidator {
                         /**
                          * For the invariant block, initial approach:
                          * - Invariant at position 1
+                         *      - find latest update path before transformation
                          *      - get value of arg 1
                          *      - command_invariant_1()
                          * - Invariant at position 2
+                         *      - find latest update path before transformation
                          *      - get value of arg 2
                          *      - command_invariant_2()
                          *
@@ -245,10 +247,11 @@ export class DesignValidator {
                          *
                          * Finding the path wouldn't be too difficult because
                          * it is just following the next behavior until
-                         * target is reached or a loop happens. I am seeing
-                         * if there is a way to avoid this by eliminating
-                         * ambiguity but I think in this case, the ambiguity
-                         * is eliminated using the graph.
+                         * the target is reached or a loop happens.
+                         *
+                         * In this case, the ambiguity is eliminated using
+                         * the graph, it is expliclity identifying when the
+                         * world can become semantically invalid.
                          */
                         const invariantBlock = {
                             "type": "invariant",
