@@ -178,7 +178,7 @@ export class DesignValidator {
                                 transformBehavior: behavior.name,
                                 transformation: transformation.command,
                                 participant: name,
-                                index: index
+                                index: index + 1,
                             });
                         }
                     }
@@ -207,11 +207,57 @@ export class DesignValidator {
                             invariant["participant"] + " in transformation" +
                             invariant["transformation"] + " in behavior" +
                             invariant["transformBehavior"] + "'";
-                        console.log(printVal);
+
+                        /**
+                         * For the invariant block, this approach:
+                         * - Get participants from world state
+                         * - Invariant at position 1
+                         *      - get value of arg 1
+                         *      - command_invariant_1()
+                         * - Invariant at position 2
+                         *      - get value of arg 2
+                         *      - command_invariant_2()
+                         *
+                         * - Invariant for both position 1 and position 2
+                         *      - find path A from 1 to target
+                         *      - find path B from 2 to target
+                         *      - if 2 is in path A between 1 to target
+                         *          - place at 2
+                         *      - if 1 is in path B between 2 to target
+                         *          - place at 1
+                         *
+                         * Finding the path wouldn't be too difficult because
+                         * it is just following the next behavior until
+                         * target is reached or a loop happens. I am seeing
+                         * if there is a way to avoid this by eliminating
+                         * ambiguity but I think in this case, the ambiguity
+                         * is eliminated using the graph.
+                         */
                         const invariantBlock = {
                             "type": "invariant",
                             "args": [],
                             "body": [
+                                {
+                                    "type": "cmd",
+                                    "command": "worldStateManager",
+                                    "args": [
+                                        {
+                                            "arg": null,
+                                            "type": "name",
+                                            "value": invariant["participant"],
+                                        },
+                                        {
+                                            "arg": null,
+                                            "type": "string",
+                                            "value": "get",
+                                        },
+                                        {
+                                            "arg": null,
+                                            "type": "string",
+                                            "value": `${invariant["participant"]}`,
+                                        },
+                                    ],
+                                },
                                 {
                                     "type": "cmd",
                                     "command": "display",
@@ -222,7 +268,7 @@ export class DesignValidator {
                                             "value": printVal,
                                         },
                                     ],
-                                },
+                                }
                             ],
                         };
                         child.body.splice(child.body.length - 1, 0, invariantBlock);
