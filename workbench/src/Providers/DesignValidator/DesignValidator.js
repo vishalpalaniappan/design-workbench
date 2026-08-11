@@ -208,6 +208,9 @@ export class DesignValidator {
                             invariant["transformation"] + " in behavior" +
                             invariant["transformBehavior"] + "'";
 
+                        const invCmd = invariant["transformation"] +
+                             "_invariant_" + invariant["index"];
+
                         /**
                          * For the invariant block, initial approach:
                          * - Invariant at position 1
@@ -241,19 +244,45 @@ export class DesignValidator {
                                     "command": "worldStateManager",
                                     "args": [
                                         {
-                                            "arg": null,
+                                            "arg": "storeIn",
                                             "type": "name",
                                             "value": invariant["participant"],
                                         },
                                         {
-                                            "arg": null,
+                                            "arg": "cmd",
                                             "type": "string",
                                             "value": "get",
                                         },
                                         {
-                                            "arg": null,
+                                            "arg": "participant",
                                             "type": "string",
                                             "value": `${invariant["participant"]}`,
+                                        },
+                                        {
+                                            "arg": "type",
+                                            "type": "string",
+                                            "value": "",
+                                        },
+                                        {
+                                            "arg": "role",
+                                            "type": "string",
+                                            "value": `${invariant["participant"]}`,
+                                        },
+                                    ],
+                                },
+                                {
+                                    "type": "registeredCmd",
+                                    "command": invCmd,
+                                    "args": [
+                                        {
+                                            "arg": null,
+                                            "type": "string",
+                                            "value": "inv_result",
+                                        },
+                                        {
+                                            "arg": null,
+                                            "type": "name",
+                                            "value": invariant["participant"],
                                         },
                                     ],
                                 },
@@ -265,6 +294,17 @@ export class DesignValidator {
                                             "arg": null,
                                             "type": "string",
                                             "value": printVal,
+                                        },
+                                    ],
+                                },
+                                {
+                                    "type": "cmd",
+                                    "command": "display",
+                                    "args": [
+                                        {
+                                            "arg": null,
+                                            "type": "string",
+                                            "value": 'f"Result (false is inv violation): {inv_result}"',
                                         },
                                     ],
                                 }
