@@ -142,6 +142,7 @@ export class DesignValidator {
             if (isCreate) {
                 const nameRole = {name: name, role: role, behavior: this.currentBehavior.name};
                 // this.currentBehavior["creation"].push(nameRole);
+                this.currentBehavior["updatedParticipants"].push({name: name, role: role});
                 this.created.push(nameRole);
             }
 
@@ -167,7 +168,7 @@ export class DesignValidator {
             for (const t of worldStateTransformArgs) {
                 const isTransformation = (t.arg === "transformation");
                 const v = t.value;
-                isAdd = (isTransformation && (v === "add" || v === "update"))?true:isGet;
+                isAdd = (isTransformation && (v === "add" || v === "update"))?true:isAdd;
                 name = (t.arg === "name")?t.value:name;
                 role = (t.arg === "p_role")?t.value:role;
             }
@@ -215,24 +216,43 @@ export class DesignValidator {
                     console.log(this.validPaths);
 
                     /**
-                     * TODO: Walk the path backward to find the behavior where
-                     * the participant was last modified.
+                     * Walk the path backward to find the behavior where
+                     * the participant was last modified and add invariant.
                      */
 
-                    // Add the invariants
-                    this.invariants.push({
-                        behavior: p.provenanceBehavior,
-                        transformBehavior: behavior.name,
-                        transformation: transformation.command,
-                        participant: name,
-                        index: index + 1,
-                    });
+                    for (const path of this.validPaths) {
+                        for (let i = path.length - 2; i >= 0; i--) {
+                            const behavior = this.getBehavior(path[i]);
+                            const p = behavior.updatedParticipants.find((value) => {
+                                return value.name === name;
+                            });
+                            if (p) {
+                                const exists = this.invariants.find((val) => {
+                                    if (val.behavior === path[i] && val.participant === name) {
+                                        return true;
+                                    }
+                                });
+                                if (!exists) {
+                                    this.invariants.push({
+                                        behavior: path[i],
+                                        transformBehavior: tB,
+                                        transformation: transformation.command,
+                                        participant: name,
+                                        index: index + 1,
+                                    });
+                                }
+                                break;
+                            }
+                        }
+                    }
                 }
             });
             delete behavior.worldState;
             delete behavior.accessedParticipants;
         }
+        console.log(this.invariants);
     }
+
 
     /**
      * Get the behavior.
