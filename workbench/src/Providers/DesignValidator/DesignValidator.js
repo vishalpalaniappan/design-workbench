@@ -136,7 +136,7 @@ export class DesignValidator {
                 const nameRole = {name: name, role: role, behavior: this.currentBehavior.name};
                 // this.currentBehavior["creation"].push(nameRole);
                 this.created.push(nameRole);
-            }   
+            }
 
             // Saves all the participant that were accessed in the behavior.
             let isGet = false;
@@ -162,7 +162,7 @@ export class DesignValidator {
     identifyProvenance () {
         for (const behavior of this.behaviors) {
             behavior.transformations.forEach((transformation, index)=> {
-                for (const p of transformation.participants) {
+                for (const [index, p] of transformation.participants.entries()) {
                     if (p.type !== "name") {
                         continue;
                     }
@@ -178,6 +178,7 @@ export class DesignValidator {
                                 transformBehavior: behavior.name,
                                 transformation: transformation.command,
                                 participant: name,
+                                index: index
                             });
                         }
                     }
@@ -202,13 +203,11 @@ export class DesignValidator {
                         if (invariant.behavior !== child["behaviorName"]) {
                             continue;
                         }
-                        const printVal = "f'Invariant for " +
-                            invariant["participant"] +
-                            " in transformation " +
-                            invariant["transformation"] +
-                            " in behavior " +
-                            invariant["transformBehavior"] +
-                            "'";
+                        const printVal = "f'Invariant (pos " + invariant["index"] + " for " +
+                            invariant["participant"] + " in transformation" +
+                            invariant["transformation"] + " in behavior" +
+                            invariant["transformBehavior"] + "'";
+                        console.log(printVal);
                         const invariantBlock = {
                             "type": "invariant",
                             "args": [],
