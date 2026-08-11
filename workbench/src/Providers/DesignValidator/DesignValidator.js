@@ -188,6 +188,15 @@ export class DesignValidator {
             delete behavior.accessedParticipants;
         }
     }
+    
+    /**
+     * Get the behavior.
+     * @param {String} behaviorName Name of the behavior.
+     * @return {null|String}
+     */
+    getBehavior (behaviorName) {
+        return this.behaviors.find((value) => value.name === behaviorName);
+    }
 
     /**
      * Visits nodes in the tree and adds invariant in the behavior block.
@@ -203,13 +212,19 @@ export class DesignValidator {
                         if (invariant.behavior !== child["behaviorName"]) {
                             continue;
                         }
-                        const printVal = "f'Invariant (pos " + invariant["index"] + " for " +
-                            invariant["participant"] + " in transformation" +
-                            invariant["transformation"] + " in behavior" +
-                            invariant["transformBehavior"] + "'";
+
+                        const sB = invariant["behavior"];
+                        const tB = invariant["transformBehavior"];
+                        console.log(`Finding path from ${sB} to ${tB}`);
+                        this.walkPath(sB, tB, []);
 
                         const invCmd = invariant["transformation"].slice(1) +
                              "_invariant_" + invariant["index"];
+
+                        const invViolationMessage = "f'Invariant " + invCmd + " for " +
+                            invariant["participant"] + " in transformation " +
+                            invariant["transformation"] + " in behavior " +
+                            invariant["transformBehavior"] + "'";
 
                         /**
                          * For the invariant block, initial approach:
@@ -292,27 +307,26 @@ export class DesignValidator {
                                     ],
                                 },
                                 {
-                                    "type": "cmd",
-                                    "command": "display",
+                                    "type": "if",
                                     "args": [
                                         {
                                             "arg": null,
-                                            "type": "string",
-                                            "value": printVal,
+                                            "type": "name",
+                                            "value": "inv_result",
                                         },
                                     ],
+                                    "body": [{
+                                        "type": "cmd",
+                                        "command": "display",
+                                        "args": [
+                                            {
+                                                "arg": null,
+                                                "type": "string",
+                                                "value": invViolationMessage,
+                                            },
+                                        ],
+                                    }],
                                 },
-                                {
-                                    "type": "cmd",
-                                    "command": "display",
-                                    "args": [
-                                        {
-                                            "arg": null,
-                                            "type": "string",
-                                            "value": 'f"Result (false is inv violation): {inv_result}"',
-                                        },
-                                    ],
-                                }
                             ],
                         };
                         child.body.splice(child.body.length - 1, 0, invariantBlock);
@@ -321,6 +335,46 @@ export class DesignValidator {
                     this.addInvariants(child);
                 }
             }
+        }
+    }
+
+
+    /**
+     * Walk path from behavior to behavior and save in path.
+     * @param {String} startBehavior
+     * @param {String} endBehavior
+     * @param {Array} path
+     *
+     * @return {Null|Array}
+     */
+    walkPath (startBehavior, endBehavior, path) {
+        const currBehavior = this.getBehavior(startBehavior);
+        const targetBehavior = this.getBehavior(endBehavior);
+
+        if (!currBehavior || !targetBehavior) {
+            console.warn("Behavior not found");
+            return;
+        }
+
+        if (path.includes(startBehavior)) {
+            path.push(startBehavior);
+            // console.log("Looped Path:");
+            // console.log([...path]);
+            return path;
+        } else if (startBehavior === endBehavior) {
+            path.push(startBehavior);
+            console.log("Valid Path from create to transform:");
+            console.log([...path]);
+            return path;
+        }
+
+        path.push(startBehavior);
+        if (currBehavior.nextBehaviors.length > 1) {
+            for (const next of currBehavior.nextBehaviors) {
+                this.walkPath(next, endBehavior, [...path]);
+            }
+        } else if (currBehavior.nextBehaviors.length === 1) {
+            this.walkPath(currBehavior.nextBehaviors[0], endBehavior, [...path]);
         }
     }
 }
