@@ -68,7 +68,7 @@ export class DesignValidator {
         const t = child["type"];
         const c = child["command"];
         if (t === "cmd") {
-            if (c === "select") {
+            if (c === "goToBehavior") {
                 this.currentBehavior.nextBehaviors.push(child.args[0].value);
             } else if (c === "worldStateManager") {
                 this.currentBehavior.worldState.push(child.args);
