@@ -107,13 +107,20 @@ export class DesignValidator {
      *
      * In the next pass, it will identify every participant used in
      * a transformation and then use the role to identify when it
-     * was introduced into the world.This will then be used to automatically
-     * the releavnt invariant in the correct location.
+     * was introduced into the world. This will be used to find the
+     * paths from the creation to the transformation. The last time
+     * the participant was updated will be used to place the invariant
+     * because it will cause the world to become semantically invalid.
+     *
+     * There can be multiple paths taken, this approach will find those
+     * paths and place the invariant in multiple points where semantic
+     * invalidity can be reached.
      *
      * @param {Object} behavior Behavior Info
      */
     processBehavior () {
         this.currentBehavior["accessedParticipants"] = [];
+        this.currentBehavior["updatedParticipants"] = [];
         this.currentBehavior.worldState.forEach((worldStateTransformArgs, index)=> {
             /**
              * The arguments for the world state transform are stored in a list
@@ -152,6 +159,21 @@ export class DesignValidator {
             if (isGet) {
                 this.currentBehavior["accessedParticipants"].push({name: name, role: role});
             }
+
+            // Saves all the participant that were updated.
+            let isAdd = false;
+            name = null;
+            role = null;
+            for (const t of worldStateTransformArgs) {
+                const isTransformation = (t.arg === "transformation");
+                const v = t.value;
+                isAdd = (isTransformation && (v === "add" || v === "update"))?true:isGet;
+                name = (t.arg === "name")?t.value:name;
+                role = (t.arg === "p_role")?t.value:role;
+            }
+            if (isAdd) {
+                this.currentBehavior["updatedParticipants"].push({name: name, role: role});
+            }
         });
     }
 
@@ -188,7 +210,7 @@ export class DesignValidator {
             delete behavior.accessedParticipants;
         }
     }
-    
+
     /**
      * Get the behavior.
      * @param {String} behaviorName Name of the behavior.
@@ -216,7 +238,10 @@ export class DesignValidator {
                         const sB = invariant["behavior"];
                         const tB = invariant["transformBehavior"];
                         console.log(`Finding path from ${sB} to ${tB}`);
+                        this.validPaths = [];
                         this.walkPath(sB, tB, []);
+
+                        console.log(this.validPaths);
 
                         const invCmd = invariant["transformation"].slice(1) +
                              "_invariant_" + invariant["index"];
@@ -366,8 +391,9 @@ export class DesignValidator {
             return path;
         } else if (startBehavior === endBehavior) {
             path.push(startBehavior);
-            console.log("Valid Path from create to transform:");
-            console.log([...path]);
+            // console.log("Valid Path from create to transform:");
+            // console.log([...path]);
+            this.validPaths.push([...path]);
             return path;
         }
 
