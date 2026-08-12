@@ -129,46 +129,24 @@ export class DesignValidator {
 
             // Saves all the participants that were created in the behavior.
             let isCreate = false;
+            let isGet = false;
+            let isAdd = false;
             let name = null;
             let role = null;
             for (const t of worldStateTransformArgs) {
-                const isTransformation = (t.arg === "transformation");
-                isCreate = (isTransformation && t.value === "create")?true:isCreate;
+                const isTransform = (t.arg === "transformation");
+                isCreate = (isTransform && t.value === "create")?true:isCreate;
+                isGet = (isTransform && (t.value === "get" || t.value === "getValue"))?true:isGet;
+                isAdd = (isTransform && (t.value === "update"))?true:isAdd;
                 name = (t.arg === "name")?t.value:name;
                 role = (t.arg === "p_role")?t.value:role;
             }
             if (isCreate) {
-                const nameRole = {name: name, role: role, behavior: this.currentBehavior.name};
-                // this.currentBehavior["creation"].push(nameRole);
+                this.created.push({name: name, role: role, behavior: this.currentBehavior.name});
                 this.currentBehavior["updatedParticipants"].push({name: name, role: role});
-                this.created.push(nameRole);
-            }
-
-            // Saves all the participant that were accessed in the behavior.
-            let isGet = false;
-            name = null;
-            role = null;
-            for (const t of worldStateTransformArgs) {
-                const isTransformation = (t.arg === "transformation");
-                const v = t.value;
-                isGet = (isTransformation && (v === "get" || v === "getValue"))?true:isGet;
-                name = (t.arg === "name")?t.value:name;
-                role = (t.arg === "p_role")?t.value:role;
             }
             if (isGet) {
                 this.currentBehavior["accessedParticipants"].push({name: name, role: role});
-            }
-
-            // Saves all the participant that were updated.
-            let isAdd = false;
-            name = null;
-            role = null;
-            for (const t of worldStateTransformArgs) {
-                const isTransformation = (t.arg === "transformation");
-                const v = t.value;
-                isAdd = (isTransformation && (v === "update"))?true:isAdd;
-                name = (t.arg === "name")?t.value:name;
-                role = (t.arg === "p_role")?t.value:role;
             }
             if (isAdd) {
                 this.currentBehavior["updatedParticipants"].push({name: name, role: role});
@@ -182,20 +160,15 @@ export class DesignValidator {
      */
     identifyProvenance () {
         for (const behavior of this.behaviors) {
-            behavior.transformations.forEach((transformation, index)=> {
+            for (const transformation of behavior.transformations) {
                 for (const [index, p] of transformation.participants.entries()) {
-                    // If participant is not type name or
-                    // first entry (return value), skip
-                    if (p.type !== "name") {
-                        continue;
-                    }
+                    // If participant is not type name
+                    if (p.type !== "name") continue;
 
-                    // Find participant role
+                    // Find role and save role in transformation participant
                     const name = p.value;
                     const pMeta = behavior["accessedParticipants"].find((p) => p.name == name);
                     if (!pMeta) continue;
-
-                    // Save the role in the transformation participant
                     p.role = pMeta.role;
 
                     // Find where the role was created
@@ -213,59 +186,37 @@ export class DesignValidator {
                     /**
                      * Walk the path backward to find the behavior where
                      * the participant was last modified and add invariant.
-                     *
-                     * TODO: For each path, I find the invariant placement
-                     * for each participant. However, when there are invariants
-                     * which are dependent on both participants, I need to use
-                     * the path information to determine when both participant
-                     * values have been set and world has become semantically
-                     * invalid. The invariants will be placed for all
-                     * combination of participants but it isn't necessary that
-                     * an invariant was established for that combination. It
-                     * will only be called if it is defined.
-                     *
-                     * In the case of the library manager, as a result of this,
-                     * the position used to access the book location will cause
-                     * the world to become semantically invalid if it isn't
-                     * within the range of the length of the basket. This then
-                     * means that the behavior has to be modified so that
-                     * semantically invalid positions are not accepted before
-                     * attempting to get a book from the basket.
                      */
-                    for (let pathIndex = 0; pathIndex < this.validPaths.length; pathIndex++) {
-                        const path = this.validPaths[pathIndex];
+                    for (const [pathIndex, path] of this.validPaths.entries()) {
                         for (let i = path.length - 1; i >= 0; i--) {
                             if (path[i] === tB) continue;
-                            const behavior = this.getBehavior(path[i]);
-                            const p = behavior.updatedParticipants.find((value) => {
-                                return value.name === name;
-                            });
-                            if (p) {
-                                const exists = this.invariants.find((val) => {
+                            const b = this.getBehavior(path[i]);
+                            const pIsUpdated = b.updatedParticipants.find((v) => v.name === name);
+                            if (pIsUpdated) {
+                                const invExists = this.invariants.find((val) => {
                                     if (val.behavior === path[i] &&
                                         val.transformation === transformation.command &&
                                         val.index === index + 1) {
                                         return true;
                                     }
                                 });
-                                if (!exists) {
-                                    const inv = {
-                                        path: pathIndex,
-                                        pathPosition: i,
-                                        behavior: path[i],
-                                        transformBehavior: tB,
-                                        transformation: transformation.command,
-                                        participant: name,
-                                        index: index + 1,
-                                    };
-                                    this.invariants.push(inv);
-                                }
+                                if (invExists) continue;
+                                const inv = {
+                                    path: pathIndex,
+                                    pathPosition: i,
+                                    behavior: path[i],
+                                    transformBehavior: tB,
+                                    transformation: transformation.command,
+                                    participant: name,
+                                    index: index + 1,
+                                };
+                                this.invariants.push(inv);
                                 break;
                             }
                         }
                     }
                 }
-            });
+            };
             delete behavior.worldState;
         }
         console.log(this.invariants, this.pInfo);
