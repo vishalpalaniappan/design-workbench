@@ -285,7 +285,7 @@ export class DesignValidator {
                         const invCmd = invariant["transformation"].slice(1) +
                              "_invariant_" + invariant["index"];
 
-                        const invViolationMessage = "f'Invariant " + invCmd + " for " +
+                        const invViolationMessage = "f'Invariant Violation: " + invCmd + " for " +
                             invariant["participant"] + " in transformation " +
                             invariant["transformation"] + " in behavior " +
                             invariant["transformBehavior"] + "'";
