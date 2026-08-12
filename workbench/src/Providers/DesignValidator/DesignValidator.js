@@ -272,7 +272,7 @@ export class DesignValidator {
             };
             delete behavior.worldState;
         }
-        console.log(this.invariants, this.pInfo);
+        console.log(this.invariants);
     }
 
 
