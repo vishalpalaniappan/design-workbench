@@ -183,7 +183,6 @@ export class DesignValidator {
     identifyProvenance () {
         for (const behavior of this.behaviors) {
             behavior.transformations.forEach((transformation, index)=> {
-                const invariants = [];
                 for (const [index, p] of transformation.participants.entries()) {
                     // If participant is not type name or
                     // first entry (return value), skip
@@ -243,7 +242,9 @@ export class DesignValidator {
                             });
                             if (p) {
                                 const exists = this.invariants.find((val) => {
-                                    if (val.behavior === path[i] && val.participant === name) {
+                                    if (val.behavior === path[i] &&
+                                        val.transformation === transformation.command &&
+                                        val.index === index + 1) {
                                         return true;
                                     }
                                 });
@@ -264,13 +265,10 @@ export class DesignValidator {
                         }
                     }
                 }
-                console.log(invariants);
-                // const additionalInvariants = this.buildInvariants(invariants);
-                // this.invariants = this.invariants.concat(invariants);
             });
             delete behavior.worldState;
         }
-        console.log(this.invariants);
+        console.log(this.invariants, this.pInfo);
     }
 
 
