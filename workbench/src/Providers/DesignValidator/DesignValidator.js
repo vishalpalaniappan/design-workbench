@@ -44,8 +44,6 @@ export class DesignValidator {
         if ("body" in node) {
             for (const child of node["body"]) {
                 if (child["type"] === "behavior") {
-                    // TODO: This would break for nested behaviors.
-                    // I would have to add them to a stack.
                     this.createBehavior(child);
                     this.processTree(child);
                     this.processBehavior();
@@ -216,6 +214,24 @@ export class DesignValidator {
                     /**
                      * Walk the path backward to find the behavior where
                      * the participant was last modified and add invariant.
+                     *
+                     * TODO: For each path, I find the invariant placement
+                     * for each participant. However, when there are invariants
+                     * which are dependent on both participants, I need to use
+                     * the path information to determine when both participant
+                     * values have been set and world has become semantically
+                     * invalid. The invariants will be placed for all
+                     * combination of participants but it isn't necessary that
+                     * an invariant was established for that combination. It
+                     * will only be called if it is defined.
+                     *
+                     * In the case of the library manager, as a result of this,
+                     * the position used to access the book location will cause
+                     * the world to become semantically invalid if it isn't
+                     * within the range of the length of the basket. This then
+                     * means that the behavior has to be modified so that
+                     * semantically invalid positions are not accepted before
+                     * attempting to get a book from the basket.
                      */
                     for (let pathIndex = 0; pathIndex < this.validPaths.length; pathIndex++) {
                         const path = this.validPaths[pathIndex];
