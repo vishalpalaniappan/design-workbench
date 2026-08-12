@@ -168,7 +168,7 @@ export class DesignValidator {
             for (const t of worldStateTransformArgs) {
                 const isTransformation = (t.arg === "transformation");
                 const v = t.value;
-                isAdd = (isTransformation && (v === "add" || v === "update"))?true:isAdd;
+                isAdd = (isTransformation && (v === "update"))?true:isAdd;
                 name = (t.arg === "name")?t.value:name;
                 role = (t.arg === "p_role")?t.value:role;
             }
@@ -185,26 +185,24 @@ export class DesignValidator {
     identifyProvenance () {
         for (const behavior of this.behaviors) {
             behavior.transformations.forEach((transformation, index)=> {
+                const invariants = [];
                 for (const [index, p] of transformation.participants.entries()) {
-                    // If participant is not type name, skip it.
+                    // If participant is not type name or
+                    // first entry (return value), skip
                     if (p.type !== "name") {
                         continue;
                     }
 
                     // Find participant role
                     const name = p.value;
-                    const participantMeta = behavior["accessedParticipants"].find(
-                        (p) => p.name == name
-                    );
-                    if (!participantMeta) {
-                        continue;
-                    }
-                    p.role = participantMeta.role;
+                    const pMeta = behavior["accessedParticipants"].find((p) => p.name == name);
+                    if (!pMeta) continue;
+
+                    // Save the role in the transformation participant
+                    p.role = pMeta.role;
 
                     // Find where the role was created
-                    p.provenanceBehavior = this.created.find(
-                        (val) => val.role == participantMeta.role
-                    )?.behavior;
+                    p.provenanceBehavior = this.created.find((v) => v.role == pMeta.role)?.behavior;
 
                     // Find all the valid paths from creation to trasformation
                     this.validPaths = [];
@@ -219,9 +217,10 @@ export class DesignValidator {
                      * Walk the path backward to find the behavior where
                      * the participant was last modified and add invariant.
                      */
-
-                    for (const path of this.validPaths) {
-                        for (let i = path.length - 2; i >= 0; i--) {
+                    for (let pathIndex = 0; pathIndex < this.validPaths.length; pathIndex++) {
+                        const path = this.validPaths[pathIndex];
+                        for (let i = path.length - 1; i >= 0; i--) {
+                            if (path[i] === tB) continue;
                             const behavior = this.getBehavior(path[i]);
                             const p = behavior.updatedParticipants.find((value) => {
                                 return value.name === name;
@@ -233,22 +232,27 @@ export class DesignValidator {
                                     }
                                 });
                                 if (!exists) {
-                                    this.invariants.push({
+                                    const inv = {
+                                        path: pathIndex,
+                                        pathPosition: i,
                                         behavior: path[i],
                                         transformBehavior: tB,
                                         transformation: transformation.command,
                                         participant: name,
                                         index: index + 1,
-                                    });
+                                    };
+                                    this.invariants.push(inv);
                                 }
                                 break;
                             }
                         }
                     }
                 }
+                console.log(invariants);
+                // const additionalInvariants = this.buildInvariants(invariants);
+                // this.invariants = this.invariants.concat(invariants);
             });
             delete behavior.worldState;
-            delete behavior.accessedParticipants;
         }
         console.log(this.invariants);
     }
