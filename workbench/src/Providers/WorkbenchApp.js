@@ -160,6 +160,9 @@ class WorkbenchApp {
     getRunSyntax () {
         const path = this.designName + "/synthesized/metadata.json";
         const found = this.flatTree.find((file) => file.path == path);
+        if (!found) {
+            return;
+        }
         const metadata = JSON.parse(found.content);
         const commands = metadata["commands"];
         if (commands.length === 1) {
