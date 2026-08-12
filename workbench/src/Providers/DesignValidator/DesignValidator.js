@@ -193,63 +193,82 @@ export class DesignValidator {
                     this.validPaths = [];
                     const sB = p.provenanceBehavior;
                     const tB = behavior.name;
-                    // console.log(`Finding path from ${sB} to ${tB}`);
                     this.walkPath(sB, tB, []);
-                    // console.log(this.validPaths);
+                    // console.log(`From ${sB} to ${tB}: ${this.validPaths}`);
 
-                    // For each path, save the node in which each
-                    // participant was updated. This will be used
-                    // to place the invariants (or combination of
-                    // invaraints.
+
+                    /**
+                     * For each path, save the node in which each participant
+                     * was updated. This will be used to place the invariants
+                     * (or combination of invaraints).
+                     */
                     for (const [pathIndex, path] of this.validPaths.entries()) {
                         _p[p.value][pathIndex] = [];
                         for (let i = path.length - 1; i >= 0; i--) {
                             if (path[i] === tB) continue;
                             const b = this.getBehavior(path[i]);
-                            for (const name of names) {
+                            for (const [pIndex, name] of names.entries()) {
                                 if (b.updatedParticipants.find((v) => v.name === name)) {
-                                    _p[p.value][pathIndex].push(
-                                        `${name} in ${b.name} at index ${i}`
-                                    );
+                                    const val = {
+                                        participant: name,
+                                        path: pathIndex,
+                                        pathPosition: i,
+                                        behavior: path[i],
+                                        transformBehavior: tB,
+                                        transformation: transformation.command,
+                                        index: pIndex + 1,
+                                    };
+                                    _p[p.value][pathIndex].push(val);
                                 }
                             }
                         }
                     }
 
-                    /**
-                     * Walk the path backward to find the behavior where
-                     * the participant was last modified and add invariant.
-                     */
-                    for (const [pathIndex, path] of this.validPaths.entries()) {
-                        for (let i = path.length - 1; i >= 0; i--) {
-                            if (path[i] === tB) continue;
-                            const b = this.getBehavior(path[i]);
-                            if (b.updatedParticipants.find((v) => v.name === name)) {
-                                // Multiple paths can result in same placement.
-                                const invExists = this.invariants.find((val) => {
-                                    if (val.behavior === path[i] &&
-                                        val.transformation === transformation.command &&
-                                        val.index === index + 1) {
-                                        return true;
-                                    }
-                                });
-                                if (invExists) continue;
-                                this.invariants.push({
-                                    path: pathIndex,
-                                    pathPosition: i,
-                                    behavior: path[i],
-                                    transformBehavior: tB,
-                                    transformation: transformation.command,
-                                    participant: name,
-                                    index: index + 1,
-                                });
-                                break;
+                    console.log(_p);
+
+                    for (const name of Object.keys(_p)) {
+                        for (const [index, uniquePath] of Object.entries(_p[name])) {
+                            for (let i = uniquePath.length - 1; i >= 0; i--) {
+                                const entry = uniquePath[i];
+
+                                // If we have reached the current participant
+                                if (entry.participant === name) {
+                                    // Check if invariant already exists
+                                    const invExists = this.invariants.find((val) => {
+                                        if (val.behavior === entry.behavior &&
+                                            val.transformation === entry.transformation &&
+                                            val.transformBehavior === entry.transformBehavior &&
+                                            val.index === entry.index) {
+                                            return true;
+                                        }
+                                    });
+                                    if (invExists) continue;
+
+                                    // Add invariant
+                                    this.invariants.push({
+                                        path: entry.index,
+                                        pathPosition: entry.pathPosition,
+                                        behavior: entry.behavior,
+                                        transformBehavior: entry.transformBehavior,
+                                        transformation: entry.transformation,
+                                        participant: entry.participant,
+                                        index: entry.index,
+                                    });
+                                    break;
+                                }
                             }
                         }
                     }
-                    _t.push(_p);
+
+                    // Now I can set inv dependent on multiple participants
+                    //
+                    // plan:
+                    // get combination of participants
+                    // ex: [basket, position]
+                    // [basket], [position], [basket, position]
+                    // WHen scanning backward in the indexed path, if any of the
+                    // entries in the list are found, place invariant
                 }
-                console.log(_t);
             };
             delete behavior.worldState;
         }
