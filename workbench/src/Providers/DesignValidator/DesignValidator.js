@@ -160,10 +160,25 @@ export class DesignValidator {
      */
     identifyProvenance () {
         for (const behavior of this.behaviors) {
+            console.log("");
+            console.log(`Behavior:${behavior.name}`);
             for (const transformation of behavior.transformations) {
+                const _t = [];
+                console.log(`Transformation:${transformation.command}`);
+
+                // Save the names.
+                const names = [];
+                for (const p of transformation.participants) {
+                    if (p.type !== "name") continue;
+                    names.push(p.value);
+                }
+
                 for (const [index, p] of transformation.participants.entries()) {
+                    const _p = {};
                     // If participant is not type name
                     if (p.type !== "name") continue;
+
+                    _p[p.value] = {};
 
                     // Find role and save role in transformation participant
                     const name = p.value;
@@ -178,10 +193,28 @@ export class DesignValidator {
                     this.validPaths = [];
                     const sB = p.provenanceBehavior;
                     const tB = behavior.name;
-                    console.log("");
-                    console.log(`Finding path from ${sB} to ${tB}`);
+                    // console.log(`Finding path from ${sB} to ${tB}`);
                     this.walkPath(sB, tB, []);
-                    console.log(this.validPaths);
+                    // console.log(this.validPaths);
+
+                    // For each path, save the node in which each
+                    // participant was updated. This will be used
+                    // to place the invariants (or combination of
+                    // invaraints.
+                    for (const [pathIndex, path] of this.validPaths.entries()) {
+                        _p[p.value][pathIndex] = [];
+                        for (let i = path.length - 1; i >= 0; i--) {
+                            if (path[i] === tB) continue;
+                            const b = this.getBehavior(path[i]);
+                            for (const name of names) {
+                                if (b.updatedParticipants.find((v) => v.name === name)) {
+                                    _p[p.value][pathIndex].push(
+                                        `${name} in ${b.name} at index ${i}`
+                                    );
+                                }
+                            }
+                        }
+                    }
 
                     /**
                      * Walk the path backward to find the behavior where
@@ -191,8 +224,8 @@ export class DesignValidator {
                         for (let i = path.length - 1; i >= 0; i--) {
                             if (path[i] === tB) continue;
                             const b = this.getBehavior(path[i]);
-                            const pIsUpdated = b.updatedParticipants.find((v) => v.name === name);
-                            if (pIsUpdated) {
+                            if (b.updatedParticipants.find((v) => v.name === name)) {
+                                // Multiple paths can result in same placement.
                                 const invExists = this.invariants.find((val) => {
                                     if (val.behavior === path[i] &&
                                         val.transformation === transformation.command &&
@@ -201,7 +234,7 @@ export class DesignValidator {
                                     }
                                 });
                                 if (invExists) continue;
-                                const inv = {
+                                this.invariants.push({
                                     path: pathIndex,
                                     pathPosition: i,
                                     behavior: path[i],
@@ -209,13 +242,14 @@ export class DesignValidator {
                                     transformation: transformation.command,
                                     participant: name,
                                     index: index + 1,
-                                };
-                                this.invariants.push(inv);
+                                });
                                 break;
                             }
                         }
                     }
+                    _t.push(_p);
                 }
+                console.log(_t);
             };
             delete behavior.worldState;
         }
