@@ -199,23 +199,19 @@ export class DesignValidator {
      */
     identifyProvenance () {
         for (const behavior of this.behaviors) {
-            console.log("");
-            console.log(`Behavior:${behavior.name}`);
             for (const transformation of behavior.transformations) {
-                console.log(`Transformation:${transformation.command}`);
-
                 // Save the args.
                 const args = [];
                 for (const p of transformation.participants) {
                     args.push({type: p.type, value: p.value});
                 }
 
-                for (const [index, p] of transformation.participants.entries()) {
-                    const _p = {};
+                for (const p of transformation.participants) {
                     // If participant is not type name
                     if (p.type !== "name") continue;
 
-                    _p[p.value] = {};
+                    const invariantsPerPath = {};
+                    invariantsPerPath[p.value] = {};
 
                     // Find role and save role in transformation participant
                     const name = p.value;
@@ -231,8 +227,6 @@ export class DesignValidator {
                     const sB = p.provenanceBehavior;
                     const tB = behavior.name;
                     this.walkPath(sB, tB, []);
-                    // console.log(`From ${sB} to ${tB}: ${this.validPaths}`);
-
 
                     /**
                      * For each path, save the node in which each participant
@@ -240,7 +234,7 @@ export class DesignValidator {
                      * (or combination of invaraints).
                      */
                     for (const [pathIndex, path] of this.validPaths.entries()) {
-                        _p[p.value][pathIndex] = [];
+                        invariantsPerPath[p.value][pathIndex] = [];
                         for (let i = path.length - 1; i >= 0; i--) {
                             if (path[i] === tB) continue;
                             const b = this.getBehavior(path[i]);
@@ -257,27 +251,24 @@ export class DesignValidator {
                                         transformation: transformation.command,
                                         index: pIndex + 1,
                                     };
-                                    _p[p.value][pathIndex].push(val);
+                                    invariantsPerPath[p.value][pathIndex].push(val);
                                 }
                             }
                         }
                     }
 
-                    console.log(_p);
+                    /**
+                     * Go through all the combinations and find the last update
+                     * which modified a participants in the invariant. This is
+                     * where the invariant can predict semantic invalidity, so
+                     * the invariant is automatically placed here.
+                     */
+                    for (const combination of this.generateCombinations(args)) {
+                        const indexStr = combination.map((i) => i.index.toString()).join("_");
+                        const _participants = combination;
 
-                    const combinations = this.generateCombinations(args);
-
-                    for (const combination of combinations) {
-                        let indexStr = "";
-                        const _participants = [];
-                        for (const [index, entry] of combination.entries()) {
-                            indexStr += ((combination[index].index).toString() + "_");
-                            _participants.push(combination[index]);
-                        }
-                        indexStr = indexStr.slice(0, -1);
-
-                        for (const name of Object.keys(_p)) {
-                            for (const [index, uniquePath] of Object.entries(_p[name])) {
+                        for (const name of Object.keys(invariantsPerPath)) {
+                            for (const uniquePath of Object.values(invariantsPerPath[name])) {
                                 for (let i = uniquePath.length - 1; i >= 0; i--) {
                                     const entry = uniquePath[i];
 
