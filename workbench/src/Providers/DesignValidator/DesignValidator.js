@@ -583,6 +583,14 @@ export class DesignValidator {
         }
 
         if (path.length > 100) {
+            /**
+             * TODO:
+             * This is a catch all to prevent loops but clearly
+             * there is a more effective way to do this and a
+             * valid path can be 100 nodes long. So I will revisit
+             * this and work on identifying closed loops in the path
+             * that don't terminate at the target behavior.
+             */
             console.warn("Path wasn't closing, termianting");
             return path;
         } else if (startBehavior === endBehavior) {
