@@ -155,6 +155,17 @@ export class DesignValidator {
     }
 
     /**
+     * Geneates combination from array of names:
+     * ["a","b"]
+     * ->
+     * ("a"), ("b"), ("a","b")
+     * @param {Array} names Array of names.
+     */
+    generateCombinations (names) {
+
+    }
+
+    /**
      * Identifies the provenance of the participants involved in
      * each transformation in a behavior.
      */
@@ -163,7 +174,6 @@ export class DesignValidator {
             console.log("");
             console.log(`Behavior:${behavior.name}`);
             for (const transformation of behavior.transformations) {
-                const _t = [];
                 console.log(`Transformation:${transformation.command}`);
 
                 // Save the names.
