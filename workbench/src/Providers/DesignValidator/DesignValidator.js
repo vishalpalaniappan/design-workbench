@@ -179,7 +179,8 @@ export class DesignValidator {
             for (let i = start; i < names.length; i++) {
                 const combination = current.concat({
                     index: i + 1,
-                    name: names[i],
+                    value: names[i].value,
+                    type: names[i].type,
                 });
 
                 combinations.push(combination);
@@ -203,11 +204,10 @@ export class DesignValidator {
             for (const transformation of behavior.transformations) {
                 console.log(`Transformation:${transformation.command}`);
 
-                // Save the names.
-                const names = [];
+                // Save the args.
+                const args = [];
                 for (const p of transformation.participants) {
-                    if (p.type !== "name") continue;
-                    names.push(p.value);
+                    args.push({type: p.type, value: p.value});
                 }
 
                 for (const [index, p] of transformation.participants.entries()) {
@@ -244,10 +244,12 @@ export class DesignValidator {
                         for (let i = path.length - 1; i >= 0; i--) {
                             if (path[i] === tB) continue;
                             const b = this.getBehavior(path[i]);
-                            for (const [pIndex, name] of names.entries()) {
-                                if (b.updatedParticipants.find((v) => v.name === name)) {
+                            for (const [pIndex, arg] of args.entries()) {
+                                if (arg.type == "name" && b.updatedParticipants.find(
+                                    (v) => v.name === arg.value)
+                                ) {
                                     const val = {
-                                        participant: name,
+                                        participant: arg.value,
                                         path: pathIndex,
                                         pathPosition: i,
                                         behavior: path[i],
@@ -263,14 +265,14 @@ export class DesignValidator {
 
                     console.log(_p);
 
-                    const combinations = this.generateCombinations(names);
+                    const combinations = this.generateCombinations(args);
 
                     for (const combination of combinations) {
                         let indexStr = "";
                         const _participants = [];
                         for (const [index, entry] of combination.entries()) {
                             indexStr += ((combination[index].index).toString() + "_");
-                            _participants.push(combination[index].name);
+                            _participants.push(combination[index]);
                         }
                         indexStr = indexStr.slice(0, -1);
 
@@ -279,7 +281,9 @@ export class DesignValidator {
                                 for (let i = uniquePath.length - 1; i >= 0; i--) {
                                     const entry = uniquePath[i];
 
-                                    if (combination.find((val) => val.name === entry.participant)) {
+                                    if (combination.find(
+                                        (val) => val.value === entry.participant)
+                                    ) {
                                         // Check if invariant already exists
                                         const invExists = this.invariants.find((val) => {
                                             if (val.behavior === entry.behavior &&
@@ -343,9 +347,17 @@ export class DesignValidator {
                              "_invariant_" + invariant["index"];
 
                         const invViolationMessage = "f'Invariant Violation: " + invCmd + " for " +
-                            invariant["participants"].toString() + " in transformation " +
+                            invariant["participants"].map((t) => t.value).toString()
+                            + " in transformation " +
                             invariant["transformation"] + " in behavior " +
                             invariant["transformBehavior"] + "'";
+
+                        const validParticipants = [];
+                        invariant.participants.forEach((p) => {
+                            if (p.type === "name") {
+                                validParticipants.push(p.value);
+                            }
+                        });
 
                         // Has participants
                         const hasParticipants = {
@@ -365,7 +377,7 @@ export class DesignValidator {
                                 {
                                     "arg": "participant",
                                     "type": "list",
-                                    "value": invariant.participants,
+                                    "value": validParticipants,
                                 },
                             ],
                         };
@@ -383,19 +395,29 @@ export class DesignValidator {
                                     "arg": null,
                                     "type": "string",
                                     "value": invCmd,
-                                }].concat(invariant.participants.map((inv) => {
+                                },
+                            ].concat(invariant.participants.map((inv) => {
                                 return {
                                     "arg": null,
-                                    "type": "name",
-                                    "value": inv,
+                                    "type": inv.type,
+                                    "value": inv.value,
                                 };
                             })),
                         };
 
                         // Get participant values
-                        const getParticipants = invariant.participants.map((name) => {
-                            return this.getWorldStateParticipantAST("getValue", name, name);
-                        });
+                        const getParticipants = [];
+                        for (const entry of invariant.participants) {
+                            if (entry.type === "name") {
+                                getParticipants.push(
+                                    this.getWorldStateParticipantAST(
+                                        "getValue",
+                                        entry.value,
+                                        entry.value
+                                    )
+                                );
+                            }
+                        }
 
                         // If participants exist
                         const ifInvariantViolated = {
@@ -430,11 +452,11 @@ export class DesignValidator {
                                     "value": "hasParticipants",
                                 },
                             ],
-                            "body": [...getParticipants, callInv, ifInvariantViolated]
+                            "body": [...getParticipants, callInv, ifInvariantViolated],
                         };
 
-
                         const body = [hasParticipants, ifParticipantsExist];
+                        console.log(body);
 
                         const invariantBlock = {
                             "type": "invariant",
