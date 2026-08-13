@@ -178,7 +178,7 @@ export class DesignValidator {
         function generate (start, current) {
             for (let i = start; i < names.length; i++) {
                 const combination = current.concat({
-                    index: i,
+                    index: i + 1,
                     name: names[i],
                 });
 
@@ -267,8 +267,10 @@ export class DesignValidator {
 
                     for (const combination of combinations) {
                         let indexStr = "";
+                        const _participants = [];
                         for (const [index, entry] of combination.entries()) {
                             indexStr += ((combination[index].index).toString() + "_");
+                            _participants.push(combination[index].name);
                         }
                         indexStr = indexStr.slice(0, -1);
 
@@ -296,7 +298,7 @@ export class DesignValidator {
                                             behavior: entry.behavior,
                                             transformBehavior: entry.transformBehavior,
                                             transformation: entry.transformation,
-                                            participant: entry.participant,
+                                            participants: _participants,
                                             index: indexStr,
                                         });
                                         break;
@@ -345,111 +347,37 @@ export class DesignValidator {
                             invariant["transformation"] + " in behavior " +
                             invariant["transformBehavior"] + "'";
 
-                        /**
-                         * For the invariant block, initial approach:
-                         * - Invariant at position 1
-                         *      - find latest update path before transformation
-                         *      - get value of arg 1
-                         *      - command_invariant_1()
-                         * - Invariant at position 2
-                         *      - find latest update path before transformation
-                         *      - get value of arg 2
-                         *      - command_invariant_2()
-                         *
-                         * - Invariant for both position 1 and position 2
-                         *      - find path A from 1 to target
-                         *      - find path B from 2 to target
-                         *      - if 2 is in path A between 1 to target
-                         *          - place at 2
-                         *      - if 1 is in path B between 2 to target
-                         *          - place at 1
-                         *
-                         * Finding the path wouldn't be too difficult because
-                         * it is just following the next behavior until
-                         * the target is reached or a loop happens.
-                         *
-                         * In this case, the ambiguity is eliminated using
-                         * the graph, it is expliclity identifying when the
-                         * world can become semantically invalid.
-                         */
+                        const hasParticipants = {
+                            "type": "cmd",
+                            "command": "worldStateManager",
+                            "args": [
+                                {
+                                    "arg": "storeIn",
+                                    "type": "name",
+                                    "value": "hasParticipants",
+                                },
+                                {
+                                    "arg": "cmd",
+                                    "type": "string",
+                                    "value": "hasParticipants",
+                                },
+                                {
+                                    "arg": "participant",
+                                    "type": "list",
+                                    "value": invariant.participants,
+                                }
+                            ],
+                        };
+
+
+                        const body = [hasParticipants];
+
+                        this.getWorldStateParticipantAST("hasParticipants","")
+
                         const invariantBlock = {
                             "type": "invariant",
                             "args": [],
-                            "body": [
-                                {
-                                    "type": "cmd",
-                                    "command": "worldStateManager",
-                                    "args": [
-                                        {
-                                            "arg": "storeIn",
-                                            "type": "name",
-                                            "value": invariant["participant"],
-                                        },
-                                        {
-                                            "arg": "cmd",
-                                            "type": "string",
-                                            "value": "getValue",
-                                        },
-                                        {
-                                            "arg": "participant",
-                                            "type": "string",
-                                            "value": `${invariant["participant"]}`,
-                                        },
-                                        {
-                                            "arg": "type",
-                                            "type": "string",
-                                            "value": "",
-                                        },
-                                        {
-                                            "arg": "role",
-                                            "type": "string",
-                                            "value": "",
-                                        },
-                                    ],
-                                },
-                                {
-                                    "type": "registeredCmd",
-                                    "command": "_callIfExist",
-                                    "args": [
-                                        {
-                                            "arg": null,
-                                            "type": "string",
-                                            "value": "inv_result",
-                                        },
-                                        {
-                                            "arg": null,
-                                            "type": "string",
-                                            "value": invCmd,
-                                        },
-                                        {
-                                            "arg": null,
-                                            "type": "name",
-                                            "value": invariant["participant"],
-                                        },
-                                    ],
-                                },
-                                {
-                                    "type": "if",
-                                    "args": [
-                                        {
-                                            "arg": null,
-                                            "type": "name",
-                                            "value": "inv_result",
-                                        },
-                                    ],
-                                    "body": [{
-                                        "type": "cmd",
-                                        "command": "display",
-                                        "args": [
-                                            {
-                                                "arg": null,
-                                                "type": "string",
-                                                "value": invViolationMessage,
-                                            },
-                                        ],
-                                    }],
-                                },
-                            ],
+                            "body": body,
                         };
                         child.body.splice(child.body.length - 1, 0, invariantBlock);
                     };
@@ -458,6 +386,47 @@ export class DesignValidator {
                 }
             }
         }
+    }
+
+    /**
+     * Returns the participant args AST.
+     * @param {String} cmd
+     * @param {String} storeP
+     * @param {String} p
+     * @return {Object}
+     */
+    getWorldStateParticipantAST (cmd, storeP, p) {
+        return {
+            "type": "cmd",
+            "command": "worldStateManager",
+            "args": [
+                {
+                    "arg": "storeIn",
+                    "type": "name",
+                    "value": storeP,
+                },
+                {
+                    "arg": "cmd",
+                    "type": "string",
+                    "value": cmd,
+                },
+                {
+                    "arg": "participant",
+                    "type": "string",
+                    "value": `${p}`,
+                },
+                {
+                    "arg": "type",
+                    "type": "string",
+                    "value": "",
+                },
+                {
+                    "arg": "role",
+                    "type": "string",
+                    "value": "",
+                },
+            ],
+        };
     }
 
 
