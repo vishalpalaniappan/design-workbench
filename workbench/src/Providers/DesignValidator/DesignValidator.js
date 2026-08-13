@@ -162,7 +162,20 @@ export class DesignValidator {
      * @param {Array} names Array of names.
      */
     generateCombinations (names) {
+        const combinations = [];
 
+        for (let i = 0; i < names.length; i++) {
+            combinations.push([names[i]]);
+            for (let j = i + 1; j < names.length; j++) {
+                const curr = [];
+                for (let k = j; k < names.length; k++) {
+                    curr.push(names[k]);
+                    combinations.push([names[i]].concat(curr));
+                }
+            }
+        }
+
+        console.log(combinations);
     }
 
     /**
@@ -182,6 +195,8 @@ export class DesignValidator {
                     if (p.type !== "name") continue;
                     names.push(p.value);
                 }
+
+                const combinations = this.generateCombinations(names);
 
                 for (const [index, p] of transformation.participants.entries()) {
                     const _p = {};
