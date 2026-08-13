@@ -343,10 +343,11 @@ export class DesignValidator {
                              "_invariant_" + invariant["index"];
 
                         const invViolationMessage = "f'Invariant Violation: " + invCmd + " for " +
-                            invariant["participant"] + " in transformation " +
+                            invariant["participants"].toString() + " in transformation " +
                             invariant["transformation"] + " in behavior " +
                             invariant["transformBehavior"] + "'";
 
+                        // Has participants
                         const hasParticipants = {
                             "type": "cmd",
                             "command": "worldStateManager",
@@ -365,14 +366,75 @@ export class DesignValidator {
                                     "arg": "participant",
                                     "type": "list",
                                     "value": invariant.participants,
-                                }
+                                },
                             ],
                         };
 
+                        const callInv = {
+                            "type": "registeredCmd",
+                            "command": "_callIfExist",
+                            "args": [
+                                {
+                                    "arg": null,
+                                    "type": "string",
+                                    "value": "invariantViolated",
+                                },
+                                {
+                                    "arg": null,
+                                    "type": "string",
+                                    "value": invCmd,
+                                }].concat(invariant.participants.map((inv) => {
+                                return {
+                                    "arg": null,
+                                    "type": "name",
+                                    "value": inv,
+                                };
+                            })),
+                        };
 
-                        const body = [hasParticipants];
+                        // Get participant values
+                        const getParticipants = invariant.participants.map((name) => {
+                            return this.getWorldStateParticipantAST("getValue", name, name);
+                        });
 
-                        this.getWorldStateParticipantAST("hasParticipants","")
+                        // If participants exist
+                        const ifInvariantViolated = {
+                            "type": "if",
+                            "args": [
+                                {
+                                    "arg": null,
+                                    "type": "name",
+                                    "value": "invariantViolated",
+                                },
+                            ],
+                            "body": [{
+                                "type": "cmd",
+                                "command": "display",
+                                "args": [
+                                    {
+                                        "arg": null,
+                                        "type": "string",
+                                        "value": invViolationMessage,
+                                    },
+                                ],
+                            }],
+                        };
+
+                        // If participants exist
+                        const ifParticipantsExist = {
+                            "type": "if",
+                            "args": [
+                                {
+                                    "arg": null,
+                                    "type": "name",
+                                    "value": "hasParticipants",
+                                },
+                            ],
+                            "body": [...getParticipants, callInv, ifInvariantViolated]
+                        };
+
+
+                        const body = [hasParticipants, ifParticipantsExist];
 
                         const invariantBlock = {
                             "type": "invariant",
