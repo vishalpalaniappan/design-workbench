@@ -38,7 +38,7 @@ export class DesignValidator {
 
     /**
      * Processes the tree recursively.
-     * @param {Object} node 
+     * @param {Object} node
      */
     processTree (node) {
         if ("body" in node) {
@@ -155,27 +155,38 @@ export class DesignValidator {
     }
 
     /**
-     * Geneates combination from array of names:
-     * ["a","b"]
+     * Geneates all unique combinations from list of values:
+     * ["a","b","c"]
      * ->
-     * ("a"), ("b"), ("a","b")
+     * ("a"),("a","b"),("a","b","c"),("a","c"),("b")("b","c"),("c")
+     *
      * @param {Array} names Array of names.
+     * @return {Object} Combinations
      */
     generateCombinations (names) {
         const combinations = [];
 
-        for (let i = 0; i < names.length; i++) {
-            combinations.push([names[i]]);
-            for (let j = i + 1; j < names.length; j++) {
-                const curr = [];
-                for (let k = j; k < names.length; k++) {
-                    curr.push(names[k]);
-                    combinations.push([names[i]].concat(curr));
-                }
+        /**
+         * Generates all the possible combinations by visiting
+         * each node in the list and then recursively walking
+         * each unique branch while accumulating the possible
+         * combinations.
+         *
+         * @param {Number} start Starting position in list
+         * @param {Number} current Current accumulated list
+         */
+        function generate (start, current) {
+            for (let i = start; i < names.length; i++) {
+                const combination = current.concat(names[i]);
+
+                combinations.push(combination);
+
+                generate(i + 1, combination);
             }
         }
 
-        console.log(combinations);
+        generate(0, []);
+        return combinations;
     }
 
     /**
@@ -312,7 +323,7 @@ export class DesignValidator {
 
     /**
      * Visits nodes in the tree and adds invariant in the behavior block.
-     * @param {Object} node 
+     * @param {Object} node
      */
     addInvariants (node) {
         if ("body" in node) {
