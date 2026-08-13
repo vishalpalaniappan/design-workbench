@@ -346,9 +346,10 @@ export class DesignValidator {
                         const invCmd = invariant["transformation"].slice(1) +
                              "_invariant_" + invariant["index"];
 
-                        const invViolationMessage = "f'Invariant Violation: " + invCmd + " for " +
-                            invariant["participants"].map((t) => t.value).toString()
-                            + " in transformation " +
+                        const invViolationMessage = "f'Semantically invalid state: " + invCmd +
+                             " for " +
+                            invariant["participants"].map((t) => t.value).toString() +
+                            " in transformation " +
                             invariant["transformation"] + " in behavior " +
                             invariant["transformBehavior"] + "'";
 
@@ -419,6 +420,40 @@ export class DesignValidator {
                             }
                         }
 
+                        const setInvariantViolation = {
+                            "type": "cmd",
+                            "command": "worldStateManager",
+                            "args": [
+                                {
+                                    "arg": "storeIn",
+                                    "type": "name",
+                                    "value": "hasParticipants",
+                                },
+                                {
+                                    "arg": "cmd",
+                                    "type": "string",
+                                    "value": "setInvariantViolation",
+                                },
+                                {
+                                    "arg": "invariantName",
+                                    "type": "string",
+                                    "value": invCmd,
+                                },
+                                {
+                                    "arg": "invartiantParticipant",
+                                    "type": "string",
+                                    "value": invariant["participants"].map(
+                                        (t) => t.value
+                                    ).toString(),
+                                },
+                                {
+                                    "arg": "protectedBehavior",
+                                    "type": "string",
+                                    "value": invariant.transformBehavior,
+                                },
+                            ],
+                        };
+
                         // If participants exist
                         const ifInvariantViolated = {
                             "type": "if",
@@ -429,17 +464,20 @@ export class DesignValidator {
                                     "value": "invariantViolated",
                                 },
                             ],
-                            "body": [{
-                                "type": "cmd",
-                                "command": "display",
-                                "args": [
-                                    {
-                                        "arg": null,
-                                        "type": "string",
-                                        "value": invViolationMessage,
-                                    },
-                                ],
-                            }],
+                            "body": [
+                                {
+                                    "type": "cmd",
+                                    "command": "display",
+                                    "args": [
+                                        {
+                                            "arg": null,
+                                            "type": "string",
+                                            "value": invViolationMessage,
+                                        },
+                                    ],
+                                },
+                                setInvariantViolation,
+                            ],
                         };
 
                         // If participants exist
