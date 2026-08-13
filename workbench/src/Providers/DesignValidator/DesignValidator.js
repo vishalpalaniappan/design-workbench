@@ -177,7 +177,10 @@ export class DesignValidator {
          */
         function generate (start, current) {
             for (let i = start; i < names.length; i++) {
-                const combination = current.concat(names[i]);
+                const combination = current.concat({
+                    index: i,
+                    name: names[i],
+                });
 
                 combinations.push(combination);
 
@@ -206,8 +209,6 @@ export class DesignValidator {
                     if (p.type !== "name") continue;
                     names.push(p.value);
                 }
-
-                const combinations = this.generateCombinations(names);
 
                 for (const [index, p] of transformation.participants.entries()) {
                     const _p = {};
@@ -262,48 +263,48 @@ export class DesignValidator {
 
                     console.log(_p);
 
-                    for (const name of Object.keys(_p)) {
-                        for (const [index, uniquePath] of Object.entries(_p[name])) {
-                            for (let i = uniquePath.length - 1; i >= 0; i--) {
-                                const entry = uniquePath[i];
+                    const combinations = this.generateCombinations(names);
 
-                                // If we have reached the current participant
-                                if (entry.participant === name) {
-                                    // Check if invariant already exists
-                                    const invExists = this.invariants.find((val) => {
-                                        if (val.behavior === entry.behavior &&
-                                            val.transformation === entry.transformation &&
-                                            val.transformBehavior === entry.transformBehavior &&
-                                            val.index === entry.index) {
-                                            return true;
-                                        }
-                                    });
-                                    if (invExists) continue;
+                    for (const combination of combinations) {
+                        let indexStr = "";
+                        for (const [index, entry] of combination.entries()) {
+                            indexStr += ((combination[index].index).toString() + "_");
+                        }
+                        indexStr = indexStr.slice(0, -1);
 
-                                    // Add invariant
-                                    this.invariants.push({
-                                        path: entry.index,
-                                        pathPosition: entry.pathPosition,
-                                        behavior: entry.behavior,
-                                        transformBehavior: entry.transformBehavior,
-                                        transformation: entry.transformation,
-                                        participant: entry.participant,
-                                        index: entry.index,
-                                    });
-                                    break;
+                        for (const name of Object.keys(_p)) {
+                            for (const [index, uniquePath] of Object.entries(_p[name])) {
+                                for (let i = uniquePath.length - 1; i >= 0; i--) {
+                                    const entry = uniquePath[i];
+
+                                    if (combination.find((val) => val.name === entry.participant)) {
+                                        // Check if invariant already exists
+                                        const invExists = this.invariants.find((val) => {
+                                            if (val.behavior === entry.behavior &&
+                                                val.transformation === entry.transformation &&
+                                                val.transformBehavior === entry.transformBehavior &&
+                                                val.index === indexStr) {
+                                                return true;
+                                            }
+                                        });
+                                        if (invExists) continue;
+
+                                        // Add invariant
+                                        this.invariants.push({
+                                            path: entry.index,
+                                            pathPosition: entry.pathPosition,
+                                            behavior: entry.behavior,
+                                            transformBehavior: entry.transformBehavior,
+                                            transformation: entry.transformation,
+                                            participant: entry.participant,
+                                            index: indexStr,
+                                        });
+                                        break;
+                                    }
                                 }
                             }
                         }
                     }
-
-                    // Now I can set inv dependent on multiple participants
-                    //
-                    // plan:
-                    // get combination of participants
-                    // ex: [basket, position]
-                    // [basket], [position], [basket, position]
-                    // WHen scanning backward in the indexed path, if any of the
-                    // entries in the list are found, place invariant
                 }
             };
             delete behavior.worldState;
