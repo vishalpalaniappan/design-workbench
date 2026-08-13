@@ -324,6 +324,29 @@ export class DesignValidator {
      * @param {Object} node
      */
     addInvariants (node) {
+        /**
+         * This entire block is messy because I am constructing
+         * the DAL ast to synthesize the relevant implementation
+         *
+         * TODO:
+         * It will be much cleaner once I add methods in the
+         * dal-ast-js package to generate nodes but I am adding
+         * a todo to remind myself to organize the implementation
+         * below into a more digestable format.
+         *
+         * The structure is:
+         *
+         * - Check if the participants exist
+         * - If they exist
+         *      - get participant values
+         *      - call the invariant
+         *      - if invariant violation
+         *          - log it
+         *
+         * I am rendering the check for participants through the
+         * world state manager. I am also logging the invariant
+         * using the world state manager.
+         */
         if ("body" in node) {
             for (const child of node["body"]) {
                 if (child["type"] === "behavior") {
@@ -485,7 +508,6 @@ export class DesignValidator {
                         };
 
                         const body = [hasParticipants, ifParticipantsExist];
-                        console.log(body);
 
                         const invariantBlock = {
                             "type": "invariant",
