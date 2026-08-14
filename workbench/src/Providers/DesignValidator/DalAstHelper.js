@@ -34,6 +34,7 @@ export const getInvariantBlock = (invariant) => {
     const invCmd = invariant["transformation"].slice(1) +
             "_invariant_" + invariant["index"];
 
+    // Create invariant violation message
     const invViolationMessage = "f'Semantically invalid state: " + invCmd +
             " for " +
         invariant["participants"].map((t) => t.value).toString() +
@@ -41,6 +42,7 @@ export const getInvariantBlock = (invariant) => {
         invariant["transformation"] + " in behavior " +
         invariant["transformBehavior"] + "'";
 
+    // Identify participants that need to be loaded from world state
     const validParticipants = [];
     invariant.participants.forEach((p) => {
         if (p.type === "name") {
@@ -48,7 +50,7 @@ export const getInvariantBlock = (invariant) => {
         }
     });
 
-    // Has participants
+    // Add node to check if the participants exist
     const hasParticipants = {
         "type": "cmd",
         "command": "worldStateManager",
@@ -71,6 +73,7 @@ export const getInvariantBlock = (invariant) => {
         ],
     };
 
+    // Add nodes to call the invariant evaluator
     const callInv = {
         "type": "registeredCmd",
         "command": "_callIfExist",
@@ -94,7 +97,7 @@ export const getInvariantBlock = (invariant) => {
         })),
     };
 
-    // Get participant values
+    // Add nodes to synthesize getting participant values
     const getParticipants = [];
     for (const entry of invariant.participants) {
         if (entry.type === "name") {
@@ -108,6 +111,7 @@ export const getInvariantBlock = (invariant) => {
         }
     }
 
+    // Add nodes to set the invariant violation
     const setInvariantViolation = {
         "type": "cmd",
         "command": "worldStateManager",
@@ -142,7 +146,7 @@ export const getInvariantBlock = (invariant) => {
         ],
     };
 
-    // If participants exist
+    // Create node if invariant is violated
     const ifInvariantViolated = {
         "type": "if",
         "args": [
@@ -168,7 +172,7 @@ export const getInvariantBlock = (invariant) => {
         ],
     };
 
-    // If participants exist
+    // Create node if participant exists
     const ifParticipantsExist = {
         "type": "if",
         "args": [
@@ -181,17 +185,17 @@ export const getInvariantBlock = (invariant) => {
         "body": [...getParticipants, callInv, ifInvariantViolated],
     };
 
-    const body = [hasParticipants, ifParticipantsExist];
-
+    // Return the invariant node
     return {
         "type": "invariant",
         "args": [],
-        "body": body,
+        "body": [hasParticipants, ifParticipantsExist],
     };
 };
 
 /**
- * Returns the participant args AST.
+ * Returns the world state transformation AST node.
+ *
  * @param {String} cmd
  * @param {String} storeP
  * @param {String} p
