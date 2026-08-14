@@ -98,22 +98,10 @@ export class DesignValidator {
     }
 
     /**
-     * Currently this function accesses the participant that were
-     * created and saves their role.
-     *
-     * It then saves every participant that was accessed along with
-     * their roles into the behavior.
-     *
-     * In the next pass, it will identify every participant used in
-     * a transformation and then use the role to identify when it
-     * was introduced into the world. This will be used to find the
-     * paths from the creation to the transformation. The last time
-     * the participant was updated will be used to place the invariant
-     * because it will cause the world to become semantically invalid.
-     *
-     * There can be multiple paths taken, this approach will find those
-     * paths and place the invariant in multiple points where semantic
-     * invalidity can be reached.
+     * For each behavior, this method:
+     * - Saves the created participants with their role
+     * - Saves the accessed participants with their role
+     * - Saves the updated participants with their role
      *
      * @param {Object} behavior Behavior Info
      */
@@ -195,8 +183,26 @@ export class DesignValidator {
     }
 
     /**
-     * Identifies the provenance of the participants involved in
-     * each transformation in a behavior.
+     * Identifies the invariants in the design.
+     *
+     * It does this by doing the following:
+     * - For each transformation in a behavior, it identifies the
+     *   participants that are involved.
+     * - For each participant it finds when the role was created
+     * - It finds all the valid paths from creation to the transformation
+     *
+     * It then makes a pass through all the paths and identifies which
+     * node each of the participants was updated in.
+     *
+     * Then it indentifies all the possible combination of invariants
+     * given the participant.
+     *
+     * Then it walks backward from each of the paths while placing the
+     * invariant when any of the participants are updated. This is where
+     * the world enters a semantically invalid state.
+     *
+     * It deduplicates the invariants that were placed on the same node
+     * by multiple participants in the same invariant definition.
      */
     identifyProvenance () {
         for (const behavior of this.behaviors) {
