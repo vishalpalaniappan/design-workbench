@@ -1,4 +1,4 @@
-import {getInvariantBlock} from "./AstHelper";
+import {getInvariantBlock} from "./DalAstHelper";
 import {DesignGraph} from "./DesignGraph";
 
 /**
