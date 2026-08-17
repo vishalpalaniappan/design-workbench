@@ -158,9 +158,14 @@ export const getInvariantBlock = (invariant) => {
         ],
         "body": [
             {
-                "type": "cmd",
-                "command": "display",
+                "type": "registeredCmd",
+                "command": "_print",
                 "args": [
+                    {
+                        "arg": null,
+                        "type": "null",
+                        "value": null,
+                    },
                     {
                         "arg": null,
                         "type": "string",
