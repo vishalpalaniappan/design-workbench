@@ -144,7 +144,7 @@ export function ImplementationToolbar () {
             }
             dispatch(incrementCounter());
         }
-    }, [hasEntryPoint, engine, workbench, dispatch, activeTab, selectedVerbosity]);
+    }, [workbench, dispatch, selectedVerbosity]);
 
 
     const deleteTrace = (e) => {
