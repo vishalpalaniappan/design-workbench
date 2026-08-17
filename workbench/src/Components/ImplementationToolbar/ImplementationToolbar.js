@@ -113,24 +113,38 @@ export function ImplementationToolbar () {
 
 
     const synthesizeDesign = useCallback(() => {
-        // TODO: There can be multiple dal files, use the entry point.
+        // Load the entry point from metadata file.
+        let entryPoint;
         for (const file of workbench.getFiles()) {
-            if (file.name.endsWith(".dal")) {
-                const content = file.content;
-                const ast = new DalAstGenerator().run(content);
-                workbench.saveAst(ast);
-                console.log(ast);
-                sendMessage({
-                    type: "synthesize_design",
-                    payload: {
-                        ast: workbench.ast,
-                        verbosity: selectedVerbosity,
-                    },
-                });
+            if (file.name === "metadata.json") {
+                entryPoint = JSON.parse(file.content)?.entryPoint;
+                break;
             }
         }
-        dispatch(incrementCounter());
-    }, [hasEntryPoint, workbench, dispatch, activeTab, selectedVerbosity]);
+        if (!entryPoint) {
+            console.error("No entry point provided in metadata.json file");
+        }
+        // Get the AST and synthesize
+        if (entryPoint && entryPoint.endsWith(".dal")) {
+            for (const file of workbench.getFiles()) {
+                if (file.name === entryPoint) {
+                    const content = file.content;
+                    const ast = new DalAstGenerator().run(content);
+                    workbench.saveAst(ast);
+                    console.log(ast);
+                    sendMessage({
+                        type: "synthesize_design",
+                        payload: {
+                            ast: workbench.ast,
+                            verbosity: selectedVerbosity,
+                        },
+                    });
+                    break;
+                }
+            }
+            dispatch(incrementCounter());
+        }
+    }, [hasEntryPoint, engine, workbench, dispatch, activeTab, selectedVerbosity]);
 
 
     const deleteTrace = (e) => {
