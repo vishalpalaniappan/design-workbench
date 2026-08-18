@@ -118,7 +118,7 @@ export function ImplementationToolbar () {
      */
     const synthesizeDesign = useCallback(() => {
         // Get Metadata file
-        const entryMetadataFile = getFileFromWorkbench("metadata.json");
+        const entryMetadataFile = workbench.getFile("metadata.json");
         if (!entryMetadataFile) {
             console.error("No metadata.json file provided.");
             return;
@@ -134,9 +134,9 @@ export function ImplementationToolbar () {
         // Get the AST and synthesize
         if (entryPoint && entryPoint.endsWith(".dal")) {
             const asts = getAsts(entryPoint);
-            const designFile = getFileFromWorkbench(entryPoint);
+            const designFile = workbench.getFile(entryPoint);
             dispatch(setActiveTabThunk(designFile));
-            // workbench.saveAst(ast);
+            // workbench.saveAst(asts);
             console.log(asts);
             sendMessage({
                 type: "synthesize_design",
@@ -147,15 +147,7 @@ export function ImplementationToolbar () {
             });
             dispatch(incrementCounter());
         }
-    }, [workbench, getFileFromWorkbench, dispatch, selectedVerbosity]);
-
-    /**
-     * Get the file from the workbench.
-     * TODO: Move this method to the workbench.
-     */
-    const getFileFromWorkbench = useCallback((name) => {
-        return workbench.getFiles().find((f) => f.name === name);
-    }, [workbench]);
+    }, [workbench, dispatch, selectedVerbosity]);
 
     /**
      * Get the AST's from the design file tracking imports.
@@ -167,7 +159,7 @@ export function ImplementationToolbar () {
 
         while (filesToProcess.length > 0) {
             const f = filesToProcess.pop();
-            const file = getFileFromWorkbench(f);
+            const file = workbench.getFile(f);
             const ast = new DalAstGenerator().run(file.content);
             asts[f] = ast;
             if ("imports" in ast) {
@@ -179,7 +171,7 @@ export function ImplementationToolbar () {
             }
         }
         return asts;
-    }, [getFileFromWorkbench, workbench]);
+    }, [workbench]);
 
     const deleteTrace = (e) => {
         e.stopPropagation();

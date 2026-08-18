@@ -76,7 +76,7 @@ export const useEngineFiles = () => {
 
     return useMemo(() => {
         if (!workbench) return null;
-        return workbench.getFiles();
+        return workbench.files;
     }, [workbench, activeTab, counter]);
 };
 

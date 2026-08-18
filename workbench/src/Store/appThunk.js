@@ -10,7 +10,7 @@ import {setSelectedBehavior} from "./appSlice";
  * @return {Function} Thunk function.
  */
 export const deleteFileThunk = (fileId) => (dispatch, getState, {engine}) => {
-    const files = engine.getFiles();
+    const files = engine.files;
     const index = files.findIndex((file) => file.uid === fileId);
     let newUid = null;
     if (index === 0 && files.length > 1) {

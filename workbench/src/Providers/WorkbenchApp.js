@@ -19,6 +19,7 @@ class WorkbenchApp {
      */
     constructor () {
         this.files = [];
+        this.asts = {};
     }
     /**
      * Sets the name of the workbench.
@@ -45,6 +46,7 @@ class WorkbenchApp {
      */
     addFiles (files) {
         this.files = files;
+        this.getRunSyntax();
     }
 
     /**
@@ -69,14 +71,12 @@ class WorkbenchApp {
     }
 
     /**
-     * Get the files
-     *
-     * @return {Array} Files
+     * Get the file given the file name.
+     * @param {String} fName File Name
+     * @return {Object|null} File object.
      */
-    getFiles () {
-        this.flatTree = this.flattenTree(this.files);
-        this.getRunSyntax();
-        return this.files;
+    getFile (fName) {
+        return this.flatTree.find((f) => f.name === fName);
     }
 
     /**
@@ -106,6 +106,12 @@ class WorkbenchApp {
         }
     }
 
+    /**
+     * Flatten the tree into an array.
+     * @param {Object} tree 
+     * @param {Number} level 
+     * @return {Array}
+     */
     flattenTree = (tree, level) => {
         if (!level) {
             level = 0;
@@ -158,6 +164,7 @@ class WorkbenchApp {
      * program or programs (for concurrent designs).
      */
     getRunSyntax () {
+        this.flatTree = this.flattenTree(this.files);
         const path = this.designName + "/synthesized/metadata.json";
         const found = this.flatTree.find((file) => file.path == path);
         if (!found) {
@@ -180,13 +187,15 @@ class WorkbenchApp {
 
     /**
      * Saves the AST in the workbench app.
-     * @param {Object} ast
+     * @param {Object} asts
      *
      */
-    saveAst (ast) {
-        this.validator = new DesignValidator(ast);
-        this.validator.run();
-        this.ast = this.validator.ast;
+    saveAst (asts) {
+        for (const [index, fName] of Object.entries(asts)) {
+            this.validator = new DesignValidator(ast);
+            this.validator.run();
+            this.asts[fName] = this.validator.ast;
+        }
         // return this.addFile("ast.json", JSON.stringify(ast, null, 1));
     }
 
