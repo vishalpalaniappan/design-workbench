@@ -31,12 +31,22 @@ const loadDir = async function (rootPath, folderPath, level) {
                 level: level
             };
         } else {
-            const content =  await fs.readFile(fullPath, 'utf-8');
+            let content;
+            let readOnly;
+            if (entry.name.endsWith(".clp.zst")) {
+                content =  await fs.readFile(fullPath);
+                readOnly = true;
+            }else {
+                content =  await fs.readFile(fullPath, "utf-8");
+                readOnly = false;
+            }
+
             return {
                 name: entry.name,
                 type: 'file',
                 uid: relativePath,
                 path: relativePath,
+                readOnly: readOnly,
                 content: content,
                 updatedContent: content,
                 level: level
