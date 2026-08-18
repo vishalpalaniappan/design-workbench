@@ -20,6 +20,7 @@ class WorkbenchApp {
     constructor () {
         this.files = [];
         this.asts = {};
+        this.graphBehaviors = {};
     }
     /**
      * Sets the name of the workbench.
@@ -62,6 +63,7 @@ class WorkbenchApp {
             type: "file",
             uid: this.designName + "/" + fileName,
             path: this.designName + "/" + fileName,
+            readOnly: false,
             content: content,
             updatedContent: content,
             level: 0,
@@ -191,12 +193,13 @@ class WorkbenchApp {
      *
      */
     saveAst (asts) {
-        for (const [index, fName] of Object.entries(asts)) {
-            this.validator = new DesignValidator(ast);
-            this.validator.run();
-            this.asts[fName] = this.validator.ast;
+        for (const fName of Object.keys(asts)) {
+            const validator = new DesignValidator(asts[fName]);
+            validator.run();
+            asts[fName] = validator.ast;
+            this.graphBehaviors[fName] = validator.behaviors;
+            // this.addFile(fName, JSON.stringify(validator.ast, null, 1));
         }
-        // return this.addFile("ast.json", JSON.stringify(ast, null, 1));
     }
 
     /**

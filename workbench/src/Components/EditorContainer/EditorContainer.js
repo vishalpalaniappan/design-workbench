@@ -76,7 +76,6 @@ export function EditorContainer () {
         const logContent = log.map((entry) => {
             return JSON.stringify(JSON.parse(entry[0])["user-generated"], null, 2);
         }).join("\n");
-        console.log(logContent);
         file.content = logContent;
         file.updatedContent = logContent;
         editorRef.current.addTab(file);
@@ -89,7 +88,6 @@ export function EditorContainer () {
                 console.error("Active tab file not found in engine files");
                 return;
             }
-            console.log(foundFile);
             const found = editorRef.current.getTabs().some((tab) => tab.uid === activeTab);
             if (found) {
                 editorRef.current.selectTab(foundFile.uid);

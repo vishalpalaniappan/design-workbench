@@ -8,6 +8,7 @@ import {BehavioralGraphBuilder} from "sample-ui-component-library";
 import {selectBehaviorThunk} from "../../Store/appThunk";
 import {useWorkbenchRedux} from "../../Store/useAppSelection";
 import {useSelectedBehavior} from "../../Store/useAppSelection";
+import {useActiveTab} from "../../Store/useAppSelection";
 
 import "./Graph.scss";
 
@@ -23,20 +24,27 @@ export function Graph () {
 
     const [engine, setEngine] = useState();
     const dispatch = useDispatch();
-    const workbench = useWorkbenchRedux();
+    const {workbench} = useWorkbenchRedux();
     const [behaviors, setBehaviors] = useState();
+    const activeTab = useActiveTab();
 
     useEffect(() => {
-        if (workbench && workbench.workbench.getAst()) {
+        if (activeTab && workbench && workbench.graphBehaviors) {
             const engine = new DALEngine({name: "testEngine", description: ""});
-            const behaviors = workbench.workbench.validator.behaviors;
+            if (!(activeTab in workbench.graphBehaviors)) {
+                setBehaviors([]);
+                return;
+            }
+            const behaviors = workbench.graphBehaviors[activeTab];
             setBehaviors(behaviors);
             for (const behavior of behaviors) {
                 engine.addNode(behavior["name"], "", behavior["nextBehaviors"]);
             }
             editorRef.current.updateEngine(engine);
+        } else {
+            setBehaviors([]);
         }
-    }, [workbench]);
+    }, [workbench, activeTab]);
 
     const connectBehaviors = useCallback(
         (from, to) => {

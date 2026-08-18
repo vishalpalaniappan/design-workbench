@@ -135,7 +135,7 @@ export function ImplementationToolbar () {
         if (entryPoint && entryPoint.endsWith(".dal")) {
             const asts = getAsts(entryPoint);
             const designFile = workbench.getFile(entryPoint);
-            // workbench.saveAst(asts);
+            workbench.saveAst(asts);
             console.log(asts);
             sendMessage({
                 type: "synthesize_design",
@@ -144,8 +144,8 @@ export function ImplementationToolbar () {
                     verbosity: selectedVerbosity,
                 },
             });
-            dispatch(incrementCounter());
             dispatch(setActiveTabThunk(designFile));
+            dispatch(incrementCounter());
         }
     }, [workbench, dispatch, selectedVerbosity]);
 
@@ -161,7 +161,7 @@ export function ImplementationToolbar () {
             const f = filesToProcess.pop();
             const file = workbench.getFile(f);
             const ast = new DalAstGenerator().run(file.content);
-            asts[f] = ast;
+            asts[file.uid] = ast;
             if ("imports" in ast) {
                 for (const _import of ast.imports) {
                     if (filesToProcess.includes(_import[0])) continue;
