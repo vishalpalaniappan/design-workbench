@@ -32,7 +32,7 @@ async function synthesizeDesign(designName, ast, verbosity) {
     // Copy the required files to the synthesized folder
     const metadata = JSON.parse(synthObj["metadata.json"])
     for (const file of metadata["required"]) {
-        const fromPath = path.join(process.cwd(), "workspace", designName, file);
+        const fromPath = path.join(process.cwd(), "workspace", designName, "includes", file);
         const toPath = path.join(process.cwd(), "workspace", designName, "synthesized", file);
         await copyFile(fromPath, toPath);
     }
