@@ -135,7 +135,6 @@ export function ImplementationToolbar () {
         if (entryPoint && entryPoint.endsWith(".dal")) {
             const asts = getAsts(entryPoint);
             const designFile = workbench.getFile(entryPoint);
-            dispatch(setActiveTabThunk(designFile));
             // workbench.saveAst(asts);
             console.log(asts);
             sendMessage({
@@ -146,6 +145,7 @@ export function ImplementationToolbar () {
                 },
             });
             dispatch(incrementCounter());
+            dispatch(setActiveTabThunk(designFile));
         }
     }, [workbench, dispatch, selectedVerbosity]);
 
