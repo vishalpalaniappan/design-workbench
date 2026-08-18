@@ -126,26 +126,48 @@ export function ImplementationToolbar () {
         }
         // Get the AST and synthesize
         if (entryPoint && entryPoint.endsWith(".dal")) {
-            for (const file of workbench.getFiles()) {
-                if (file.name === entryPoint) {
-                    const content = file.content;
-                    const ast = new DalAstGenerator().run(content);
-                    workbench.saveAst(ast);
-                    console.log(ast);
-                    sendMessage({
-                        type: "synthesize_design",
-                        payload: {
-                            ast: workbench.ast,
-                            verbosity: selectedVerbosity,
-                        },
-                    });
-                    break;
-                }
-            }
+            const asts = getAsts(entryPoint);
+            // workbench.saveAst(ast);
+            console.log(asts);
+            sendMessage({
+                type: "synthesize_design",
+                payload: {
+                    ast: asts,
+                    verbosity: selectedVerbosity,
+                },
+            });
             dispatch(incrementCounter());
         }
-    }, [workbench, dispatch, selectedVerbosity]);
+    }, [workbench, getFileFromWorkbench, dispatch, selectedVerbosity]);
 
+    const getFileFromWorkbench = useCallback((name) => {
+        for (const file of workbench.getFiles()) {
+            if (file.name === name) {
+                return file;
+            }
+        }
+    }, [workbench]);
+
+
+    const getAsts = useCallback((designFile) => {
+        const filesToProcess = [designFile];
+        const asts = {};
+
+        while (filesToProcess.length > 0) {
+            const f = filesToProcess.pop();
+            const file = getFileFromWorkbench(f);
+            const ast = new DalAstGenerator().run(file.content);
+            asts[f] = ast;
+            if ("imports" in ast) {
+                for (const _import of ast.imports) {
+                    if (filesToProcess.includes(_import[0])) continue;
+                    if (_import[0] in asts) continue;
+                    filesToProcess.push(_import[0]);
+                }
+            }
+        }
+        return asts;
+    }, [getFileFromWorkbench, workbench]);
 
     const deleteTrace = (e) => {
         e.stopPropagation();
