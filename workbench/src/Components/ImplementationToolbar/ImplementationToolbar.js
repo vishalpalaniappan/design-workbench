@@ -12,6 +12,7 @@ import {useServer} from "../../Providers/GlobalProviders";
 import {useWorkbench} from "../../Providers/GlobalProviders";
 import {incrementCounter, setStatusMsg} from "../../Store/appSlice";
 import {deleteTraceThunk} from "../../Store/appThunk";
+import {setActiveTabThunk} from "../../Store/appThunk";
 import {useHasEntryPoint} from "../../Store/useAppSelection";
 import {useTraces} from "../../Store/useAppSelection";
 import {useActiveTab} from "../../Store/useAppSelection";
@@ -112,21 +113,29 @@ export function ImplementationToolbar () {
     }, [sendMessage, workbench, selectedTrace]);
 
 
+    /**
+     * Synthesize the design.
+     */
     const synthesizeDesign = useCallback(() => {
-        // Load the entry point from metadata file.
-        let entryPoint;
-        for (const file of workbench.getFiles()) {
-            if (file.name === "metadata.json") {
-                entryPoint = JSON.parse(file.content)?.entryPoint;
-                break;
-            }
+        // Get Metadata file
+        const entryMetadataFile = getFileFromWorkbench("metadata.json");
+        if (!entryMetadataFile) {
+            console.error("No metadata.json file provided.");
+            return;
         }
+
+        // Get entry point from metadata file
+        const entryPoint = JSON.parse(entryMetadataFile.content)?.entryPoint;
         if (!entryPoint) {
             console.error("No entry point provided in metadata.json file");
+            return;
         }
+
         // Get the AST and synthesize
         if (entryPoint && entryPoint.endsWith(".dal")) {
             const asts = getAsts(entryPoint);
+            const designFile = getFileFromWorkbench(entryPoint);
+            dispatch(setActiveTabThunk(designFile));
             // workbench.saveAst(ast);
             console.log(asts);
             sendMessage({
@@ -140,15 +149,18 @@ export function ImplementationToolbar () {
         }
     }, [workbench, getFileFromWorkbench, dispatch, selectedVerbosity]);
 
+    /**
+     * Get the file from the workbench.
+     * TODO: Move this method to the workbench.
+     */
     const getFileFromWorkbench = useCallback((name) => {
-        for (const file of workbench.getFiles()) {
-            if (file.name === name) {
-                return file;
-            }
-        }
+        return workbench.getFiles().find((f) => f.name === name);
     }, [workbench]);
 
-
+    /**
+     * Get the AST's from the design file tracking imports.
+     * @return {Object} AST's for all files in the design.
+     */
     const getAsts = useCallback((designFile) => {
         const filesToProcess = [designFile];
         const asts = {};

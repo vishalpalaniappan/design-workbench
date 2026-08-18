@@ -30,7 +30,17 @@ export const deleteFileThunk = (fileId) => (dispatch, getState, {engine}) => {
  */
 export const addFileThunk = (fileName) => (dispatch, getState, {engine}) => {
     const newFile = engine.addFile(fileName, fileName, "");
-    dispatch(setActiveTab(newFile._uid));
+    dispatch(setActiveTab(newFile.uid));
+    dispatch(incrementCounter());
+};
+
+/**
+ * Sets the active tab.
+ * @param {String} activeTab - Identifier for the active tab.
+ * @return {Function} Thunk functin.
+ */
+export const setActiveTabThunk = (activeTab) => (dispatch, getState, {workbench}) => {
+    dispatch(setActiveTab(activeTab.uid));
     dispatch(incrementCounter());
 };
 
