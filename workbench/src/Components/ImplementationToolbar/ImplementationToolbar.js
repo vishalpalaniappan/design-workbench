@@ -112,6 +112,11 @@ export function ImplementationToolbar () {
         }
     }, [sendMessage, workbench, selectedTrace]);
 
+    // TODO: Simplify this so it only generates the ASTs, I can synthesize
+    // the design when the design is saved or if synthesis is triggered.
+    useEffect(() => {
+        synthesizeDesign();
+    }, []);
 
     /**
      * Synthesize the design.
