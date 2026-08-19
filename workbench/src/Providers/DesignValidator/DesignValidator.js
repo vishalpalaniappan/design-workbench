@@ -59,6 +59,11 @@ export class DesignValidator {
                     this.mode = null;
                 } else if (child["type"] === "select") {
                     this.mode = "select";
+                    this.currentBehavior.select.push({
+                        worldState: [],
+                        transformations: [],
+                        nextBehaviors: [],
+                    });
                     this.processChild(child);
                     this.processTree(child);
                     this.mode = "behavior";
@@ -83,12 +88,14 @@ export class DesignValidator {
         if (this.mode === "behavior") {
             writeTo = this.currentBehavior;
         } else if (this.mode === "select") {
-            writeTo = this.currentBehavior.select;
+            const len = this.currentBehavior.select.length;
+            writeTo = this.currentBehavior.select[len - 1];
         }
 
         if (t === "cmd") {
             if (c === "goToBehavior") {
                 writeTo.nextBehaviors.push(child.args[0].value);
+                this.currentBehavior.nextBehaviors.push(child.args[0].value);
             } else if (c === "worldStateManager") {
                 writeTo.worldState.push(child.args);
             }
@@ -116,11 +123,8 @@ export class DesignValidator {
             name: behavior["behaviorName"],
             worldState: [],
             transformations: [],
-            select: {
-                worldState: [],
-                transformations: [],
-                nextBehaviors: [],
-            },
+            nextBehaviors: [],
+            select: [],
         };
     }
 
@@ -359,7 +363,6 @@ export class DesignValidator {
      */
     testInvariant (name) {
         const inv = this.invariants.find((inv) => inv.name === name);
-
         console.log("");
         console.log("Creating AST to test invariant:", inv);
 
@@ -368,24 +371,26 @@ export class DesignValidator {
         const foundSelectBlocks = [];
         for (const node of inv.fullPath) {
             const behavior = this.getBehavior(node);
+            console.log(behavior);
+            for (const selectBlock of behavior.select) {
+                const participants = [];
+                for (const entry of selectBlock.worldState) {
+                    const name = entry.find((e) => e.arg === "name");
+                    if (participants.includes(name.value)) continue;
+                    participants.push(name.value);
+                }
 
-            const participants = [];
-            for (const entry of behavior.select.worldState) {
-                const name = entry.find((e) => e.arg === "name");
-                if (participants.includes(name.value)) continue;
-                participants.push(name.value);
-            }
+                if (participants.length > 0) {
+                    const isValid = isEqual(sortBy(participants), sortBy(invParticipants));
+                    console.log("Behavior Name:", behavior.name);
+                    console.log(participants, invParticipants, isValid);
 
-            if (participants.length > 0) {
-                const isValid = isEqual(sortBy(participants), sortBy(invParticipants));
-                console.log("Behavior Name:", behavior.name);
-                console.log(participants, invParticipants, isValid);
-
-                if (isValid) {
-                    foundSelectBlocks.push({
-                        behavior: behavior.name,
-                        select: behavior.select,
-                    });
+                    if (isValid) {
+                        foundSelectBlocks.push({
+                            behavior: behavior.name,
+                            select: selectBlock,
+                        });
+                    }
                 }
             }
         }
@@ -469,14 +474,14 @@ export class DesignValidator {
         }
 
         path.push(startBehavior);
-        if (currBehavior.select.nextBehaviors.length > 1) {
-            for (const next of currBehavior.select.nextBehaviors) {
+        if (currBehavior.nextBehaviors.length > 1) {
+            for (const next of currBehavior.nextBehaviors) {
                 if (!path.includes(next)) {
                     this.walkPath(next, endBehavior, [...path]);
                 }
             }
-        } else if (currBehavior.select.nextBehaviors.length === 1) {
-            this.walkPath(currBehavior.select.nextBehaviors[0], endBehavior, [...path]);
+        } else if (currBehavior.nextBehaviors.length === 1) {
+            this.walkPath(currBehavior.nextBehaviors[0], endBehavior, [...path]);
         }
     }
 }
