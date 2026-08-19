@@ -46,10 +46,16 @@ export class DesignValidator {
             for (const child of node["body"]) {
                 if (child["type"] === "behavior") {
                     this.createBehavior(child);
+                    this.mode = "behavior";
                     this.processTree(child);
                     this.processBehavior();
                     this.behaviors.push({...this.currentBehavior});
                     this.currentBehavior = null;
+                    this.mode = null;
+                } else if (child["type"] === "select") {
+                    this.mode = "select";
+                    this.processChild(child);
+                    this.processTree(child);
                 } else {
                     this.processChild(child);
                     this.processTree(child);
@@ -66,15 +72,25 @@ export class DesignValidator {
     processChild (child) {
         const t = child["type"];
         const c = child["command"];
+
+        let writeTo;
+        if (this.mode === "") {
+            writeTo = this.currentBehavior;
+        } else if (this.mode === "select") {
+            writeTo = this.currentBehavior.select;
+        }
+
+        if (!writeTo) return;
+
         if (t === "cmd") {
             if (c === "goToBehavior") {
-                this.currentBehavior.nextBehaviors.push(child.args[0].value);
+                writeTo.nextBehaviors.push(child.args[0].value);
             } else if (c === "worldStateManager") {
-                this.currentBehavior.worldState.push(child.args);
+                writeTo.worldState.push(child.args);
             }
         } else if (t === "registeredCmd") {
             const output = child.args[0].value;
-            this.currentBehavior.transformations.push({
+            writeTo.transformations.push({
                 command: child.command,
                 output: output,
                 participants: child.args.slice(1),
@@ -85,15 +101,22 @@ export class DesignValidator {
 
     /**
      * Process a node in the tree.
+     *
+     * Storing select block in its own key because I will
+     * evaluate that separately for testing invariants.
+     *
      * @param {Object} behavior
      */
     createBehavior (behavior) {
         this.currentBehavior = {
             name: behavior["behaviorName"],
-            // creation: [],
             worldState: [],
             transformations: [],
-            nextBehaviors: [],
+            select: {
+                worldState: [],
+                transformations: [],
+                nextBehaviors: [],
+            },
         };
     }
 

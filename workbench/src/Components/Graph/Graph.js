@@ -32,7 +32,7 @@ export function Graph () {
             const behaviors = workbench.workbench.validator.behaviors;
             setBehaviors(behaviors);
             for (const behavior of behaviors) {
-                engine.addNode(behavior["name"], "", behavior["nextBehaviors"]);
+                engine.addNode(behavior["name"], "", behavior.select["nextBehaviors"]);
             }
             editorRef.current.updateEngine(engine);
         }
