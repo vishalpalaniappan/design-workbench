@@ -365,6 +365,7 @@ export class DesignValidator {
 
         const invParticipants = inv.participants.map((e) => e.value);
 
+        const foundSelectBlocks = [];
         for (const node of inv.fullPath) {
             const behavior = this.getBehavior(node);
 
@@ -379,7 +380,22 @@ export class DesignValidator {
                 const isValid = isEqual(sortBy(participants), sortBy(invParticipants));
                 console.log("Behavior Name:", behavior.name);
                 console.log(participants, invParticipants, isValid);
+
+                if (isValid) {
+                    foundSelectBlocks.push({
+                        behavior: behavior.name,
+                        select: behavior.select,
+                    });
+                }
             }
+        }
+
+        if (foundSelectBlocks.length > 0) {
+            console.log("Found select block, need to synthesize and test");
+            console.log(foundSelectBlocks);
+        } else {
+            console.log(`${name}`);
+            console.log("Behavior does not restore semantic validity.");
         }
     }
 
