@@ -251,6 +251,7 @@ export class DesignValidator {
                                 ) {
                                     const val = {
                                         participant: arg.value,
+                                        fullPath: path,
                                         path: pathIndex,
                                         pathPosition: i,
                                         behavior: path[i],
@@ -296,6 +297,7 @@ export class DesignValidator {
                                         // Add invariant
                                         this.invariants.push({
                                             path: entry.index,
+                                            fullPath: entry.fullPath,
                                             pathPosition: entry.pathPosition,
                                             behavior: entry.behavior,
                                             transformBehavior: entry.transformBehavior,
