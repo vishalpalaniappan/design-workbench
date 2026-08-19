@@ -363,18 +363,31 @@ export class DesignValidator {
          * Here I will generate the AST that will be synthesized into
          * an implementation that will be executed. The approach is,
          * on the path, find the select block that involves the participants
-         * in the invariant. If they are synthesize that behavior with the
+         * in the invariant. If found, synthesize that behavior with the
          * select block, the next behavior that is selected should not
          * be the same as the invariant path.
          *
          * I will set the semantically invalid state inside the block and then
-         * evaluate.
+         * execute the block.
          *
          * I will actually add a testing helper function which I will include
          * that will evaluate the results of the test directly in the script
          * and it will log the result. If there are no select blocks which
          * include the invariant participants, then the semantically invalid
          * state will persist, so we already know that it fails.
+         *
+         * So the results of the test will be logged into a testing folder and
+         * then I will read those files and visualize which invariants are
+         * respected and which ones aren't. Eventually, I can move all the tests
+         * into a single script, then a single log file will have the result of
+         * the invariant tests.
+         *
+         * Also, I just wanted to say that the code is being built in a very
+         * adhoc way, meaning, I just keep adding and removing things as I get
+         * new ideas and follow different paths. As a result, its not the
+         * easiest to follow but I just move forward to get meaningful results
+         * and the rest can be addressed in a rewrite and writing maintainble
+         * code isn't my objective right now.
          */
     }
 
