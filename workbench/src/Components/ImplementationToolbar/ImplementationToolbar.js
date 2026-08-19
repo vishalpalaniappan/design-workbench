@@ -193,7 +193,7 @@ export function ImplementationToolbar () {
                 <span className="mainToolBarSelect" >
                     <select
                         value={selectedInvariant}
-                        onChange={(e) => setSelectedTrace(e.target.value)}>
+                        onChange={(e) => setSelectedInvariant(e.target.value)}>
                         <option key={"none"} value={null}>None</option>
                         {
                             invariants && Object.values(invariants).map((invariant) => (
