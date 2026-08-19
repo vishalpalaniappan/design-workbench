@@ -63,6 +63,7 @@ export class DesignValidator {
                         worldState: [],
                         transformations: [],
                         nextBehaviors: [],
+                        dalAst: child,
                     });
                     this.processChild(child);
                     this.processTree(child);
@@ -371,7 +372,6 @@ export class DesignValidator {
         const foundSelectBlocks = [];
         for (const node of inv.fullPath) {
             const behavior = this.getBehavior(node);
-            console.log(behavior);
             for (const selectBlock of behavior.select) {
                 const participants = [];
                 for (const entry of selectBlock.worldState) {
