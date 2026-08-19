@@ -377,34 +377,37 @@ export class DesignValidator {
         for (const [index, node] of Object.entries(inv.fullPath)) {
             const behavior = this.getBehavior(node);
 
+            // Semantic restoration happens in dedicated behaviors
+            // only one select block with only one evaluated condition.
+            if (behavior.select.length > 1) continue;
+
             // Visit each select block in the behavior to evaluate
-            for (const selectBlock of behavior.select) {
-                const participants = [];
+            const selectBlock = behavior.select[0];
+            const participants = [];
 
-                // Get all the participants involved in this select block
-                for (const entry of selectBlock.worldState) {
-                    const name = entry.find((e) => e.arg === "name");
-                    if (participants.includes(name.value)) continue;
-                    participants.push(name.value);
-                }
+            // Get all the participants involved in this select block
+            for (const entry of selectBlock.worldState) {
+                const name = entry.find((e) => e.arg === "name");
+                if (participants.includes(name.value)) continue;
+                participants.push(name.value);
+            }
 
-                // If invariant participants and select participants are same
-                // then add it to selected block to be evaluated.
-                if (participants.length > 0) {
-                    const isValid = isEqual(sortBy(participants), sortBy(invParticipants));
-                    console.log("Behavior Name:", behavior.name);
-                    console.log(participants, invParticipants, isValid);
+            // If invariant participants and select participants are same
+            // then add it to selected block to be evaluated.
+            if (participants.length > 0) {
+                const isValid = isEqual(sortBy(participants), sortBy(invParticipants));
+                console.log("Behavior Name:", behavior.name);
+                console.log("Select:", participants, "Invariant:", invParticipants, isValid);
 
-                    if (isValid) {
-                        // Save the behavior, the select block to synthesize and
-                        // the next beahvior that should not be observed.
-                        foundSelectBlocks.push({
-                            invariantName: name,
-                            behavior: behavior.name,
-                            select: selectBlock,
-                            nextBehaviorInInvPath: inv.fullPath[index + 1]
-                        });
-                    }
+                if (isValid) {
+                    // Save the behavior, the select block to synthesize and
+                    // the next beahvior that should not be observed.
+                    foundSelectBlocks.push({
+                        invariantName: name,
+                        behavior: behavior.name,
+                        select: selectBlock,
+                        nextBehaviorInInvPath: inv.fullPath[Number(index) + 1]
+                    });
                 }
             }
         }
