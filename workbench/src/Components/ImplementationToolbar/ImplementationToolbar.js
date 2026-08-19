@@ -61,10 +61,10 @@ export function ImplementationToolbar () {
     }, []);
 
     const evaluateInvariant = useCallback(() => {
-        if (workbench) {
-            console.log(workbench);
+        if (workbench && selectedInvariant && "validator" in workbench) {
+            workbench.validator.testInvariant(selectedInvariant);
         }
-    }, [workbench]);
+    }, [workbench, selectedInvariant]);
 
     const openTraceInEditor = useCallback(async (e) => {
         e.stopPropagation();

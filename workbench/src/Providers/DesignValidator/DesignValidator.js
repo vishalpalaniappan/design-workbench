@@ -351,12 +351,31 @@ export class DesignValidator {
     /**
      * Tests that the behavior of the design prevents semantically
      * invalid states from persisting in the design.
+     * 
+     * @param {String} name
      */
-    testInvariants () {
-        // Starting with just a single invariant
-        const invariant = this.invariants[0];
+    testInvariant (name) {
+        const inv = this.invariants.find((inv) => inv.name === name);
 
-        console.log(invariant);
+        console.log("Creating AST to test invariant:", inv);
+
+        /**
+         * Here I will generate the AST that will be synthesized into
+         * an implementation that will be executed. The approach is,
+         * on the path, find the select block that involves the participants
+         * in the invariant. If they are synthesize that behavior with the
+         * select block, the next behavior that is selected should not
+         * be the same as the invariant path.
+         *
+         * I will set the semantically invalid state inside the block and then
+         * evaluate.
+         *
+         * I will actually add a testing helper function which I will include
+         * that will evaluate the results of the test directly in the script
+         * and it will log the result. If there are no select blocks which
+         * include the invariant participants, then the semantically invalid
+         * state will persist, so we already know that it fails.
+         */
     }
 
 
