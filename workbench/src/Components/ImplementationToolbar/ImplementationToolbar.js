@@ -56,6 +56,10 @@ export function ImplementationToolbar () {
         console.log("Active Tab:", activeTab);
     }, [activeTab]);
 
+    useEffect(() => {
+        synthesizeDesign();
+    }, []);
+
     const evaluateInvariant = useCallback(() => {
         if (workbench) {
             console.log(workbench);
