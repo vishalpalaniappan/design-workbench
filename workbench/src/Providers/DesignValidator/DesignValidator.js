@@ -367,28 +367,42 @@ export class DesignValidator {
         console.log("");
         console.log("Creating AST to test invariant:", inv);
 
+        // Participants in the invariant
         const invParticipants = inv.participants.map((e) => e.value);
 
+        // Valid blocks to synthesize and test
         const foundSelectBlocks = [];
-        for (const node of inv.fullPath) {
+
+        // Walk the entire invariant path
+        for (const [index, node] of Object.entries(inv.fullPath)) {
             const behavior = this.getBehavior(node);
+
+            // Visit each select block in the behavior to evaluate
             for (const selectBlock of behavior.select) {
                 const participants = [];
+
+                // Get all the participants involved in this select block
                 for (const entry of selectBlock.worldState) {
                     const name = entry.find((e) => e.arg === "name");
                     if (participants.includes(name.value)) continue;
                     participants.push(name.value);
                 }
 
+                // If invariant participants and select participants are same
+                // then add it to selected block to be evaluated.
                 if (participants.length > 0) {
                     const isValid = isEqual(sortBy(participants), sortBy(invParticipants));
                     console.log("Behavior Name:", behavior.name);
                     console.log(participants, invParticipants, isValid);
 
                     if (isValid) {
+                        // Save the behavior, the select block to synthesize and
+                        // the next beahvior that should not be observed.
                         foundSelectBlocks.push({
+                            invariantName: name,
                             behavior: behavior.name,
                             select: selectBlock,
+                            nextBehaviorInInvPath: inv.fullPath[index + 1]
                         });
                     }
                 }
