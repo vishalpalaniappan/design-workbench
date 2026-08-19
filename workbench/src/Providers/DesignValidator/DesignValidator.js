@@ -1,3 +1,6 @@
+import isEqual from "lodash/isEqual";
+import sortBy from "lodash/sortBy";
+
 import {getInvariantBlock} from "./DalAstHelper";
 import {DesignGraph} from "./DesignGraph";
 
@@ -318,7 +321,7 @@ export class DesignValidator {
                                         });
                                         if (invExists) continue;
 
-                                        const name = entry.behavior + "_" + 
+                                        const name = entry.behavior + "_" +
                                             entry.transformBehavior + "_"+
                                             entry["transformation"].slice(1) +
                                             "_invariant_" + indexStr;
@@ -351,23 +354,32 @@ export class DesignValidator {
     /**
      * Tests that the behavior of the design prevents semantically
      * invalid states from persisting in the design.
-     * 
+     *
      * @param {String} name
      */
     testInvariant (name) {
         const inv = this.invariants.find((inv) => inv.name === name);
 
+        console.log("");
         console.log("Creating AST to test invariant:", inv);
+
+        const invParticipants = inv.participants.map((e) => e.value);
 
         for (const node of inv.fullPath) {
             const behavior = this.getBehavior(node);
-            console.log(behavior);
 
-            // Collect Participants in Invariant Block
+            const participants = [];
+            for (const entry of behavior.select.worldState) {
+                const name = entry.find((e) => e.arg === "name");
+                if (participants.includes(name.value)) continue;
+                participants.push(name.value);
+            }
 
-            // Check if Participants match invariant participants
-
-            // Add select block to be evaluated with pass and fail case
+            if (participants.length > 0) {
+                const isValid = isEqual(sortBy(participants), sortBy(invParticipants));
+                console.log("Behavior Name:", behavior.name);
+                console.log(participants, invParticipants, isValid);
+            }
         }
     }
 
