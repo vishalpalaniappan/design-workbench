@@ -9,10 +9,9 @@ import {useModalManager} from "ui-layout-manager-dev";
 
 import {useDalEngine} from "../../Providers/GlobalProviders";
 import {useServer} from "../../Providers/GlobalProviders";
-import {useWorkbench} from "../../Providers/GlobalProviders";
 import {incrementCounter, setStatusMsg} from "../../Store/appSlice";
 import {deleteTraceThunk} from "../../Store/appThunk";
-import {useHasEntryPoint} from "../../Store/useAppSelection";
+import {useHasEntryPoint, useWorkbenchRedux} from "../../Store/useAppSelection";
 import {useTraces} from "../../Store/useAppSelection";
 import {useActiveTab} from "../../Store/useAppSelection";
 import {AddTraceName} from "../Modals/AddTraceName";
@@ -37,7 +36,10 @@ export function ImplementationToolbar () {
     const [selectedTrace, setSelectedTrace] = useState(null);
     const [selectedVerbosity, setSelectedVerbosity] = useState("minimal");
     const activeTab = useActiveTab();
-    const {workbench} = useWorkbench();
+    const {workbench} = useWorkbenchRedux();
+
+    const [invariants, setInvariants] = useState([]);
+    const [selectedInvariant, setSelectedInvariant] = useState();
 
     const saveFile = useCallback(() => {
         if (workbench && activeTab) {
@@ -53,6 +55,12 @@ export function ImplementationToolbar () {
     useEffect(() => {
         console.log("Active Tab:", activeTab);
     }, [activeTab]);
+
+    const evaluateInvariant = useCallback(() => {
+        if (workbench) {
+            console.log(workbench);
+        }
+    }, [workbench]);
 
     const openTraceInEditor = useCallback(async (e) => {
         e.stopPropagation();
@@ -142,6 +150,12 @@ export function ImplementationToolbar () {
                     break;
                 }
             }
+            if (workbench && "validator" in workbench && "invariants" in workbench.validator) {
+                setInvariants(workbench?.validator?.invariants);
+                if (workbench.validator.invariants.length > 0) {
+                    setSelectedInvariant(workbench.validator.invariants[0].name);
+                }
+            }
             dispatch(incrementCounter());
         }
     }, [workbench, dispatch, selectedVerbosity]);
@@ -173,24 +187,29 @@ export function ImplementationToolbar () {
     return (
         <div className="mainToolBar">
             <div className="mainToolBarLeft">
-                {/* Temporary Changes to Name */}
-                <span className="mainToolBarLabel">Design</span>
             </div>
             <div className="mainToolBarRight">
-                <span className="mainToolBarLabel">Environment:</span>
+                {/* <span className="mainToolBarLabel">Environment:</span> */}
                 <span className="mainToolBarSelect" >
                     <select
-                        value={selectedTrace}
+                        value={selectedInvariant}
                         onChange={(e) => setSelectedTrace(e.target.value)}>
                         <option key={"none"} value={null}>None</option>
                         {
-                            traces && Object.values(traces).map((trace) => (
-                                <option key={trace.uid} value={trace.uid}>{
-                                    (trace?.name ? trace.name : trace.timestamp)
+                            invariants && Object.values(invariants).map((invariant) => (
+                                <option key={invariant.name} value={invariant.name}>{
+                                    (invariant?.name )
                                 }</option>
                             ))
                         }
                     </select>
+                </span>
+                <span className="mainToolBarButton" onClick={evaluateInvariant}>
+                    <Play
+                        size={20}
+                        className="mainToolBarButton"
+                        style={{"color": "white", "cursor": "pointer", "padding": "0 5px"}}/>
+                    <span >Test Invariant</span>
                 </span>
                 <span className="debuggingToolBarButton"
                     onClick={setTraceName}

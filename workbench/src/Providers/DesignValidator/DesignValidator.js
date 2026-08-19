@@ -318,8 +318,14 @@ export class DesignValidator {
                                         });
                                         if (invExists) continue;
 
+                                        const name = entry.behavior + "_" + 
+                                            entry.transformBehavior + "_"+
+                                            entry["transformation"].slice(1) +
+                                            "_invariant_" + indexStr;
+
                                         // Add invariant
                                         this.invariants.push({
+                                            name: name,
                                             path: entry.index,
                                             fullPath: entry.fullPath,
                                             pathPosition: entry.pathPosition,
