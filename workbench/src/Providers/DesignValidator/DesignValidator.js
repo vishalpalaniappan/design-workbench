@@ -33,8 +33,8 @@ export class DesignValidator {
         console.log(this.behaviors);
         console.log("Created:", this.created);
         this.identifyProvenance();
-        // this.addInvariants(this.ast);
-        this.testInvariants();
+        this.addInvariants(this.ast);
+        // this.testInvariants();
         console.log(this.ast);
         return this.behaviors;
     }

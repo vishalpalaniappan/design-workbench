@@ -88,6 +88,11 @@ export const getInvariantBlock = (invariant) => {
                 "type": "string",
                 "value": invCmd,
             },
+            {
+                "arg": null,
+                "type": "string",
+                "value": "evaluate",
+            },
         ].concat(invariant.participants.map((inv) => {
             return {
                 "arg": null,
