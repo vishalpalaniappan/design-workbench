@@ -29,10 +29,12 @@ export class DesignValidator {
      */
     run () {
         this.processTree(this.ast);
+
         console.log(this.behaviors);
         console.log("Created:", this.created);
         this.identifyProvenance();
-        this.addInvariants(this.ast);
+        // this.addInvariants(this.ast);
+        this.testInvariants();
         console.log(this.ast);
         return this.behaviors;
     }
@@ -56,6 +58,7 @@ export class DesignValidator {
                     this.mode = "select";
                     this.processChild(child);
                     this.processTree(child);
+                    this.mode = "behavior";
                 } else {
                     this.processChild(child);
                     this.processTree(child);
@@ -74,13 +77,11 @@ export class DesignValidator {
         const c = child["command"];
 
         let writeTo;
-        if (this.mode === "") {
+        if (this.mode === "behavior") {
             writeTo = this.currentBehavior;
         } else if (this.mode === "select") {
             writeTo = this.currentBehavior.select;
         }
-
-        if (!writeTo) return;
 
         if (t === "cmd") {
             if (c === "goToBehavior") {
@@ -341,6 +342,17 @@ export class DesignValidator {
         console.log(this.invariants);
     }
 
+    /**
+     * Tests that the behavior of the design prevents semantically
+     * invalid states from persisting in the design.
+     */
+    testInvariants () {
+        // Starting with just a single invariant
+        const invariant = this.invariants[0];
+
+        console.log(invariant);
+    }
+
 
     /**
      * Get the behavior.
@@ -411,14 +423,14 @@ export class DesignValidator {
         }
 
         path.push(startBehavior);
-        if (currBehavior.nextBehaviors.length > 1) {
-            for (const next of currBehavior.nextBehaviors) {
+        if (currBehavior.select.nextBehaviors.length > 1) {
+            for (const next of currBehavior.select.nextBehaviors) {
                 if (!path.includes(next)) {
                     this.walkPath(next, endBehavior, [...path]);
                 }
             }
-        } else if (currBehavior.nextBehaviors.length === 1) {
-            this.walkPath(currBehavior.nextBehaviors[0], endBehavior, [...path]);
+        } else if (currBehavior.select.nextBehaviors.length === 1) {
+            this.walkPath(currBehavior.select.nextBehaviors[0], endBehavior, [...path]);
         }
     }
 }
