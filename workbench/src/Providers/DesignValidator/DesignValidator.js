@@ -474,6 +474,31 @@ export class DesignValidator {
                      * - If it fails and there isn't, indicate that the
                      *   design is internally inconsistent.
                      **/
+
+                    for (const invariant of foundInvariants) {
+                        const path = invariant.fullPath;
+
+                        // Find invariant behavior and the next behavior on path
+                        const index = path.findIndex((inv) => inv === invariant.behaviorName);
+                        const currBehavior = path[index];
+                        const nextBehavior = path[index + 1];
+
+                        // From behavior, get goTo meta (valid/restoring path)
+                        const behavior = this.getBehavior(invariant.behavior);
+                        const goTo = behavior.nextBehaviors.find((b) => b.valid === nextBehavior);
+
+                        console.log("");
+                        console.log(`From ${currBehavior} to ${nextBehavior}`);
+                        console.log(`Restoring: ${goTo?.restoring}`);
+
+                        // TODO:
+                        // Create behavior nodes for each of the invariants
+                        // Populate behavior node with control flow
+                        // Chain behaviors
+                        // Last invariant behavior connects to nextBehavior
+                        // CurrBehavior connects to first invariant behavior
+                        // Change valid of goTo to the first invariant in chain
+                    }
                 } else {
                     this.addInvariants(child);
                 }
