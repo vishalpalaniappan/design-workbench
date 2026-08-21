@@ -485,7 +485,7 @@ export class DesignValidator {
 
                         console.log("");
                         console.log(`From ${index}, ${currBehavior} to ${nextBehavior}`);
-                        console.log(`Restoring: ${behavior.nextBehaviors}`);
+                        console.log(`Restoring: ${goTo.restoring}`);
 
                         // TODO:
                         // - Create behavior nodes for each of the invariants
@@ -505,7 +505,22 @@ export class DesignValidator {
                         //   design
 
                         if (goTo?.restoring) {
-                            this.newNodes.push(new BehaviorNode(invariant.name).get());
+                            // Point behavior to first invariant
+                            for (const n of child.body) {
+                                if (n.type === "select") {
+                                    for (const e of n.body) {
+                                        if (e?.command === "goToBehavior") {
+                                            const f = e.args.find((a) => a.value === nextBehavior);
+                                            f.value = invariant.name;
+                                        }
+                                    }
+                                }
+                            }
+
+
+                            const newBehavior = new BehaviorNode(invariant.name);
+                            newBehavior.addNextBehavior(nextBehavior);
+                            this.newNodes.push(newBehavior.get());
                         }
                     }
                 } else {

@@ -29,6 +29,31 @@ class BehaviorNode {
     get () {
         return this.node;
     }
+
+    /**
+     * Add next behavior
+     * @param {String} behavior
+     */
+    addNextBehavior (behavior) {
+        const e = {
+            "type": "select",
+            "args": [],
+            "body": [
+                {
+                    "type": "cmd",
+                    "command": "goToBehavior",
+                    "args": [
+                        {
+                            "arg": "default",
+                            "type": "name",
+                            "value": behavior,
+                        }
+                    ],
+                },
+            ],
+        };
+        this.node.body.push(e);
+    }
 }
 
 export default BehaviorNode;
