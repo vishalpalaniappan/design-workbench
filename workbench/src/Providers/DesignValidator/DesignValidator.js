@@ -449,14 +449,30 @@ export class DesignValidator {
                 if (child["type"] === "behavior") {
                     this.addInvariants(child);
 
+                    const foundInvariants = [];
                     for (const invariant of this.invariants) {
-                        if (invariant.behavior !== child["behaviorName"]) {
-                            continue;
-                        }
+                        if (invariant.behavior !== child["behaviorName"]) continue;
+
+                        foundInvariants.push(invariant);
 
                         const invariantBlock = getInvariantBlock(invariant);
                         child.body.splice(child.body.length - 1, 0, invariantBlock);
                     };
+
+                    /**
+                     * TODO:
+                     * For each of the invariants in this block:
+                     * - Find the node in the path and the next behavior
+                     * - Find valid and invalid path between behaviors
+                     *   - Boundary invariants will have restoring path
+                     *   - Internal invariants will not
+                     * - Chain each invariant from behavior to next behavior
+                     *   along the path.
+                     * - If invariant succeeds, move along chain
+                     * - If it fails and there is a restoring path, select it.
+                     * - If it fails and there isn't, indicate that the
+                     *   design is internally inconsistent.
+                     **/
                 } else {
                     this.addInvariants(child);
                 }
