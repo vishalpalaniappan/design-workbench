@@ -41,7 +41,8 @@ export class DesignValidator {
         // Add invariant nodes
         this.newNodes = [];
         this.addInvariants(this.ast);
-        this.ast.body = this.ast.body.concat(this.newNodes);
+
+        this.ast.body.splice(this.ast.body.length - 1, 0, ...this.newNodes);
 
         // this.testInvariants();
         console.log(this.ast);
