@@ -472,10 +472,12 @@ export class DesignValidator {
                         const currBehavior = path[index];
                         const nextBehavior = path[index + 1];
 
+                        // Temporarily grouping the invariants that make the
+                        // same behavioral transitions by using the names to
+                        // create a key. This is obviously not great because
+                        // the name can have a _ in it but its fine for now.
                         const grouped = currBehavior + "_" + nextBehavior;
-                        if (!(grouped in foundInvariants)) {
-                            foundInvariants[grouped] = [];
-                        }
+                        if (!(grouped in foundInvariants)) foundInvariants[grouped] = [];
 
                         foundInvariants[grouped].push(invariant);
 
@@ -506,7 +508,7 @@ export class DesignValidator {
         if (grouped.length === 0) return;
 
         let prevBehavior = null;
-        for (const [groupIndex, invariant] of Object.entries(grouped)) {
+        for (const invariant of grouped) {
             const path = invariant.fullPath;
 
             // Find invariant behavior and the next behavior on path
@@ -544,7 +546,7 @@ export class DesignValidator {
                 this.newNodes.push(newBehavior.get());
 
                 if (prevBehavior) {
-                    // Connect prev beahavior to this one
+                    // Connect prev invariant to this invariant (chain them)
                     prevBehavior.addNextBehavior(invariant.name);
                 } else {
                     // Point behavior to first invariant
