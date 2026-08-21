@@ -461,17 +461,10 @@ export class DesignValidator {
                 if (child["type"] === "behavior") {
                     this.addInvariants(child);
 
-                    const foundInvariants = [];
+                    const foundInvariants = {};
                     for (const invariant of this.invariants) {
                         if (invariant.behavior !== child["behaviorName"]) continue;
 
-                        foundInvariants.push(invariant);
-
-                        const invariantBlock = getInvariantBlock(invariant);
-                        child.body.splice(child.body.length - 1, 0, invariantBlock);
-                    };
-
-                    for (const invariant of foundInvariants) {
                         const path = invariant.fullPath;
 
                         // Find invariant behavior and the next behavior on path
@@ -479,55 +472,101 @@ export class DesignValidator {
                         const currBehavior = path[index];
                         const nextBehavior = path[index + 1];
 
-                        // From behavior, get goTo meta (valid/restoring path)
-                        const behavior = this.getBehavior(invariant.behavior);
-                        const goTo = behavior.nextBehaviors.find((b) => b.valid === nextBehavior);
-
-                        console.log("");
-                        console.log(`From ${index}, ${currBehavior} to ${nextBehavior}`);
-                        console.log(`Restoring: ${goTo.restoring}`);
-
-                        // TODO:
-                        // - Create behavior nodes for each of the invariants
-                        // - Populate behavior node with control flow
-                        //    - Restore for boundary inv
-                        //    - Block for internal inv (inconsistent design)
-                        // - Chain behaviors
-                        // - Last invariant behavior connects to nextBehavior
-                        // - CurrBehavior connects to first invariant behavior
-                        // - Set valid behavior path for current goto to the
-                        //   first invariant in the list
-                        //
-                        // This automatically establishes:
-                        // - restoring path in the case of semantic invalidity
-                        //   caused by inputs
-                        // - blocking path in case of internally incosistent
-                        //   design
-
-                        if (goTo?.restoring) {
-                            // Point behavior to first invariant
-                            for (const n of child.body) {
-                                if (n.type === "select") {
-                                    for (const e of n.body) {
-                                        if (e?.command === "goToBehavior") {
-                                            const f = e.args.find((a) => a.value === nextBehavior);
-                                            f.value = invariant.name;
-                                        }
-                                    }
-                                }
-                            }
-
-
-                            const newBehavior = new BehaviorNode(invariant.name);
-                            newBehavior.addNextBehavior(nextBehavior);
-                            this.newNodes.push(newBehavior.get());
+                        const grouped = currBehavior + "_" + nextBehavior;
+                        if (!(grouped in foundInvariants)) {
+                            foundInvariants[grouped] = [];
                         }
+
+                        foundInvariants[grouped].push(invariant);
+
+                        const invariantBlock = getInvariantBlock(invariant);
+                        child.body.splice(child.body.length - 1, 0, invariantBlock);
+                    };
+
+                    if (Object.keys(foundInvariants).length === 0) continue;
+
+                    for (const groupName of Object.keys(foundInvariants)) {
+                        this.processInavariantGroup(child, groupName, foundInvariants[groupName]);
                     }
                 } else {
                     this.addInvariants(child);
                 }
             }
         }
+    }
+
+
+    /**
+     * Processes the group of invariants.
+     * @param {Object} behaviorNode
+     * @param {String} groupName
+     * @param {Array} grouped
+     */
+    processInavariantGroup (behaviorNode, groupName, grouped) {
+        if (grouped.length === 0) return;
+
+        let prevBehavior = null;
+        for (const [groupIndex, invariant] of Object.entries(grouped)) {
+            const path = invariant.fullPath;
+
+            // Find invariant behavior and the next behavior on path
+            const index = path.findIndex((b) => b === invariant.behavior);
+            const currBehavior = path[index];
+            const nextBehavior = path[index + 1];
+
+            // From behavior, get goTo meta (valid/restoring path)
+            const behavior = this.getBehavior(invariant.behavior);
+            const goTo = behavior.nextBehaviors.find((b) => b.valid === nextBehavior);
+
+            console.log("");
+            console.log(`From ${index}, ${currBehavior} to ${nextBehavior}`);
+            console.log(`Restoring: ${goTo.restoring}`);
+
+            // TODO:
+            // - Create behavior nodes for each of the invariants
+            // - Populate behavior node with control flow
+            //    - Restore for boundary inv
+            //    - Block for internal inv (inconsistent design)
+            // - Chain behaviors
+            // - Last invariant behavior connects to nextBehavior
+            // - CurrBehavior connects to first invariant behavior
+            // - Set valid behavior path for current goto to the
+            //   first invariant in the list
+            //
+            // This automatically establishes:
+            // - restoring path in the case of semantic invalidity
+            //   caused by inputs
+            // - blocking path in case of internally incosistent
+            //   design
+
+            if (true || goTo?.restoring) {
+                const newBehavior = new BehaviorNode(invariant.name);
+                this.newNodes.push(newBehavior.get());
+
+                if (prevBehavior) {
+                    // Connect prev beahavior to this one
+                    prevBehavior.addNextBehavior(invariant.name);
+                } else {
+                    // Point behavior to first invariant
+                    for (const n of behaviorNode.body) {
+                        if (n.type === "select") {
+                            for (const e of n.body) {
+                                if (e?.command === "goToBehavior") {
+                                    const nextBehavior = groupName.split("_")[1];
+                                    const f = e.args.find((a) => a.value === nextBehavior);
+                                    if (f === -1) continue;
+                                    f.value = invariant.name;
+                                }
+                            }
+                        }
+                    }
+                    newBehavior.addNextBehavior(groupName.split("_")[1]);
+                }
+                prevBehavior = newBehavior;
+            }
+        }
+        // For last invariant, connect to next behavior
+        prevBehavior.addNextBehavior(groupName.split("_")[1]);
     }
 
     /**
