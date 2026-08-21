@@ -463,7 +463,8 @@ export class DesignValidator {
                      * TODO:
                      * For each of the invariants in this block:
                      * - Find the node in the path and the next behavior
-                     * - Find valid and invalid path between behaviors
+                     *   in the path.
+                     * - Find default and restoring path between behaviors
                      *   - Boundary invariants will have restoring path
                      *   - Internal invariants will not
                      * - Chain each invariant from behavior to next behavior
