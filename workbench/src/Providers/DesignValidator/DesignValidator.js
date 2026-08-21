@@ -95,8 +95,16 @@ export class DesignValidator {
 
         if (t === "cmd") {
             if (c === "goToBehavior") {
-                writeTo.nextBehaviors.push(child.args[0].value);
-                this.currentBehavior.nextBehaviors.push(child.args[0].value);
+                const valid = child.args.find((a) => a.arg === "default" || a.arg === null);
+                const invalid = child.args.find((a) => a.arg === "invalid");
+
+                const nextBehavior = {
+                    "valid": valid.value,
+                    "invalid": invalid?invalid.value:null,
+                };
+
+                writeTo.nextBehaviors.push(nextBehavior);
+                this.currentBehavior.nextBehaviors.push(nextBehavior);
             } else if (c === "worldStateManager") {
                 writeTo.worldState.push(child.args);
             }
@@ -493,12 +501,12 @@ export class DesignValidator {
         path.push(startBehavior);
         if (currBehavior.nextBehaviors.length > 1) {
             for (const next of currBehavior.nextBehaviors) {
-                if (!path.includes(next)) {
-                    this.walkPath(next, endBehavior, [...path]);
+                if (!path.includes(next.valid)) {
+                    this.walkPath(next.valid, endBehavior, [...path]);
                 }
             }
         } else if (currBehavior.nextBehaviors.length === 1) {
-            this.walkPath(currBehavior.nextBehaviors[0], endBehavior, [...path]);
+            this.walkPath(currBehavior.nextBehaviors[0].valid, endBehavior, [...path]);
         }
     }
 }
