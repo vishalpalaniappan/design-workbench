@@ -96,11 +96,11 @@ export class DesignValidator {
         if (t === "cmd") {
             if (c === "goToBehavior") {
                 const valid = child.args.find((a) => a.arg === "default" || a.arg === null);
-                const invalid = child.args.find((a) => a.arg === "invalid");
+                const restoring = child.args.find((a) => a.arg === "restoring");
 
                 const nextBehavior = {
                     "valid": valid.value,
-                    "invalid": invalid?invalid.value:null,
+                    "restoring": restoring?restoring.value:null,
                 };
 
                 writeTo.nextBehaviors.push(nextBehavior);
