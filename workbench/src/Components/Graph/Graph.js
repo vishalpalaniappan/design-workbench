@@ -78,6 +78,8 @@ export function Graph () {
                 deleteTransition={deleteTransition}
                 deleteBehavior={deleteBehavior}
                 selectBehavior={selectBehavior}
+                width={6000}
+                height={6000}
             />
         </div>
     );
