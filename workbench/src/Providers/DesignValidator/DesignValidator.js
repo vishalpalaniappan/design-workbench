@@ -1,6 +1,7 @@
 import isEqual from "lodash/isEqual";
 import sortBy from "lodash/sortBy";
 
+import BehaviorNode from "./DalAst/BehaviorNode";
 import {getInvariantBlock} from "./DalAstHelper";
 import {DesignGraph} from "./DesignGraph";
 
@@ -36,9 +37,20 @@ export class DesignValidator {
         console.log(this.behaviors);
         console.log("Created:", this.created);
         this.identifyProvenance();
+
+        // Add invariant nodes
+        this.newNodes = [];
         this.addInvariants(this.ast);
+        this.ast.body = this.ast.body.concat(this.newNodes);
+
         // this.testInvariants();
         console.log(this.ast);
+
+        // Recalculate the behaviors after the nodes have been added
+        this.behaviors = [];
+        this.processTree(this.ast);
+
+        // Return the behaviors
         return this.behaviors;
     }
 
@@ -414,7 +426,7 @@ export class DesignValidator {
                         invariantName: name,
                         behavior: behavior.name,
                         select: selectBlock,
-                        nextBehaviorInInvPath: inv.fullPath[Number(index) + 1]
+                        nextBehaviorInInvPath: inv.fullPath[Number(index) + 1],
                     });
                 }
             }
@@ -463,7 +475,7 @@ export class DesignValidator {
                         const path = invariant.fullPath;
 
                         // Find invariant behavior and the next behavior on path
-                        const index = path.findIndex((inv) => inv === invariant.behaviorName);
+                        const index = path.findIndex((b) => b === invariant.behavior);
                         const currBehavior = path[index];
                         const nextBehavior = path[index + 1];
 
@@ -472,8 +484,8 @@ export class DesignValidator {
                         const goTo = behavior.nextBehaviors.find((b) => b.valid === nextBehavior);
 
                         console.log("");
-                        console.log(`From ${currBehavior} to ${nextBehavior}`);
-                        console.log(`Restoring: ${goTo?.restoring}`);
+                        console.log(`From ${index}, ${currBehavior} to ${nextBehavior}`);
+                        console.log(`Restoring: ${behavior.nextBehaviors}`);
 
                         // TODO:
                         // - Create behavior nodes for each of the invariants
@@ -491,6 +503,10 @@ export class DesignValidator {
                         //   caused by inputs
                         // - blocking path in case of internally incosistent
                         //   design
+
+                        if (goTo?.restoring) {
+                            this.newNodes.push(new BehaviorNode(invariant.name).get());
+                        }
                     }
                 } else {
                     this.addInvariants(child);

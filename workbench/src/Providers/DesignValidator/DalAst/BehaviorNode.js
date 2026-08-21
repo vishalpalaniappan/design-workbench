@@ -21,6 +21,14 @@ class BehaviorNode {
             "body": [],
         };
     }
+
+    /**
+     * Returns the DAL Ast node
+     * @return {Object}
+     */
+    get () {
+        return this.node;
+    }
 }
 
 export default BehaviorNode;
