@@ -459,22 +459,6 @@ export class DesignValidator {
                         child.body.splice(child.body.length - 1, 0, invariantBlock);
                     };
 
-                    /**
-                     * TODO:
-                     * For each of the invariants in this block:
-                     * - Find the node in the path and the next behavior
-                     *   in the path.
-                     * - Find default and restoring path between behaviors
-                     *   - Boundary invariants will have restoring path
-                     *   - Internal invariants will not
-                     * - Chain each invariant from behavior to next behavior
-                     *   along the path.
-                     * - If invariant succeeds, move along chain
-                     * - If it fails and there is a restoring path, select it.
-                     * - If it fails and there isn't, indicate that the
-                     *   design is internally inconsistent.
-                     **/
-
                     for (const invariant of foundInvariants) {
                         const path = invariant.fullPath;
 
@@ -492,12 +476,21 @@ export class DesignValidator {
                         console.log(`Restoring: ${goTo?.restoring}`);
 
                         // TODO:
-                        // Create behavior nodes for each of the invariants
-                        // Populate behavior node with control flow
-                        // Chain behaviors
-                        // Last invariant behavior connects to nextBehavior
-                        // CurrBehavior connects to first invariant behavior
-                        // Change valid of goTo to the first invariant in chain
+                        // - Create behavior nodes for each of the invariants
+                        // - Populate behavior node with control flow
+                        //    - Restore for boundary inv
+                        //    - Block for internal inv (inconsistent design)
+                        // - Chain behaviors
+                        // - Last invariant behavior connects to nextBehavior
+                        // - CurrBehavior connects to first invariant behavior
+                        // - Set valid behavior path for current goto to the
+                        //   first invariant in the list
+                        //
+                        // This automatically establishes:
+                        // - restoring path in the case of semantic invalidity
+                        //   caused by inputs
+                        // - blocking path in case of internally incosistent
+                        //   design
                     }
                 } else {
                     this.addInvariants(child);
