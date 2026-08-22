@@ -32,7 +32,8 @@ export function Graph () {
             const behaviors = workbench.workbench.validator.behaviors;
             setBehaviors(behaviors);
             for (const behavior of behaviors) {
-                const next = behavior["nextBehaviors"].map((n) => n.valid);
+                // Filtering empty behavior names (internal inv blocking output)
+                const next = behavior["nextBehaviors"].map((n) => n.valid).filter((n) => n !== "");
                 engine.addNode(behavior["name"], "", next);
             }
             editorRef.current.updateEngine(engine);
