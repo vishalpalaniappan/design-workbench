@@ -1,4 +1,4 @@
-export const getInvBlock = (invariant) => {
+export const getInvBlock = (invariant, goToBehavior) => {
     const invCmd = invariant["transformation"].slice(1) +
             "_invariant_" + invariant["index"];
 
@@ -153,6 +153,22 @@ export const getInvBlock = (invariant) => {
             setInvariantViolation,
         ],
     };
+
+    if (goToBehavior) {
+        ifInvariantViolated.body.push(
+            {
+                "type": "cmd",
+                "command": "goToBehavior",
+                "args": [
+                    {
+                        "arg": null,
+                        "type": "string",
+                        "value": goToBehavior,
+                    },
+                ],
+            }
+        );
+    }
 
     // Create node if participant exists
     const ifParticipantsExist = {

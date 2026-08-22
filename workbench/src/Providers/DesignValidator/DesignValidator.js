@@ -541,17 +541,20 @@ export class DesignValidator {
 
 
             const newBehavior = new BehaviorNode(invariant.name);
-            const block = getInvBlock(invariant);
-            newBehavior.node.body.push(block);
-            this.newNodes.push(newBehavior.get());
+            let block;
 
             if (goTo?.restoring) {
                 // Add restoring logic here, if invariant is violated
                 // go to restoring path otherwise continue.
+                block = getInvBlock(invariant, goTo?.restoring);
             } else {
                 // If internal invariant is violated, it is blocking
                 // because it should never be reached.
+                block = getInvBlock(invariant);
             }
+
+            newBehavior.node.body.push(block);
+            this.newNodes.push(newBehavior.get());
 
             if (prevBehavior) {
                 // Connect prev invariant to this invariant (chain them)
