@@ -2,7 +2,7 @@ import isEqual from "lodash/isEqual";
 import sortBy from "lodash/sortBy";
 
 import BehaviorNode from "./DalAst/BehaviorNode";
-import {getInvariantBlock} from "./DalAstHelper";
+import {getInvBlock} from "./DalAst/GetInvBlock";
 import {DesignGraph} from "./DesignGraph";
 
 /**
@@ -481,9 +481,6 @@ export class DesignValidator {
                         if (!(grouped in foundInvariants)) foundInvariants[grouped] = [];
 
                         foundInvariants[grouped].push(invariant);
-
-                        const invariantBlock = getInvariantBlock(invariant);
-                        child.body.splice(child.body.length - 1, 0, invariantBlock);
                     };
 
                     if (Object.keys(foundInvariants).length === 0) continue;
@@ -544,6 +541,8 @@ export class DesignValidator {
 
 
             const newBehavior = new BehaviorNode(invariant.name);
+            const block = getInvBlock(invariant);
+            newBehavior.node.body.push(block);
             this.newNodes.push(newBehavior.get());
 
             if (goTo?.restoring) {
