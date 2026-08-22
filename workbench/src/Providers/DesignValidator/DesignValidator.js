@@ -542,32 +542,39 @@ export class DesignValidator {
             // - blocking path in case of internally incosistent
             //   design
 
-            if (true || goTo?.restoring) {
-                const newBehavior = new BehaviorNode(invariant.name);
-                this.newNodes.push(newBehavior.get());
 
-                if (prevBehavior) {
-                    // Connect prev invariant to this invariant (chain them)
-                    prevBehavior.addNextBehavior(invariant.name);
-                } else {
-                    // Point behavior to first invariant, I am finding the node
-                    // which points to the next behavior and replacing it with
-                    // first invariant.
-                    for (const n of behaviorNode.body) {
-                        if (n.type === "select") {
-                            for (const e of n.body) {
-                                if (e?.command === "goToBehavior") {
-                                    const nextBehavior = groupName.split("_")[1];
-                                    const f = e.args.find((a) => a.value === nextBehavior);
-                                    if (f === -1) continue;
-                                    f.value = invariant.name;
-                                }
+            const newBehavior = new BehaviorNode(invariant.name);
+            this.newNodes.push(newBehavior.get());
+
+            if (goTo?.restoring) {
+                // Add restoring logic here, if invariant is violated
+                // go to restoring path otherwise continue.
+            } else {
+                // If internal invariant is violated, it is blocking
+                // because it should never be reached.
+            }
+
+            if (prevBehavior) {
+                // Connect prev invariant to this invariant (chain them)
+                prevBehavior.addNextBehavior(invariant.name);
+            } else {
+                // Point behavior to first invariant, I am finding the node
+                // which points to the next behavior and replacing it with
+                // first invariant.
+                for (const n of behaviorNode.body) {
+                    if (n.type === "select") {
+                        for (const e of n.body) {
+                            if (e?.command === "goToBehavior") {
+                                const nextBehavior = groupName.split("_")[1];
+                                const f = e.args.find((a) => a.value === nextBehavior);
+                                if (f === -1) continue;
+                                f.value = invariant.name;
                             }
                         }
                     }
                 }
-                prevBehavior = newBehavior;
             }
+            prevBehavior = newBehavior;
         }
         // For last invariant, connect to next behavior
         prevBehavior.addNextBehavior(groupName.split("_")[1]);
