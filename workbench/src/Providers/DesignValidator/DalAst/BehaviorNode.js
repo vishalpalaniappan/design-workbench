@@ -35,8 +35,6 @@ class BehaviorNode {
      * @param {String} behavior
      */
     addNextBehavior (behavior) {
-        // Temporarily overwrite existing body
-        this.node.body = [];
         const e = {
             "type": "select",
             "args": [],
