@@ -157,6 +157,27 @@ export const getInvBlock = (invariant, restoringBehavior) => {
 
     ifInvariantViolated.body.push(
         {
+            "type": "registeredCmd",
+            "command": "_print",
+            "args": [
+                {
+                    "arg": null,
+                    "type": "null",
+                    "value": null,
+                },
+                {
+                    "arg": null,
+                    "type": "string",
+                    "value": `\nInternal Invariant Violated: ${invariant.name}`,
+                },
+                {
+                    "arg": null,
+                    "type": "string",
+                    "value": "\nDesign is internally inconsistent. Terminating.",
+                },
+            ],
+        },
+        {
             "type": "cmd",
             "command": "goToBehavior",
             "args": [
