@@ -550,7 +550,9 @@ export class DesignValidator {
                     // Connect prev invariant to this invariant (chain them)
                     prevBehavior.addNextBehavior(invariant.name);
                 } else {
-                    // Point behavior to first invariant
+                    // Point behavior to first invariant, I am finding the node
+                    // which points to the next behavior and replacing it with
+                    // first invariant.
                     for (const n of behaviorNode.body) {
                         if (n.type === "select") {
                             for (const e of n.body) {
@@ -563,7 +565,6 @@ export class DesignValidator {
                             }
                         }
                     }
-                    newBehavior.addNextBehavior(groupName.split("_")[1]);
                 }
                 prevBehavior = newBehavior;
             }
