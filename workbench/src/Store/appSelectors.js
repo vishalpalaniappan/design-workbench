@@ -1,13 +1,9 @@
-export const selectSelectedGraphId = (state) => state.app.selectedGraph;
-export const selectSelectedBehaviorId = (state) => state.app.selectedBehavior;
-export const selectSelectedParticipantId = (state) => state.app.selectedParticipant;
-export const selectSelectedInvariantId = (state) => state.app.selectedInvariant;
 export const selectCounter = (state) => state.app.counter;
 export const selectActiveTab = (state) => state.app.activeTab;
 export const selectStatusMsg = (state) => state.app.statusMsg;
 export const selectLastSaved = (state) => state.app.lastSaved;
 export const selectAppMode = (state) => state.app.appMode;
-export const selectSelectedMappingId = (state) => state.app.selectedMapping;
 export const selectDesignLoaded = (state) => state.app.designLoaded;
 export const selectHasEntryPoint = (state) => state.app.hasEntryPoint;
 export const selectSelectedTraceId = (state) => state.app.selectedTraceId;
+export const selectSelectedBehavior = (state) => state.app.selectedBehavior;

@@ -3,7 +3,7 @@ import os from "os";
 import { EventEmitter } from "events";
 import path from "node:path";
 
-const playgroundPath = path.join(process.cwd(), "playground");
+const workspacePath = path.join(process.cwd(), "workspace");
 const bashRcFile = path.join(process.cwd(), "terminal.bashrc");
 
 /**
@@ -22,7 +22,13 @@ export class TerminalSession extends EventEmitter {
             ? "powershell.exe"
             : process.env.SHELL || "bash");
 
-        this.cwd = options.cwd || playgroundPath;
+        // If design name is provided, set the working directory to the design repo
+        if ("designName" in args && args["designName"]) {
+            this.cwd = path.join(process.cwd(), "workspace", args["designName"])
+        } else {
+            this.cwd = options.cwd || workspacePath;
+        }
+
         this.env = options.env || process.env;
         this.cols = options.cols || 80;
         this.rows = options.rows || 24;

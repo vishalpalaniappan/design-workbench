@@ -7,14 +7,19 @@ import saveDesign from "./design-file-utils/saveDesign.js";
 import {saveTraceInEngine} from "./design-file-utils/saveTraceInEngine.js";
 import {clearTraceFilesInPlayground} from "./design-file-utils/saveTraceInEngine.js";
 import loadTraceInTempFolder from "./design-file-utils/loadTraceInTempFolder.js";
+import synthesizeDesign from "./design-file-utils/synthesizeDesign.js";
+import saveFile from "./design-file-utils/saveFile.js";
 import { unpack, pack } from 'msgpackr';
+import path from "node:path";
+import { setTimeout as sleep } from "node:timers/promises";
 
 export class  WSMessageHandler {
     constructor(ws) {
         this.ws = ws;
+        this.loadedDesign = null;
 
         // TODO: Add support for multiple terminals (identified using UID)
-        this.startTerminalAndAddListeners();
+        this.startTerminalAndAddListeners({ designName: this.loadedDesign });
 
         this.ws.on("close", () => {
             this.stopTerminalAndRemoveListeners();
@@ -28,8 +33,11 @@ export class  WSMessageHandler {
             create_design: this.createDesign.bind(this),
             delete_design: this.deleteDesign.bind(this),
             load_design: this.loadDesign.bind(this),
+            save_file: this.saveFile.bind(this),
             terminal_run_entry_point: this.onTerminalRunEntryPoint.bind(this),
             terminal_run_design: this.onTerminalRunDesign.bind(this),
+            terminal_run_file_cmd: this.onTerminalRunFileCmd.bind(this),
+            synthesize_design:this.onSynthesizeDesign.bind(this),
         };
     }
 
@@ -94,7 +102,7 @@ export class  WSMessageHandler {
 
     deleteDesign = async (msg) => {
         try {
-            await deleteDesign(msg.payload.fileName);
+            await deleteDesign(msg.payload.designName);
             const folders = await loadDesigns();
             msg.type = "workspaces";
             msg.data = folders;
@@ -106,6 +114,9 @@ export class  WSMessageHandler {
 
     loadDesign = async (msg) => {
         try {
+            // Load the design into the terminal path
+            this.loadedDesign = msg.payload.fileName;
+            this.startTerminalAndAddListeners({ designName: this.loadedDesign });
             const file = await loadDesign(msg.payload.fileName)
             msg.type = "load_design";
             msg.data = file;
@@ -131,6 +142,15 @@ export class  WSMessageHandler {
         result.set(a, 0);
         result.set(b, a.length);
         return result;
+    }
+
+    saveFile = async (msg) => {
+        try {
+            await saveFile(msg.data.name, msg.data.path, msg.data.updatedContent);
+            this.sendMessage({ type: "save_file", data: msg.data.uid });
+        } catch (err) {
+            this.sendMessage({ type: "error", data: err.message });
+        }
     }
 
     saveEngine = async (msg) => {
@@ -192,16 +212,6 @@ export class  WSMessageHandler {
         if (this.entryPointFinishedSent) return;
 
         this.entryPointFinishedSent = true;
-        try {
-            const traceEntry = await saveTraceInEngine("implementation");
-            if (traceEntry) {
-                this.sendMessage({ type: "add_trace", data: traceEntry });
-            } else {
-                console.warn("No trace entry to send to front end.");
-            }
-        } catch (err) {
-            console.error("Failed to save trace:", err);
-        }
         this.startTerminalAndAddListeners();
     }
 
@@ -221,17 +231,10 @@ export class  WSMessageHandler {
          */
         let cmd;
         if (msg?.payload?.entryPoint) {
-            const fileCmd = msg.payload.entryPoint.split(" ")[1];
-
-            cmd = `node ../tools/design-runtime/src/index.js implementation`;
-            if (msg.payload.designName) cmd = cmd + ` ${fileCmd}`;    
-            if (msg.payload.selectedTrace) cmd = cmd + ` ../temp/${msg.payload.selectedTrace}`;
-
-            await clearTraceFilesInPlayground();
-
-            if (msg.payload.selectedTrace && msg.payload.selectedTrace !== "None") {
-                await loadTraceInTempFolder(msg.payload.designName, msg.payload.selectedTrace);
-            }
+            cmd = msg.payload.entryPoint;
+            // if (msg.payload.selectedTrace && msg.payload.selectedTrace !== "None") {
+            //     await loadTraceInTempFolder(msg.payload.designName, msg.payload.selectedTrace);
+            // }
         } else if (msg?.payload?.data) {
             cmd = msg.payload.data;
         } else {
@@ -239,7 +242,7 @@ export class  WSMessageHandler {
         }
 
         this.stopTerminalAndRemoveListeners();
-        this.terminal = new TerminalSession({ command: cmd });
+        this.terminal = new TerminalSession({ command: cmd, designName: this.loadedDesign + "/synthesized"});
         this.terminal.on("data", this.onTerminalData);
         this.terminal.on("exit", this.handleEntryPointFinished);
         this.terminal.on("start", this.onTerminalStart);
@@ -264,6 +267,19 @@ export class  WSMessageHandler {
         this.startTerminalAndAddListeners();
     }
 
+    onSynthesizeDesign = async (msg) => {
+        try {
+            const source = await synthesizeDesign(this.loadedDesign, msg.payload.ast, msg.payload.verbosity)
+            // this.sendMessage({ type: "synthesize_design", data: source });
+            const files = await loadDesign(this.loadedDesign)
+            msg.type = "load_design";
+            msg.data = files;
+            this.sendMessage(msg);
+        } catch (err) {
+            console.error("Failed to synthesize design:", err);
+        }
+    }
+
     onTerminalRunDesign = async (msg) => {     
         this.designExecutionFinishedSent = false;
 
@@ -284,5 +300,16 @@ export class  WSMessageHandler {
         this.terminal.on("start", this.onTerminalStart);
         this.terminal.on("stop", this.handleDesignExecutionFinished);
         this.terminal.start();
+    }
+
+    onTerminalRunFileCmd = async (msg) => {
+        const filePath = path.join(process.cwd(), "workspace", this.loadedDesign);
+        this.terminal.write(`cd ${filePath} \n`);
+        this.terminal.write(msg.payload.cmd);
+        await sleep(100);
+        this.sendMessage({
+            type: "load_design",
+            data: await loadDesign(this.loadedDesign)
+        });
     }
 }

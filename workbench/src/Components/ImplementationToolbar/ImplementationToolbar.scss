@@ -17,14 +17,14 @@ $darkened-status-bar-color: #0d202c;
 .mainToolBar > .mainToolBarLeft {
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:5px;
   height:100%;
 }
 
 
 
 .mainToolBarSelect > select {
-  font-size: 13px;
+  font-size: 11px;
   display:flex;
   align-items:center;
   cursor:pointer;
@@ -72,5 +72,5 @@ $darkened-status-bar-color: #0d202c;
 .mainToolBar > .mainToolBarRight {
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:5px;
 }
