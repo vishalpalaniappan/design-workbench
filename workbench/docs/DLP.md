@@ -108,12 +108,11 @@ Using the narrative approach to define the world is much more effective at commu
 Invariants don't just have to include a single participant, they can also be for combination of participants. For example, when accessing an entry from the list, a multiple participant invariant is that the accessed positions is within the range of the lists length. In this case, along each unique path, the last value of the two participants in the invariant that was updated determines where the invariant gets placed. This is where the world has the potential to become semantically invaid. 
 
 To generalize the invariant placement algorithm:
-- Identify every unique path leading to a transformation.
+- Identify every unique path leading to the transformation from when the participants in the invariants entered the world state.
 - Identify the positions in that path where the participants in the invariant are updated.
 - Place the invariant at the last position where one of the participants in the invariant was updated.
 
-In this way, every semantically invalid narrative will be eliminated from the world because the invariant unambiguously identifies it.
-
+In this way, every semantically invalid narrative will be eliminated from the world because the invariant unambiguously identifies it. A more general way to think about this is that through the invariants, the potential failures are absorbed into the domain knowledge of the world and the known failures are eliminated at the behavioral level by making it impossible for the environment to select a semantically invalid narrative.
 
 ## Shared Meaning and Distributed Systems
 - Discuss the consequences of a computable semantic model for interaction between software systems.
