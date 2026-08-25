@@ -26,6 +26,15 @@ In this sense, through the invariants, the design absorbs the domain knowledge n
 - Use library manager because it is simple and there is 
 
 # Computable Semantic Model
+
+Software systems are the result of an intentional design.The design is realized through an implementation in a programming language, which uses its abstractions to realize the design’s intentions. Therefore, the meaning behind the mechanical implementation in a programming language is established by the design of the system. Through this process of understanding the execution through the design, the automation enabled by the design is inherited by any diagnostic tool for software systems.
+
+This process is achieved by establishing the design as a Computable Semantic Model (CSM) in a Design Abstraction Language (DAL). A CSM is built by establishing the design structure and its transformations unambiguously in the DAL and then defining the implementation which realizes the meaning established by the design. This effectively means that the implementation exists in the context of its role in the design and any invariants specified by the implementation can be enforced by the design structure.
+
+This process of establishing the design and its implementation through the CSM means that the invariants established by the implementation of transformation can reshape the narrative permitted in the world to prevent failures. It also provides a means to automatically test that the design's behavior respects the invariants specified by the transformation, effectively eliminating known failures by construction.
+
+
+
 - Explain how software systems are the result of an intentional design.
 - Explain how a programming language is used to realize the intentional design.
 - Explain how by understanding the execution through its design, the automation enabled by the design can be applied to software systems.
