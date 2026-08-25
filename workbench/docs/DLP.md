@@ -50,7 +50,7 @@ While this is a very simple design, it does contain enough functionality to demo
 
 ### The Design
 
-The behavioral script presented above outlines the design of a simple libary manager. In the script, each behavior is established in its own block. A behavior accessess the necessary participants from the world state, performs at transformation and modifies the world state in an unambiguous way. The behavior then either selects the next behavior directly or selects the next behavior based on the world state.
+The behavioral script presented above outlines the design of a simple libary manager. In the script, each behavior is established in its own block. A behavior accessess the necessary participants from the world state, performs the transformation on the participants and modifies the world state in an unambiguous way. The behavior then either selects the next behavior directly or selects the next behavior based on the world state. 
 
 A diagram of the design established by the script is provided below:
  ![DLP](../assets/design_behavior.png)
@@ -64,7 +64,7 @@ In this example, the closed semantic world has the following participants:
 
 The existence of these participants is established through the behaviors. Initially the world only contains a shelf, then when the user submits a choice, it is now a participant in the world. Through the choice made, the design selects the next behavior and accepts a book name, resulting in a new participant called name. Then the design creates the book, gets the first letter of the books name and adds it to the bookshelf.
 
-In this example, the there are two points at which the environment provides an impulse into the design. When the user submits their choice and when the user gets the books name. The design then resolves the input until it reaches a semantically stable state. In this case, once the choice a is made and the books name is provided, a series of behaviors are exhibited in sequence until it is stable again at getUserChoice and waits for the next impulse. 
+In this example, the there are two points at which the environment provides an impulse into the design. When the user submits their choice and when the user submits the books name. The design then resolves the input until it reaches a semantically stable state. In this case, once the choice a is made and the books name is provided, a series of behaviors are exhibited in sequence until it is stable again at getUserChoice and waits for the next impulse. 
 
 At this point, this structure establishes the semantics of what this world means. In this world getBookName has a specific meaning and it modifies the world state in an unambiguous way. Through the design abstraction language, meaning can be compressed by building composite behaviors. A composite behaviors meaning is established by the behaviors which define its meaning. For example, if you were to build a composite behavior for adding a book to the shelf, it would contain these behaviors:
 
@@ -80,12 +80,24 @@ In this way, the design abstrction language can establish behaviors and compress
 Next, I will talk about how the implementaiton that realizes the meaning of the semantics is sepcified.
 
 ### Implementation of Semantics 
-- Describe how the implementation that realizes the meaning of the semantics is specified.
-- Describe how the invariants that identify ways in which the transformation can fail are specified.
-- Describe how this makes the specified design executable 
-- Describe how you need to log minimal information to replay an execution because deterministic transformations can be recreted.
+The design abstraction language establishes the closed semantic world and the meaning of its semantics. By providing the implementation that realizes the meaning of the semantics, the design itself becomes executable.
+
+Below is an example of the implemenation of the transformation that gets the first letter of the books name:
+ ![DLP](../assets/implementation_of_semantics.png)
+
+In this example, the implementation realizes the meaning of the transformation getFirstLetter in the getFirstLetterOfBookName behavior of the library manager design. It accesses the first character of the provided value and returns it. The returned value is then saved in the world state as the first letter of the books name. In my opinion, the important point to note here is that every single part of this has unambiguous meaning, including the participants involved in the transformation, the transformation itself and then the generated value.
+
+Through this process, a software system can be implemented by establishing a design, then the implementation that realizes its meaning and then synthesizing an executable output of the design. The synthesis uses the run command specified in the library manager design to identify which behavior to exhibit first. Then the design itself selects the next behvior to exhibit until it doesn't select a new behavior. As a result, the design itself becomes executable. The closed semantic world is being realized by the implementations that realizing the meaning of the closed semantic world.
+
+Since the implementation of each transformation is realizing the meaning established by the semantics. The ways in which that transformation can fail can also be specified unambiguously as invariants. I will speak more about this in the next section.
+
+Finally, since the design is now a computable model, the minimal information needed replay an execution can be unambiguously identified. This means that the information that can't be deterministcally reproduced by the engine must be logged and the replay can recreate the deterministic infromation through the transformations. In the case of the library manager, this means that the user choice and the book name must be provided, the same execution can be replayed with just those inputs.
+
+Ultimately, this ability to establish the implementation that unambiguously realizes the meaning of the designs semantics transforms the design specified in the DAL into a CSM. Now the implementation unambiguously realizes the meaning of the design and is executed by the design itself.
 
 ### Reshaping Design using Invariants
+
+In the example provided above, the invariant specifies that value provided to the 
 - Establish how the invariants can be used to identify the invariant paths using the design structure
 - Describe algorithm to automatically place invariants for all combination of participants
 - Describe how the invariant path must be modified to provide a semantically valid path of the invalid narrative
