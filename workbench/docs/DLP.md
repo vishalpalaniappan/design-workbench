@@ -103,9 +103,9 @@ In the previous section, I talked about how the implementation that realizes the
 
 Since the design is an unambiguous structure, the semantic invariants can be placed at places in the design where the design will inevitably attempt the transformation under semantically invalid conditions. This can be done by identifying when the participant was last updated on any unique path leading to the transformation and placing the invariant at that location. This means that if the invariant is violated, the design must provide a semantically valid path to restory semantic validity and prevent the known failure.
 
-Using the narrative approach to define the world is much more effective at communicating this. An invariant identifies a state which will cause a particular narrative to become semantically invalid because its intentions can't be realized. The resolution is that the design must provide a semantically valid narrative to restore the semantic validity. 
+Using the narrative approach to define the world is much more effective way to communicate this. An invariant identifies a state which will cause a particular narrative to become semantically invalid because its intentions can't be realized. The resolution is that the design must provide a semantically valid narrative to restore the semantic validity. 
 
-Invariants don't just have to include a single participant, they can also be for combination of participants. For example, when accessing an entry from the list, a multiple participant invariant is that the accessed positions is within the range of the lists length. In this case, along each unique path, the last value of the two participants in the invariant that was updated determines where the invariant gets placed. This is where the world has the potential to become semantically invaid. 
+Invariants don't just have to include a single participant, they can also be for combination of participants. For example, when accessing an entry from the list, a multiple participant invariant is that the accessed position is within the range of the lists length. In this case, along each unique path, the last value of the two participants in the invariant that was updated determines where the invariant gets placed. This is where the world has the potential to become semantically invaid. 
 
 To generalize the invariant placement algorithm:
 - Identify every unique path leading to the transformation from when the participants in the invariants entered the world state.
@@ -113,6 +113,20 @@ To generalize the invariant placement algorithm:
 - Place the invariant at the last position where one of the participants in the invariant was updated.
 
 In this way, every semantically invalid narrative will be eliminated from the world because the invariant unambiguously identifies it. A more general way to think about this is that through the invariants, the potential failures are absorbed into the domain knowledge of the world and the known failures are eliminated at the behavioral level by making it impossible for the environment to select a semantically invalid narrative.
+
+Let's apply this to the library manager to identify where the invariant for the getFirstLetter transformation should be placed. 
+- From the design, it is unambiguous that the participant in the transformation is the participant with the role of "book_name".
+- Next, the point at which book_name enters the world state is identified and in this case, that is in behavior getBookName because that is when the participant was added to the world state. If the participant was already in the world state, it would get be modified with updateWorldState.
+- Next, every unique path from getBookName to getFirstLetterofBookName is identified and in this case, there is only one.
+- The invariant is placed after getBookName.
+
+ ![DLP](../assets/invariant_placement.png)
+
+The diagram above visually captures the invariant placement and the path through which the design restores semantic validity. This same process repeats for every path leading to the transformation and is also applied for invariants containing multiple participants. In doing so, every semantically invalid narrative is detected and can be elimianted.
+
+This then sets up the next step where every invariant path can be automatically tested to verify that it provides a semantically valid narrative. This is done by verifying that there is a control flow which evaluates the semantically invalid state and selects a different path that the invalid narratives path. You can also unambiguously identify the invariant diretly because it was automatically placed there but testing by actually walking the path is more complete. 
+
+Finally, as a result of every invariant being automatically placed and tested to verify that it restores semantic validity, any observed failures must mean that another narrative in this world is semantically invalid and through root cause analysis using the environment that caused the failure, the design learns new semantics and invariants to eliminate the semantically invalid narrative from the world.
 
 ## Shared Meaning and Distributed Systems
 - Discuss the consequences of a computable semantic model for interaction between software systems.
