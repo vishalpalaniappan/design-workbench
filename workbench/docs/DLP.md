@@ -99,11 +99,21 @@ In the next section, I will talk about how the invariants specified for the impl
 
 ### Reshaping Design using Invariants
 
-In the example provided above, the invariant specifies that value provided to the 
-- Establish how the invariants can be used to identify the invariant paths using the design structure
-- Describe algorithm to automatically place invariants for all combination of participants
-- Describe how the invariant path must be modified to provide a semantically valid path of the invalid narrative
-- Establish how invariants can be automatically tested using this process
+In the previous section, I talked about how the implementation that realizes the meaning of the semantics is specified. In addition to establishing the implementation, the invariants which define the conditions under which the transformation will fail can also be specified. This means that given particular participant states, this transformation will not be successful. 
+
+Since the design is an unambiguous structure, the semantic invariants can be placed at places in the design where the design will inevitably attempt the transformation under semantically invalid conditions. This can be done by identifying when the participant was last updated on any unique path leading to the transformation and placing the invariant at that location. This means that if the invariant is violated, the design must provide a semantically valid path to restory semantic validity and prevent the known failure.
+
+Using the narrative approach to define the world is much more effective at communicating this. An invariant identifies a state which will cause a particular narrative to become semantically invalid because its intentions can't be realized. The resolution is that the design must provide a semantically valid narrative to restore the semantic validity. 
+
+Invariants don't just have to include a single participant, they can also be for combination of participants. For example, when accessing an entry from the list, a multiple participant invariant is that the accessed positions is within the range of the lists length. In this case, along each unique path, the last value of the two participants in the invariant that was updated determines where the invariant gets placed. This is where the world has the potential to become semantically invaid. 
+
+To generalize the invariant placement algorithm:
+- Identify every unique path leading to a transformation.
+- Identify the positions in that path where the participants in the invariant are updated.
+- Place the invariant at the last position where one of the participants in the invariant was updated.
+
+In this way, every semantically invalid narrative will be eliminated from the world because the invariant unambiguously identifies it.
+
 
 ## Shared Meaning and Distributed Systems
 - Discuss the consequences of a computable semantic model for interaction between software systems.
