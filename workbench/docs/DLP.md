@@ -20,7 +20,7 @@ Since a design is a closed semantic world, the invariants intrinsic to the desig
 
 If a design is tested to ensure that it respects all its known invariants and it still fails, it means that the environment which caused the failure is revealing unknown semantics that the design must learn through root cause analysis. This automates failure diagnosis because there is no other interpretation of the failure. In this process, the design becomes progressively more intelligent as it learns new semantics and invariants so that it can continue realizing its intentions in its operational environment.
 
-In this sense, through the invariants, the design absorbs the domain knowledge needed to prevent the failures within its closed semantic world. The design itself is reshaped by the invariants to only allow semantically valid narratives to persist. In this process, through the design, debugging, testing and failure diagnosis are automated. However, it is clear that the diagnostic automation isn’t a result of complex analysis of the world, instead, it is the result of the world being fully constructed while being able to determine its own correctness, resulting in unambiguous diagnosis of failures. In this sense, every time the DAL is used to meaningfully eliminate ambiguity in the closed semantic world, a new form of automation will emerge.
+In this sense, through the invariants, the design absorbs the domain knowledge needed to prevent the failures within its closed semantic world. The design itself is reshaped by the invariants to only allow semantically valid narratives to persist. In this process, by working with the design, debugging, testing and failure diagnosis are automated. However, it is clear that the diagnostic automation isn’t a result of complex analysis of the world, instead, it is the result of the world being fully constructed, resulting in unambiguous diagnosis of failures. In this sense, every time ambiguity is eliminated in a meaningful way in the closed semantic world, a new form of automation will emerge.
 
 ## Example
 
@@ -37,12 +37,36 @@ This is achieved by establishing the design as a Computable Semantic Model (CSM)
 
 This process of establishing the design and its implementation through the CSM means that the invariants established by the implementation of the transformation can reshape the permitted narratives in the world to prevent failures. It also provides a means to automatically test that the design's behavior respects the invariants specified by the transformation, effectively eliminating known failures by construction.
 
-### Design Abstraction Language
-- Describe how the semantics are represented in the design abstractin lanauage.
-- Describe how the implementation of the semantics is mapped onto the transformations in the design. 
-- Describe how the the invariants on each transformation can be used to automatically identify the forbidden narratives in this world (through invariants) and test that the design respects them.
+Before continuing with the larger implications establishing software systems are computable semantic models, I will briefly discuss the Design Abstraction Language and how it enables the computable semantic model to be built. I will also describe how the invariants can reshape the narratives of the closed semantic world. 
 
-### Shared Meaning and Distributed Systems
+### Design Abstraction Language
+
+The Design Abstraction Language (DAL) is a declarative language that enables the specification of closed semantic worlds. The scope of language is determined by any mechanism needed to faithfully represent the design such as the behaviors, participants, control flow and invariants. 
+
+An example of a script written in DAL is provided below:
+ ![DLP](../assets/code.png)
+
+While this is a very simple design, it does contain enough functionality to demonstrate how the language establishes a design. In the next section, it will be used to demonstrate how the invariants specified in the implementation of the semantics can be used to reshape the behavior of the design to eliminate semantically invalid narratives.
+
+### The Design
+- Use the example above to demonstrate how the design is specified.
+- Talk about the world state, participants and the role in the design.
+- Talk about behaviors and how they transform the world state in an unambiguous way.
+- Talk about how behaviors select the next behvior to be exhibited (or to exit)
+
+### Implementation of Semantics 
+- Describe how the implementation that realizes the meaning of the semantics is specified.
+- Describe how the invariants that identify ways in which the transformation can fail are specified.
+- Describe how this makes the specified design executable 
+- Describe how you need to log minimal information to replay an execution because deterministic transformations can be recreted.
+
+### Reshaping Design using Invariants
+- Establish how the invariants can be used to identify the invariant paths using the design structure
+- Describe algorithm to automatically place invariants for all combination of participants
+- Describe how the invariant path must be modified to provide a semantically valid path of the invalid narrative
+- Establish how invariants can be automatically tested using this process
+
+## Shared Meaning and Distributed Systems
 - Discuss the consequences of a computable semantic model for interaction between software systems.
 - Discuss how through shared meaning, larger closed semantic worlds can be constructed.
 - Discuss how this frames a distributed system as a closed semantic world built through semantically computable interactions.
