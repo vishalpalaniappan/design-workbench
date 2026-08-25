@@ -23,7 +23,7 @@ In this sense, through the invariants, the design absorbs the domain knowledge n
 ## Example
 
 - Provide example of design to demonstrate what was communicated above.
-- Use library manager because it is simple and there is 
+- Use library manager because it communicates the essential ideas without adding too much complexity.
 
 # Computable Semantic Model
 
@@ -31,14 +31,9 @@ Software systems are the result of an intentional design.The design is realized 
 
 This process is achieved by establishing the design as a Computable Semantic Model (CSM) in a Design Abstraction Language (DAL). A CSM is built by establishing the design structure and its transformations unambiguously in the DAL and then defining the implementation which realizes the meaning established by the design. This effectively means that the implementation exists in the context of its role in the design and any invariants specified by the implementation can be enforced by the design structure.
 
+ ![DLP](../assets/computable_semantic_model.png)
+
 This process of establishing the design and its implementation through the CSM means that the invariants established by the implementation of transformation can reshape the narrative permitted in the world to prevent failures. It also provides a means to automatically test that the design's behavior respects the invariants specified by the transformation, effectively eliminating known failures by construction.
-
-
-
-- Explain how software systems are the result of an intentional design.
-- Explain how a programming language is used to realize the intentional design.
-- Explain how by understanding the execution through its design, the automation enabled by the design can be applied to software systems.
-- Explain how this can be achieved using a computable semantic model.
 
 ### Design Abstraction Language
 - Describe how the semantics are represented in the design abstractin lanauage.
@@ -54,7 +49,7 @@ This process of establishing the design and its implementation through the CSM m
 ## Design Learning Platform
  - Discuss the how this automation is practically achieved
 
- ![Invariant Path](../assets/ADLP_v28.png)
+ ![DLP](../assets/ADLP_v28.png)
 
  - Discuss the creation of an engine that leverges the unambiguous computable semantic model to verify the correctness of the design and automatically diagnose software failures and enables the design to learn new semantics through root cause analysis.
  - Describe how the computable semantic model can synthesize implementations that are instrumented with the relevant information.
