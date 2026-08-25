@@ -49,10 +49,35 @@ An example of a script written in DAL is provided below:
 While this is a very simple design, it does contain enough functionality to demonstrate how the language establishes a design. In the next section, it will be used to demonstrate how the invariants specified in the implementation of the semantics can be used to reshape the behavior of the design to eliminate semantically invalid narratives.
 
 ### The Design
-- Use the example above to demonstrate how the design is specified.
-- Talk about the world state, participants and the role in the design.
-- Talk about behaviors and how they transform the world state in an unambiguous way.
-- Talk about how behaviors select the next behvior to be exhibited (or to exit)
+
+The behavioral script presented above outlines the design of a simple libary manager. In the script, each behavior is established in its own block. A behavior accessess the necessary participants from the world state, performs at transformation and modifies the world state in an unambiguous way. The behavior then either selects the next behavior directly or selects the next behavior based on the world state.
+
+A diagram of the design established by the script is provided below:
+ ![DLP](../assets/design_behavior.png)
+
+In this example, the closed semantic world has the following participants:
+- Shelf
+- User Choice
+- Book Name
+- Book
+- First Letter of Book Name
+
+The existence of these participants is established through the behaviors. Initially the world only contains a shelf, then when the user submits a choice, it is now a participant in the world. Through the choice made, the design selects the next behavior and accepts a book name, resulting in a new participant called name. Then the design creates the book, gets the first letter of the books name and adds it to the bookshelf.
+
+In this example, the there are two points at which the environment provides an impulse into the design. When the user submits their choice and when the user gets the books name. The design then resolves the input until it reaches a semantically stable state. In this case, once the choice a is made and the books name is provided, a series of behaviors are exhibited in sequence until it is stable again at getUserChoice and waits for the next impulse. 
+
+At this point, this structure establishes the semantics of what this world means. In this world getBookName has a specific meaning and it modifies the world state in an unambiguous way. Through the design abstraction language, meaning can be compressed by building composite behaviors. A composite behaviors meaning is established by the behaviors which define its meaning. For example, if you were to build a composite behavior for adding a book to the shelf, it would contain these behaviors:
+
+- CreateBookAndAddToShelf
+    - CreateBook
+    - GetFirstLetterOfBookname
+    - AddBookToShelf
+
+In this example, the meaning of CreateBookAndAddToShelf is unambiguous. It is a compression of the behaviors that define its meaning. This is no different than how humans use words, when I say the world lion, it has specific meaning, I have compressed the reprentation of a lion into a single word. 
+
+In this way, the design abstrction language can establish behaviors and compress those behaviors into a composite behavior. The composite behaviors are part of their own semantic world at their level of meaning. As a result, this establishes coherent nested worlds at different level of meaning. I will speak more about this when I discuss the implications of this framework for distributed systems.
+
+Next, I will talk about how the implementaiton that realizes the meaning of the semantics is sepcified.
 
 ### Implementation of Semantics 
 - Describe how the implementation that realizes the meaning of the semantics is specified.
