@@ -112,7 +112,7 @@ To generalize the invariant placement algorithm:
 - Identify the positions in that path where the participants in the invariant are updated.
 - Place the invariant at the last position where one of the participants in the invariant was updated.
 
-In this way, every semantically invalid narrative will be eliminated from the world because the invariant unambiguously identifies it. A more general way to think about this is that through the invariants, the potential failures are absorbed into the domain knowledge of the world and the known failures are eliminated at the behavioral level by making it impossible for the environment to select a semantically invalid narrative.
+In this way, every known semantically invalid narrative will be eliminated from the world because the invariant unambiguously identifies it. A more general way to think about this is that through the invariants, the potential failures are absorbed into the domain knowledge of the world and the known failures are eliminated at the behavioral level by making it impossible for the environment to select a semantically invalid narrative.
 
 Let's apply this to the library manager to identify where the invariant for the getFirstLetter transformation should be placed. 
 - From the design, it is unambiguous that the participant in the transformation is the participant with the role of "book_name".
