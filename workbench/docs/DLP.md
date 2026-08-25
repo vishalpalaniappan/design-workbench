@@ -25,8 +25,7 @@ In this sense, through the invariants, the design absorbs the domain knowledge n
 - Provide example of design to demonstrate what was communicated above.
 - Use library manager because it is simple and there is 
 
-# Software Systems
-
+# Computable Semantic Model
 - Explain how software systems are the result of an intentional design.
 - Explain how a programming language is used to realize the intentional design.
 - Explain how by understanding the execution through its design, the automation enabled by the design can be applied to software systems.
