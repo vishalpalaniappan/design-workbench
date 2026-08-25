@@ -62,38 +62,38 @@ In this example, the closed semantic world has the following participants:
 - Book
 - First Letter of Book Name
 
-The existence of these participants is established through the behaviors. Initially the world only contains a shelf, then when the user submits a choice, it is now a participant in the world. Through the choice made, the design selects the next behavior and accepts a book name, resulting in a new participant called name. Then the design creates the book, gets the first letter of the books name and adds it to the bookshelf.
+The existence of these participants is established through their behaviors. Initially the world only contains a shelf, then when the user submits a choice, it is now a participant in the world. Through the choice made, the design selects the next behavior and accepts a book name, resulting in a new participant called name. Then the design creates the book, gets the first letter of the book's name and adds it to the bookshelf.
 
-In this example, the there are two points at which the environment provides an impulse into the design. When the user submits their choice and when the user submits the books name. The design then resolves the input until it reaches a semantically stable state. In this case, once the choice a is made and the books name is provided, a series of behaviors are exhibited in sequence until it is stable again at getUserChoice and waits for the next impulse. 
+In this example, there are two points at which the environment provides an impulse into the design. When the user submits their choice and when the user submits the book's name. The design then resolves the input until it reaches a semantically stable state. In this case, once the choice is made and the book's name is provided, a series of behaviors are exhibited in sequence until it is stable again at getUserChoice and waits for the next impulse.
 
-At this point, this structure establishes the semantics of what this world means. In this world getBookName has a specific meaning and it modifies the world state in an unambiguous way. Through the design abstraction language, meaning can be compressed by building composite behaviors. A composite behaviors meaning is established by the behaviors which define its meaning. For example, if you were to build a composite behavior for adding a book to the shelf, it would contain these behaviors:
+At this point, this structure establishes the semantics of what this world means. In this world getBookName has a specific meaning and it modifies the world state in an unambiguous way. Through the design abstraction language, meaning can be compressed by building composite behaviors. A composite behavior's meaning is established by the behaviors which define its meaning. For example, if you were to build a composite behavior for adding a book to the shelf, it would contain these behaviors:
 
 - CreateBookAndAddToShelf
     - CreateBook
     - GetFirstLetterOfBookname
     - AddBookToShelf
 
-In this example, the meaning of CreateBookAndAddToShelf is unambiguous. It is a compression of the behaviors that define its meaning. This is no different than how humans use words, when I say the world lion, it has specific meaning, I have compressed the reprentation of a lion into a single word. 
+In this example, the meaning of CreateBookAndAddToShelf is unambiguous. It is a compression of the behaviors that define its meaning. This is no different than how humans use words, when I say the word lion, it has a specific meaning, I have compressed the representation of a lion into a single word.
 
-In this way, the design abstrction language can establish behaviors and compress those behaviors into a composite behavior. The composite behaviors are part of their own semantic world at their level of meaning. As a result, this establishes coherent nested worlds at different level of meaning. I will speak more about this when I discuss the implications of this framework for distributed systems.
+In this way, the design abstraction language can establish behaviors and compress those behaviors into a composite behavior. The composite behaviors are part of their own semantic world at their level of meaning. As a result, this establishes coherent nested worlds at different levels of meaning. I will speak more about this when I discuss the implications of this framework for distributed systems.
 
-Next, I will talk about how the implementaiton that realizes the meaning of the semantics is sepcified.
+Next, I will talk about how the implementation that realizes the meaning of the semantics is specified.
 
 ### Implementation of Semantics 
 The design abstraction language establishes the closed semantic world and the meaning of its semantics. By providing the implementation that realizes the meaning of the semantics, the design itself becomes executable.
 
-Below is an example of the implemenation of the transformation that gets the first letter of the books name:
+Below is an example of the implementation  of the transformation that gets the first letter of the books name:
  ![DLP](../assets/implementation_of_semantics.png)
 
-In this example, the implementation realizes the meaning of the transformation getFirstLetter in the getFirstLetterOfBookName behavior of the library manager design. It accesses the first character of the provided value and returns it. The returned value is then saved in the world state as the first letter of the books name. In my opinion, the important point to note here is that every single part of this has unambiguous meaning, including the participants involved in the transformation, the transformation itself and then the generated value.
+In this example, the implementation realizes the meaning of the transformation getFirstLetter in the getFirstLetterOfBookName behavior of the library manager design. It accesses the first character of the provided value and returns it. The returned value is then saved in the world state as the first letter of the book's name. In my opinion, the important point to note here is that every single part of this has unambiguous meaning, including the participants involved in the transformation, the transformation itself and then the generated value.
 
-Through this process, a software system can be implemented by establishing a design, then the implementation that realizes its meaning and then synthesizing an executable output of the design. The synthesis uses the run command specified in the library manager design to identify which behavior to exhibit first. Then the design itself selects the next behvior to exhibit until it doesn't select a new behavior. As a result, the design itself becomes executable. The closed semantic world is being realized by the implementations that realizing the meaning of the closed semantic world.
+Through this process, a software system can be implemented by establishing a design, then the implementation that realizes its meaning and then synthesizing an executable output of the design. The synthesis uses the run command specified in the library manager design to identify which behavior to exhibit first. Then the design itself selects the next behavior to exhibit until it doesn't select a new behavior. As a result, the design itself becomes executable. The closed semantic world is being realized by the implementations that realizing the meaning of the closed semantic world.
 
 Since the implementation of each transformation is realizing the meaning established by the semantics. The ways in which that transformation can fail can also be specified unambiguously as invariants. I will speak more about this in the next section.
 
-Finally, since the design is now a computable model, the minimal information needed replay an execution can be unambiguously identified. This means that the information that can't be deterministcally reproduced by the design must be logged and the replay can recreate the deterministic information through the implementation of the transformations. In the case of the library manager, this means that the user choice and the book name must be provided, the same execution can be replayed with just those inputs.
+Finally, since the design is now a computable model, the minimal information needed to replay an execution can be unambiguously identified. This means that the information that can't be deterministically reproduced by the design must be logged and the replay can recreate the deterministic information through the implementation of the transformations. In the case of the library manager, this means that the user choice and the book name must be provided, the same execution can be replayed with just those inputs.
 
-Ultimately, this ability to establish the implementation that unambiguously realizes the meaning of the designs semantics transforms the design specified in the DAL into a CSM. Now the implementation unambiguously realizes the meaning of the design and is executed by the design itself.
+Ultimately, this ability to establish the implementation that unambiguously realizes the meaning of the design's semantics transforms the design specified in the DAL into a CSM. Now the implementation unambiguously realizes the meaning of the design and is executed by the design itself.
 
 In the next section, I will talk about how the invariants specified for the implementation of the transformation will reshape the behavior of the design to eliminate semantically invalid narratives.
 
@@ -101,11 +101,11 @@ In the next section, I will talk about how the invariants specified for the impl
 
 In the previous section, I talked about how the implementation that realizes the meaning of the semantics is specified. In addition to establishing the implementation, the invariants which define the conditions under which the transformation will fail can also be specified. This means that given particular participant states, this transformation will not be successful. 
 
-Since the design is an unambiguous structure, the semantic invariants can be placed at places in the design where the design will inevitably attempt the transformation under semantically invalid conditions. This can be done by identifying when the participant was last updated on any unique path leading to the transformation and placing the invariant at that location. This means that if the invariant is violated, the design must provide a semantically valid path to restory semantic validity and prevent the known failure.
+Since the design is an unambiguous structure, the semantic invariants can be placed at places in the design where the design will inevitably attempt the transformation under semantically invalid conditions. This can be done by identifying when the participant was last updated on any unique path leading to the transformation and placing the invariant at that location. This means that if the invariant is violated, the design must provide a semantically valid path to restore semantic validity and prevent the known failure.
 
-Using the narrative approach to define the world is much more effective way to communicate this. An invariant identifies a state which will cause a particular narrative to become semantically invalid because its intentions can't be realized. The resolution is that the design must provide a semantically valid narrative to restore the semantic validity. 
+Using the narrative approach to define the world is a much more effective way to communicate this. An invariant identifies a state which will cause a particular narrative to become semantically invalid because its intentions can't be realized. The resolution is that the design must provide a semantically valid narrative to restore the semantic validity. 
 
-Invariants don't just have to include a single participant, they can also be for combination of participants. For example, when accessing an entry from the list, a multiple participant invariant is that the accessed position is within the range of the lists length. In this case, along each unique path, the last value of the two participants in the invariant that was updated determines where the invariant gets placed. This is where the world has the potential to become semantically invaid. 
+Invariants don't just have to include a single participant, they can also be for combination of participants. For example, when accessing an entry from the list, a multiple participant invariant is that the accessed position is within the range of the lists length. In this case, along each unique path, the last value of the two participants in the invariant that was updated determines where the invariant gets placed. This is where the world has the potential to become semantically invalid. 
 
 To generalize the invariant placement algorithm:
 - Identify every unique path leading to the transformation from when the participants in the invariants entered the world state.
@@ -122,9 +122,9 @@ Let's apply this to the library manager to identify where the invariant for the 
 
  ![DLP](../assets/invariant_placement.png)
 
-The diagram above visually captures the invariant placement and the path through which the design restores semantic validity. This same process repeats for every path leading to the transformation and is also applied for invariants containing multiple participants. In doing so, every semantically invalid narrative is detected and can be elimianted.
+The diagram above visually captures the invariant placement and the path through which the design restores semantic validity. This same process repeats for every path leading to the transformation and is also applied for invariants containing multiple participants. In doing so, every semantically invalid narrative is detected and can be eliminated.
 
-This then sets up the next step where every invariant path can be automatically tested to verify that it provides a semantically valid narrative. This is done by verifying that there is a control flow which evaluates the semantically invalid state and selects a different path that the invalid narratives path. You can also unambiguously identify the invariant diretly because it was automatically placed there but testing by actually walking the path is more complete. 
+This then sets up the next step where every invariant path can be automatically tested to verify that it provides a semantically valid narrative. This is done by verifying that there is a control flow which evaluates the semantically invalid state and selects a different path than the invalid narratives path. You can also unambiguously identify the invariant directly because it was automatically placed there but testing by actually walking the path is more complete. 
 
 Finally, as a result of every invariant being automatically placed and tested to verify that it restores semantic validity, any observed failures must mean that another narrative in this world is semantically invalid and through root cause analysis using the environment that caused the failure, the design learns new semantics and invariants to eliminate the semantically invalid narrative from the world.
 
