@@ -91,9 +91,11 @@ Through this process, a software system can be implemented by establishing a des
 
 Since the implementation of each transformation is realizing the meaning established by the semantics. The ways in which that transformation can fail can also be specified unambiguously as invariants. I will speak more about this in the next section.
 
-Finally, since the design is now a computable model, the minimal information needed replay an execution can be unambiguously identified. This means that the information that can't be deterministcally reproduced by the design must be logged and the replay can recreate the deterministic infromation through the transformations. In the case of the library manager, this means that the user choice and the book name must be provided, the same execution can be replayed with just those inputs.
+Finally, since the design is now a computable model, the minimal information needed replay an execution can be unambiguously identified. This means that the information that can't be deterministcally reproduced by the design must be logged and the replay can recreate the deterministic information through the implementation of the transformations. In the case of the library manager, this means that the user choice and the book name must be provided, the same execution can be replayed with just those inputs.
 
 Ultimately, this ability to establish the implementation that unambiguously realizes the meaning of the designs semantics transforms the design specified in the DAL into a CSM. Now the implementation unambiguously realizes the meaning of the design and is executed by the design itself.
+
+In the next section, I will talk about how the invariants specified for the implementation of the transformation will reshape the behavior of the design to eliminate semantically invalid narratives.
 
 ### Reshaping Design using Invariants
 
