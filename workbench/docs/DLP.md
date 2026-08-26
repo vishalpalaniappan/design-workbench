@@ -134,7 +134,7 @@ One of the consequences of the computable semantic model is that the meaning beh
 
 Imagine you visit a library, find the book you are looking for and walk up to the librarian with the intention of checking out a book. In order to check out the book, you present the librarian with the book but the librarian was expecting a library card and the interaction halts. In this case, what it means to checkout a book is different for the librarian and the visitor. Since there is no shared meaning between the two, the interaction fails and neither the librarin nor the visitor achieve their goal. 
 
-In this example, since it is two humans interacting, they can clarify and establish a shared meaning and move forward with the interaction. However, software systems can't improvise(yet), so shared meaning has to be established by construction. The CSM is the way in which this is achieved because it eliminates any ambiguity in the meaning of interaction between software systems. 
+In this example, since it is two humans interacting, they can clarify and establish a shared meaning and move forward with the interaction. However, software systems can't improvise(yet), so shared meaning has to be established by construction. The CSM provides the mechanism to eliminate ambiguity in the meaning of interactions between software systems.
 
 ### Semantically Compatible Designs
 
@@ -146,9 +146,9 @@ When the meaning of the database is established, it also establishes the meaning
 
 As a result, through semantically compatible interactions between designs, larger semantic worlds can be constructed. The larger semantic world establishes a new level of meaning is defined by the semantically compatible designs that make up its reality. This frames a distributed system as a semantic world constructed from semantically compatible interactions between designs.
 
-### Securing Interactions Between and Within Designs
-
 In order for successful interaction, the meaning that must be established on both sides of the interaction is unambiguous and this happens by design. In addition, the same principles that define the correctness of a design are equally as valid at this level of meaning. By tracking interactions between designs, environmental invariants can be identified at a particular level of meaning in the closed semantic world that represents a distributed system.
+
+### Securing Interactions Between and Within Designs
 
 Finally, as a result, interaction between designs now have unambiguous meaning. There are meaningful implications for securing systems because the intention of the interaction is unambiguous. While before, the mechanical sequence had to be correct, now the design can ensure that it is the right narrative that is communicating with it. If the design is looked at as the brain of the software system, then this ensures that the correct brain is speaking with, making it more difficult to compromise a system. 
 
