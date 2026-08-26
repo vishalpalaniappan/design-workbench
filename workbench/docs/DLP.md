@@ -155,16 +155,28 @@ Finally, as a result, interaction between designs now have unambiguous meaning. 
 There are many approaches to implement this but one could be the DAL can be extended to generate a dynamic checksum along the narratives path to identify unique narrative identity. There are more interesting ways that I can think of securing it further by sharing the identify of the instance of the brain and using that to generate the proof. Regardless, the point here is, by eliminating ambiguity in a meaningful way, more automation will be enabled and securing the interaction between and within designs is another application for this framework.
 
 ## Design Learning Platform
- - Discuss the how this automation is practically achieved at scale
 
- ![DLP](../assets/ADLP_v28.png)
+![DLP](../assets/ADLP_v28.png)
 
- - Discuss the creation of an engine that leverges the unambiguous computable semantic model to verify the correctness of the design and automatically diagnose software failures and enables the design to learn new semantics through root cause analysis.
- - Describe how the computable semantic model can synthesize implementations that are instrumented with the relevant information.
- - Describe how this solution would not be practical at scale with domain specific compression
- - Describe how Comperssed Log Processor is an open source tool that can be leveraged to solve this problem and that it has been proven at a petabyte scale.
- - Discuss how this enables a design repository that can deterministically replay the evolution of the design.
- - Describe how through the compression and automation, the Design Learning Platform is a fully autoamted and optimized platform.
+In this section I will discuss the Design Learning Platform as the practical framework that realizes this solution. I will also discuss how the practical hurdles faced when implementing this solution at scale are overcome.
+
+The CSM is the mechanism through which ambiguity is eliminated in the construction of software systems. This means an engine that operates on the CSM can automatically generate the infromtion needed to for it to unambiguously understand the designs execution and enable deterministic learning. The engine does not analyze or arrive at conclusions on its own, instead, it simply enfroces the correctness established by the model. 
+
+As mentioned earlier, everytime that ambiguity is meanignfull eliminated from the computable semantic model, a new form of automation emerges. In this document, I've described how the design enables the automation of failure diagnosis, debugging and testing and documentation. Now I will talk about how the engine practically achieves these goals.
+
+The engine uses the invariants specified for the computable transformation to automatically place the invariants. It then uses the computable semantic transformations definition to establish a semantically invalid state, then it walks the invariant path to find the control flow that restores semantic validity and establishes whether it selects a semantically valid narrative. If no such control flow exists, then it concludes that the design behavior does not respect the invariant. If such a control flow does exist, it knows that this semantically invalid narrative is eliminated from the world. 
+
+After this process, since every known failure is eliminated by construction and verified through the invariant testing, failure diagnosis is automated because an observed failure can only mean that new semantics must be learnt through root cause analysis. To achieve this, the engine automatically instruments the synthesized executable output to log the necessary information needed to replay the execution headed to failure. This is once again possible because of the complete construction of the CSM because it unambiguously identifies all the information that can't be deterministcally reproduced. Then the failed execution of the CSM can be replayed using the logged inputs to aid in the root cause analysis.
+
+After root cause analysis and the expansion of the semantics, the same process repeats and the design is tested to ensure that it respects the new invariant. In this way, the engine essentially tests that the design respects every invariant to automate failure diagnosis and enables deterministic learning from failures by enabling root cause analysis on the environment which reveals the new semantics. This means that the environment which reveals the new semantics must be losslessly preserved at scale. If it isn't, then the automatic nature of this process is broken.
+
+To address this, the designs unambiguous nature can once again be exploited to provide the domain structure of the participants. Using this structure, domain specific compression can be applied to preserve all the environments at minimal cost. Domain specific compression is a technique that exploits the known domain structure of the data to maximize its compression.
+
+To practically achieve this, an open source tool name Compressed Log Processor (CLP) can be leveraged. It is a tool that can apply domain specific compression to the data and also search the compressed data without decompression. More importantly, it has been prove at a petabyte scale, establishing that it is possible to preserve the environments to learn new semantics through root cause analysis at scale.
+
+Since every environment that motivated new semantics is preserved, it results in a design repository through which the evolution of the software system can be deterministically replaced. The repository tracks not just the changes to the implementation but also how the system was designed, executed and refined through learnt semantics over time.
+
+This entire process is captured in a framework called the Design Learning Platform. It leverages the CSM and domain specific compression to fully automate the diagnosis of software failures and deterministically learn from losslessly preserved environments. In the process, it automates failure diagnosis, debugging, testing and documentation. This results in an automated and optimized platform that automates the management of software systems.
 
 
 # Conclusion
