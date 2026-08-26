@@ -160,11 +160,18 @@ There are many approaches to implement this but one could be the DAL can be exte
 
 In this section I will discuss the Design Learning Platform as the practical framework that realizes this solution. I will also discuss how the practical hurdles faced when implementing this solution at scale are overcome.
 
-The CSM is the mechanism through which ambiguity is eliminated in the construction of software systems. This means an engine that operates on the CSM can automatically generate the infromtion needed to for it to unambiguously understand the designs execution and enable deterministic learning. The engine does not analyze or arrive at conclusions on its own, instead, it simply enfroces the correctness established by the model. 
+The CSM is the mechanism through which ambiguity is eliminated in the construction of software systems. This means an engine that operates on the CSM can automatically generate the information needed to for it to unambiguously understand the designs execution and enable deterministic learning. The engine does not analyze or arrive at conclusions on its own, instead, it simply enforces the correctness established by the model.
 
-As mentioned earlier, everytime that ambiguity is meanignfull eliminated from the computable semantic model, a new form of automation emerges. In this document, I've described how the design enables the automation of failure diagnosis, debugging and testing and documentation. Now I will talk about how the engine practically achieves these goals.
+As mentioned earlier, everytime that ambiguity is meaningfully eliminated from the CSM, a new form of automation emerges. In this document, I've described how the following is automated:
 
-The engine uses the invariants specified for the computable transformation to automatically place the invariants. It then uses the computable semantic transformations definition to establish a semantically invalid state, then it walks the invariant path to find the control flow that restores semantic validity and establishes whether it selects a semantically valid narrative. If no such control flow exists, then it concludes that the design behavior does not respect the invariant. If such a control flow does exist, it knows that this semantically invalid narrative is eliminated from the world. 
+- Failure Diagnosis: Known invariant violation or unknown invariant is identified.
+- Debugging: Which invariant was violated?
+- Testing: Does the design respect all known invariants?
+- Documentation: Design written in the DAL represents itself.
+
+Now I will talk about how the engine practically achieves the failure diagnosis, debugging and testing.
+
+The engine uses the invariants specified for the computable transformation to automatically place the invariants using the designs structure. It then uses the invariants definition to establish a semantically invalid state, then it walks the invariant path to find the control flow that restores semantic validity and establishes whether it selects a semantically valid narrative. If no such control flow exists, then it concludes that the design behavior does not respect the invariant. If such a control flow does exist, it knows that the semantically invalid narrative is eliminated from the closed semantic world. 
 
 After this process, since every known failure is eliminated by construction and verified through the invariant testing, failure diagnosis is automated because an observed failure can only mean that new semantics must be learnt through root cause analysis. To achieve this, the engine automatically instruments the synthesized executable output to log the necessary information needed to replay the failed execution. This is once again possible because of the complete construction of the CSM because it unambiguously identifies all the information that can't be deterministcally reproduced. Then the failed execution of the CSM can be replayed using the logged inputs to aid in the root cause analysis.
 
@@ -176,7 +183,7 @@ To practically achieve this, an open source tool name Compressed Log Processor (
 
 Since every environment that motivated new semantics is preserved, it results in a design repository through which the evolution of the software system can be deterministically replayed. The repository tracks not just the changes to the implementation but also how the system was designed, executed and refined through learnt semantics over time.
 
-This entire process is captured in a framework called the Design Learning Platform. It leverages the CSM and domain specific compression to fully automate the diagnosis of software failures and deterministically learn from losslessly preserved environments. In the process, it automates failure diagnosis, debugging, testing and documentation. This results in an automated and optimized platform that automates the management of software systems.
+This entire process is captured in a framework called the Design Learning Platform(DLP). It leverages the CSM and domain specific compression to fully automate the diagnosis of software failures and deterministically learn from losslessly preserved environments. In the process, it automates failure diagnosis, debugging, testing and documentation. This results in an automated and optimized platform that automates the management of software systems.
 
 
 # Conclusion
