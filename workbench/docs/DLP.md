@@ -132,12 +132,27 @@ Finally, as a result of every invariant being automatically placed and tested to
 
 One of the consequences of the computable semantic model is that the meaning behind the execution of a software system is unambiguous. As a result, software systems can achieve successful coordination through shared meaning. I will first talk about how shared meaning leads to successful interaction in a general sense and then apply it to software systems.
 
-- Use example of librarian and visitor to explain how different meanings leads to failed interactions.
+Imagine you visit a library, find the book you are looking for and walk up to the librarian with the intention of checking out a book. In order to check out the book, you present the librarian with the book but the librarian was expecting a library card and the interaction halts. In this case, what it means to checkout a book is different for the librarian and the visitor. Since there is no shared meaning between the two, the interaction fails and neither the librarin nor the visitor achieve their goal. 
 
-- Discuss the consequences of a computable semantic model for interaction between software systems.
-- Discuss how through shared meaning, larger closed semantic worlds can be constructed.
-- Discuss how this frames a distributed system as a closed semantic world built through semantically computable interactions.
-- Discuss how the automation enabled by the design rises up to the level of distributed systems because the same principles determine its corretness.
+In this example, since it is two humans interacting, they can clarify and establish a shared meaning and move forward with the interaction. However, software systems can't improvise(yet), so shared meaning has to be established by construction. The CSM is the way in which this is achieved because it eliminates any ambiguity in the meaning of interaction between software systems. 
+
+### Semantically Compatible Designs
+
+Consider the system shown below. This example establishes a distributed image compression service that connects multiple designs together. In this example, each node is its own design. However, when two designs are interacting with each other, inorder to succesfully coordinate they must share the same meaning. 
+
+ ![DLP](../assets/semantically_valid_interaction.png)
+
+When the meaning of the database is established, it also establishes the meaning of a database user. There fore when the image compression service is interacting with the database, it takes on the role of the database user and communicates with shared meaning. In this sense, the interaction between the two designs is semantically valid because they share the same meaning. In the diagram, I highlight this using a color scheme to indicate that each design is invoking shared meaning between both designs.
+
+As a result, through semantically compatible interactions between designs, larger semantic worlds can be constructed. The larger semantic world establishes a new level of meaning is defined by the semantically compatible designs that make up its reality. This frames a distributed system as a semantic world constructed from semantically compatible interactions between designs.
+
+### Securing Interactions Between and Within Designs
+
+In order for successful interaction, the meaning that must be established on both sides of the interaction is unambiguous and this happens by design. In addition, the same principles that define the correctness of a design are equally as valid at this level of meaning. By tracking interactions between designs, environmental invariants can be identified at a particular level of meaning in the closed semantic world that represents a distributed system.
+
+Finally, as a result, interaction between designs now have unambiguous meaning. There are meaningful implications for securing systems because the intention of the interaction is unambiguous. While before, the mechanical sequence had to be correct, now the design can ensure that it is the right narrative that is communicating with it. If the design is looked at as the brain of the software system, then this ensures that the correct brain is speaking with, making it more difficult to compromise a system. 
+
+There are many approaches to implement this but one could be the DAL can be extended to generate a dynamic checksum along the narratives path to identify unique narrative identity. There are more interesting ways that I can think of securing it further by sharing the identify of the instance of the brain and using that to generate the proof. Regardless, the point here is, by eliminating ambiguity in a meaningful way, more automation will be enabled and securing the interaction between and within designs is another application for this framework.
 
 ## Design Learning Platform
  - Discuss the how this automation is practically achieved at scale
