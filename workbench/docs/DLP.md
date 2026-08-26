@@ -134,7 +134,7 @@ One of the consequences of the computable semantic model is that the meaning beh
 
 Imagine you visit a library, find the book you are looking for and walk up to the librarian with the intention of checking out a book. In order to check out the book, you present the librarian with the book but the librarian was expecting a library card and the interaction halts. In this case, what it means to checkout a book is different for the librarian and the visitor. Since there is no shared meaning between the two, the interaction fails and neither the librarin nor the visitor achieve their goal. 
 
-In this example, since it is two humans interacting, they can clarify and establish a shared meaning and move forward with the interaction. However, software systems can't improvise(yet), so shared meaning has to be established by construction. The CSM provides the mechanism to eliminate ambiguity in the meaning of interactions between designs.
+In this example, since it is two humans interacting, they can clarify and establish a shared meaning and move forward with the interaction. However, software systems can't improvise(yet), so shared meaning has to be established by construction. The CSM provides the mechanism to eliminate ambiguity in the meaning of interactions between software systems through their design.
 
 ### Semantically Compatible Designs
 
