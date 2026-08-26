@@ -129,13 +129,18 @@ This then sets up the next step where every invariant path can be automatically 
 Finally, as a result of every invariant being automatically placed and tested to verify that it restores semantic validity, any observed failures must mean that another narrative in this world is semantically invalid and through root cause analysis using the environment that caused the failure, the design learns new semantics and invariants to eliminate the semantically invalid narrative from the world.
 
 ## Shared Meaning and Distributed Systems
+
+One of the consequences of the computable semantic model is that the meaning behind the execution of a software system is unambiguous. As a result, software systems can achieve successful coordination through shared meaning. I will first talk about how shared meaning leads to successful interaction in a general sense and then apply it to software systems.
+
+- Use example of librarian and visitor to explain how different meanings leads to failed interactions.
+
 - Discuss the consequences of a computable semantic model for interaction between software systems.
 - Discuss how through shared meaning, larger closed semantic worlds can be constructed.
 - Discuss how this frames a distributed system as a closed semantic world built through semantically computable interactions.
 - Discuss how the automation enabled by the design rises up to the level of distributed systems because the same principles determine its corretness.
 
 ## Design Learning Platform
- - Discuss the how this automation is practically achieved
+ - Discuss the how this automation is practically achieved at scale
 
  ![DLP](../assets/ADLP_v28.png)
 
