@@ -48,7 +48,7 @@ An example of a script written in DAL is provided below:
 
 While this is a very simple design, it does contain enough functionality to demonstrate how the language establishes a design. In the next section, it will be used to demonstrate how the invariants specified in the implementation of the semantics can be used to reshape the behavior of the design to eliminate semantically invalid narratives.
 
-### The Design
+### Example Design
 
 The behavioral script presented above outlines the design of a simple library manager. In the script, each behavior is established in its own block. A behavior accesses the necessary participants from the world state, performs the transformation on the participants and modifies the world state in an unambiguous way. The behavior then either selects the next behavior directly or selects the next behavior based on the world state.
 
