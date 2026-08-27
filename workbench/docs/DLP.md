@@ -185,7 +185,7 @@ Since every environment that motivated new semantics is preserved, it results in
 
 This entire process is captured in a framework called the Design Learning Platform(DLP). It leverages the CSM and domain specific compression to fully automate the diagnosis of software failures and deterministically learn from losslessly preserved environments. In the process, it automates failure diagnosis, debugging and testing.
 
-In the next section, I will talk about how the CSM enables automated orchestration and recovery of software systems. I will discuss how, when combined with deterministic learning enabled by autoamted failure diagnosis and testing, this framework fully automates the management of software systems.
+In the next section, I will talk about how the CSM enables automated orchestration of software systems, including deployment, recovery, upgrade and lifecycle management. I will discuss how, when combined with deterministic learning enabled by autoamted failure diagnosis and testing, this framework fully automates the management of software systems.
 
 ## Automating Software System Management
 
@@ -221,4 +221,4 @@ In addition, through the CSM, the diagnosis of software failure is automated and
 
 Ultimately, this solution does not invent anything new. Software systems have always operated at this level of meaning and there is nothing that this solution presents that wasn't already common knowledge. What makes it novel is that it takes steps to unambiguously understand the implementation of the software system through the meaning established by its design. It achieves this using the computable semantic model and the ambiguity that is eliminated enables the management of software systems to be fully automated. It treats any manual effort as a symptom of incomplete construction and provides the means to complete the construction through the CSM. 
 
-This solution is ultimately eliminates ambiguity in the development and maintenance of software systems. As a result, the software systems that run modern society are less likely to fail and if they do fail, an automated process ensures their recovery and automated failure diagnosis supports enable deterministic learning to prevent future failures. The future of software development will be less about writing bug free code and more about building intelligent and secure systems that understand each other.
+This solution is ultimately eliminates ambiguity in the development and maintenance of software systems. As a result, the software systems that run modern society are less likely to fail and if they do fail, an automated process ensures their recovery and automated failure diagnosis supports deterministic learning to prevent future failures. The future of software development will be less about writing bug free code and more about building intelligent and secure systems that understand each other.
