@@ -213,7 +213,7 @@ The intelligence of the response by the orchestrator is entirely up to its desig
 
 # Conclusion
 
-The techniques presented in this document take a fundamentally different approach to software systems management than existing approaches. To provides the means to complete the construction of a software system by establishing its design in a Design Abstraction Language as a Computable Semantic Model that unambiguously establishes its meaning.
+The techniques presented in this document take a fundamentally different approach to software systems management than existing approaches. It provides the means to complete the construction of a software system by establishing its design in a Design Abstraction Language as a Computable Semantic Model that unambiguously establishes its meaning.
 
 This results in the complete automation of software systems management because there is no ambiguity in the meaning of the systems state and the necessary response to restore its ability to realize its intentions. This includes recovering from failures, deployment, normal life cycle operations and upgrades. 
 
