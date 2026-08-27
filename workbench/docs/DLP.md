@@ -203,9 +203,11 @@ This means that the manager must be designed to respond appropriately to every m
 
 ![DLP](../assets/AutomatedManagement.png)
 
-When a failure occurs, automated failure diagnosis is performed and the diagnostic data is presented to the developer for root cause analysis to deterministically learn new semantics and prevent future failures. At the same time, the orchestrator automatically responds to the failed narrative and takes unambiguous steps to restore the systems ability to realize its intentions. The intelligence of the response by the orchestrator is entirely up to the design, since there is no ambiguity in the state it is responding to or the design it is managing, it can surgically recover the system to restore normal functionality.
+When a failure occurs, automated failure diagnosis is performed and the diagnostic data is presented to the developer for root cause analysis to deterministically learn new semantics and prevent future failures. Once the design learns new semantics and it is automatically tested and validated, the automated orchestrator can upgrade the design with the updated CSM. 
 
-Ultimately, when combined with the deterministic learning loop established in earlier sections, the ability to automatically orchestrate the software system fully automates the management of software systems.
+At the same time, to immediately respond and restore the system, the orchestrator automatically responds to the failed narrative and takes unambiguous steps to restore the systems ability to realize its intentions. 
+
+The intelligence of the response by the orchestrator is entirely up to the design, since there is no ambiguity in the state it is responding to or the design it is managing, it can surgically recover the system to restore normal functionality or upgrade the system to deploy the updated CSM. Ultimately, when combined with the deterministic learning loop established in earlier sections, the ability to automatically orchestrate the software system fully automates the management of software systems.
 
 # Conclusion
 
