@@ -201,6 +201,8 @@ The failure in this narrative won't actually happen because the invariants in th
 
 This means that the manager must be designed to respond appropriately to every meaningful state in the design it is managing. Practically, it won't have to account for every narrative, instead, each design can self identify the states that will need to be managed and internally group narratives into meaningful states. Through this, an enumeration of every meaningful state can be obtained from the design and the manager can be tested to ensure that responds appropriately. 
 
+![DLP](../assets/AutomatedManagement.png)
+
 When a failure occurs, automated failure diagnosis is performed and the diagnostic data is presented to the developer for root cause analysis to deterministically learn new semantics and prevent future failures. At the same time, the orchestrator automatically responds to the failed narrative and takes unambiguous steps to restore the systems ability to realize its intentions. The intelligence of the response by the orchestrator is entirely up to the design, since there is no ambiguity in the state it is responding to or the design it is managing, it can surgically recover the system to restore normal functionality.
 
 Ultimately, when combined with the deterministic learning loop established in earlier sections, the ability to automatically orchestrate the software system fully automates the management of software systems.
