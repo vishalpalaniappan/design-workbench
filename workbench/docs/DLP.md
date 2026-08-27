@@ -156,7 +156,7 @@ There are many approaches to implement this but one could be the DAL can be exte
 
 ## Design Learning Platform
 
-![DLP](../assets/ADLP_v28.png)
+![DLP](../assets/ADLP_v29.png)
 
 In this section I will discuss the Design Learning Platform as the practical framework that realizes this solution. I will also discuss how the practical hurdles faced when implementing this solution at scale are overcome.
 
