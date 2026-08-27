@@ -50,7 +50,7 @@ While this is a very simple design, it does contain enough functionality to demo
 
 ### The Design
 
-The behavioral script presented above outlines the design of a simple libary manager. In the script, each behavior is established in its own block. A behavior accessess the necessary participants from the world state, performs the transformation on the participants and modifies the world state in an unambiguous way. The behavior then either selects the next behavior directly or selects the next behavior based on the world state. 
+The behavioral script presented above outlines the design of a simple library manager. In the script, each behavior is established in its own block. A behavior accesses the necessary participants from the world state, performs the transformation on the participants and modifies the world state in an unambiguous way. The behavior then either selects the next behavior directly or selects the next behavior based on the world state.
 
 A diagram of the design established by the script is provided below:
  ![DLP](../assets/design_behavior.png)
@@ -132,13 +132,13 @@ Finally, as a result of every invariant being automatically placed and tested to
 
 One of the consequences of the computable semantic model is that the meaning behind the execution of a software system is unambiguous. As a result, software systems can achieve successful coordination through shared meaning. I will first talk about how shared meaning leads to successful interaction in a general sense and then apply it to software systems.
 
-Imagine you visit a library, find the book you are looking for and walk up to the librarian with the intention of checking out a book. In order to check out the book, you present the librarian with the book but the librarian was expecting a library card and the interaction halts. In this case, what it means to checkout a book is different for the librarian and the visitor. Since there is no shared meaning between the two, the interaction fails and neither the librarin nor the visitor achieve their goal. 
+Imagine you visit a library, find the book you are looking for and walk up to the librarian with the intention of checking out a book. In order to check out the book, you present the librarian with the book but the librarian was expecting a library card and the interaction halts. In this case, what it means to check out a book is different for the librarian and the visitor. Since there is no shared meaning between the two, the interaction fails and neither the librarian nor the visitor achieve their goal. 
 
 In this example, since it is two humans interacting, they can clarify and establish a shared meaning and move forward with the interaction. However, software systems can't improvise(yet), so shared meaning has to be established by construction. The CSM provides the mechanism to eliminate ambiguity in the meaning of interactions between software systems through their design.
 
 ### Semantically Compatible Designs
 
-Consider the system shown below. This example establishes a distributed image compression service that connects multiple designs together. In this example, each node is its own design. However, when two designs are interacting with each other, inorder to succesfully coordinate they must share the same meaning. 
+Consider the system shown below. This example establishes a distributed image compression service that connects multiple designs together. In this example, each node is its own design. However, when two designs are interacting with each other, in order to successfully coordinate they must share the same meaning. 
 
  ![DLP](../assets/semantically_valid_interaction.png)
 
@@ -189,25 +189,25 @@ In the next section, I will talk about how the CSM enables automated orchestrati
 
 ## Automating Software System Management
 
-In order for a design to succesfully realize its intentions, the conditions necessary for it to be able to realize its intentions must exist. This can be as simple as deploying the deigns onto a node, performing life cycle operations or more specific tasks like recovering from failures. As such, when the design of a distributed system is established, it also defines a manager that can succesfully orchestrate the distributed system. 
+In order for a design to successfully realize its intentions, the conditions necessary for it to be able to realize its intentions must exist. This can be as simple as deploying the deigns onto a node, performing life cycle operations or more specific tasks like recovering from failures. As such, when the design of a distributed system is established, it also defines a manager that can successfully orchestrate the distributed system. 
 
-Orchestrating is ultimately responding to the state of the system appropriately to restore the systems ability to realize its intentions. Like with all other processes in this framework, the key to automating it is to eliminate ambiguty. Through the CSM, the meaning of a software systems state is entirely unambiguous. Each impulse into the system creates an unambiguous narrative that ripples through the system, even if it ends in failure. Since the narrative is unambigious, there can be an automatic unambiguous response by the management system. 
+Orchestrating is ultimately responding to the state of the system appropriately to restore the system's ability to realize its intentions. Like with all other processes in this framework, the key to automating it is to eliminate ambiguity. Through the CSM, the meaning of a software systems state is entirely unambiguous. Each impulse into the system creates an unambiguous narrative that ripples through the system, even if it ends in failure. Since the narrative is un ambiguous, there can be an automatic unambiguous response by the management system. 
 
-Once again, this is made possible by eliminating the ambiguity in the meaning of software system. In this case, as the impulse moves through the system, it can self-identify the narrative that it is executing, for example:
+Once again, this is made possible by eliminating the ambiguity in the meaning of software systems. In this case, as the impulse moves through the system, it can self-identify the narrative that it is executing, for example:
 
-"At 9:01 AM I started when the user chose to add a book to the library. Then they submitted a book name and then I created the book. However, I failed when I attempted to read the first letter of the books name."
+"At 9:01 AM I started when the user chose to add a book to the library. Then they submitted a book name and then I created the book. However, I failed when I attempted to read the first letter of the book's name."
 
-The failure in this narrative won't actually happen because the invariants in the CSM would have identified it and testing would have eliminated it. However, it is a simple example to convey the idea and this extends to distributed systems naturally because the designs have shared meaning. While recovering from failures are one part of the orchestration, the same principle applies to life cycle managent because the meaning of the systems state is unambiguous and the response to it is unambiguous.
+The failure in this narrative won't actually happen because the invariants in the CSM would have identified it and testing would have eliminated it. However, it is a simple example to convey the idea and this extends to distributed systems naturally because the designs have shared meaning. While recovering from failures is one part of the orchestration, the same principle applies to life cycle management because the meaning of the system's state is unambiguous and the response to it is unambiguous.
 
 ![DLP](../assets/AutomatedManagement.png)
 
-This means that the manager must be designed to respond appropriately to every meaningful state in the design it is managing. Practically, it won't have to account for every narrative, instead, each design can self identify the states that will need to be managed and internally group narratives into meaningful states. Through this, an enumeration of every meaningful state can be obtained from the design and the manager can be tested to ensure that responds appropriately. 
+This means that the manager must be designed to respond appropriately to every meaningful state in the design it is managing. Practically, it won't have to account for every narrative, instead, each design can self identify the states that will need to be managed and internally group narratives into meaningful states. Through this, an enumeration of every meaningful state can be obtained from the design and the manager can be tested to ensure that it responds appropriately.
 
 ![DLP](../assets/AutomatedManagementFailure.png)
 
 When a failure occurs, automated failure diagnosis is performed and the diagnostic data collected from the automated instrumentation is presented to the developer for root cause analysis to deterministically learn new semantics and prevent future failures. Once the design learns new semantics and it is automatically tested and validated, the automated orchestrator can upgrade the design with the updated CSM. 
 
-At the same time, to immediately respond to the failure and restore the system, the orchestrator automatically responds to the state of the system and takes unambiguous steps to restore the systems ability to realize its intentions. 
+At the same time, to immediately respond to the failure and restore the system, the orchestrator automatically responds to the state of the system and takes unambiguous steps to restore the system's ability to realize its intentions. 
 
 The intelligence of the response by the orchestrator is entirely up to its design, since there is no ambiguity in the state it is responding to or the design it is managing, it can surgically recover the system to restore normal functionality or upgrade the system to deploy the updated CSM. Ultimately, when combined with the deterministic learning loop established in earlier sections, the ability to automatically orchestrate the software system fully automates the management of software systems.
 
