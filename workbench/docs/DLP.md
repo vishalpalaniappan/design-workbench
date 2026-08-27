@@ -185,19 +185,25 @@ Since every environment that motivated new semantics is preserved, it results in
 
 This entire process is captured in a framework called the Design Learning Platform(DLP). It leverages the CSM and domain specific compression to fully automate the diagnosis of software failures and deterministically learn from losslessly preserved environments. In the process, it automates failure diagnosis, debugging and testing.
 
-In the next section, I will talk about how the CSM enables automated orchestration and recovery of software systems. I will discuss how, when combined with deterministic learning enabled by autoamted failure diagnosis and test, this framework fully automates the management of software systems.
+In the next section, I will talk about how the CSM enables automated orchestration and recovery of software systems. I will discuss how, when combined with deterministic learning enabled by autoamted failure diagnosis and testing, this framework fully automates the management of software systems.
 
 ## Automating Software System Management
 
-- Talk about how designs need conditions which will allow their intentions be realized.
-- The design of a system also establishes the complementary design of a manager that will respond approriately to establish the necessary conditions.
-- Talk about how there is no ambiguity in what a system is doing and what needs to happen to restore its ability to realize its intentions. 
-- Talk about how an active trace in the system can self identify the narrative it is part of in the designs execution.
-- Expand on how this lack of ambiguity enables an automated response that makes the necessary move to automatically manage the system. 
+In order for a design to succesfully realize its intentions, the conditions necessary for it to be able to realize its intentions must exist. This can be as simple as deploying the deigns onto a node, performing life cycle operations or more specific tasks like recovering from failures. As such, when the design of a distributed system is established, it also defines a manager that can succesfully orchestrate the distributed system. 
 
-- Paint a full picture about how when a failure occurs, the failure diagnosis is automated and the information needed for deterministic learning from root cause analysis is automatically presented to the developer. 
-- Discuss how in parallel, the recovery is automated and the systems ability to achieve its intentions is restored. 
-- Discuss how the intelligence of the unambiguous response to the unambiguous system state is entirly up to the design of the management system since it knows exactly what it is responding to.
+Orchestrating is ultimately responding to the state of the system appropriately to restore the systems ability to realize its intentions. Like with all other processes in this framework, the key to automating it is to eliminate ambiguty. Through the CSM, the meaning of a software systems state is entirely unambiguous. Each impulse into the system creates an unambiguous narrative that ripples through the system, even if it ends in failure. Since the narrative is unambigious, there can be an automatic unambiguous response by the management system. 
+
+Once again, this is made possible by eliminating the ambiguity in the meaning of software system. In this case, as the impulse moves through the system, it can self-identify the narrative that it is executing, for example:
+
+"At 9:01 AM I started when the user chose to add a book to the library. Then they submitted a book name and then I created the book. However, I failed when I attempted to read the first letter of the books name."
+
+The failure in this narrative won't actually happen because the invariants in the CSM would have identified it and testing would have eliminated it. However, it is a simple example to convey the idea and this extends to distributed systems naturally because the designs have shared meaning. While recovering from failures are one part of the orchestration, the same principle applies to life cycle managent because the meaning of the systems state is unambiguous and the response to it is unambiguous.
+
+This means that the manager must be designed to respond appropriately to every meaningful state in the design it is managing. Practically, it won't have to account for every narrative, instead, each design can self identify the states that will need to be managed and internally group narratives into meaningful states. Through this, an enumeration of every meaningful state can be obtained from the design and the manager can be tested to ensure that responds appropriately. 
+
+When a failure occurs, automated failure diagnosis is performed and the diagnostic data is presented to the developer for root cause analysis to deterministically learn new semantics and prevent future failures. At the same time, the orchestrator automatically responds to the failed narrative and takes unambiguous steps to restore the systems ability to realize its intentions. The intelligence of the response by the orchestrator is entirely up to the design, since there is no ambiguity in the state it is responding to or the design it is managing, it can surgically recover the system to restore normal functionality.
+
+Ultimately, when combined with the deterministic learning loop established in earlier sections, the ability to automatically orchestrate the software system fully automates the management of software systems.
 
 # Conclusion
 
