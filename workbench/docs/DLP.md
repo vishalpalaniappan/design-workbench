@@ -183,8 +183,21 @@ To practically achieve this, an open source tool name Compressed Log Processor (
 
 Since every environment that motivated new semantics is preserved, it results in a design repository through which the evolution of the software system can be deterministically replayed. The repository tracks not just the changes to the implementation but also how the system was designed, executed and refined through learnt semantics over time.
 
-This entire process is captured in a framework called the Design Learning Platform(DLP). It leverages the CSM and domain specific compression to fully automate the diagnosis of software failures and deterministically learn from losslessly preserved environments. In the process, it automates failure diagnosis, debugging, testing and documentation. This results in an automated and optimized platform that automates the management of software systems.
+This entire process is captured in a framework called the Design Learning Platform(DLP). It leverages the CSM and domain specific compression to fully automate the diagnosis of software failures and deterministically learn from losslessly preserved environments. In the process, it automates failure diagnosis, debugging and testing.
 
+In the next section, I will talk about how the CSM enables automated orchestration and recovery of software systems. I will discuss how, when combined with deterministic learning enabled by autoamted failure diagnosis and test, this framework fully automates the management of software systems.
+
+## Automating Software System Management
+
+- Talk about how designs need conditions which will allow their intentions be realized.
+- The design of a system also establishes the complementary design of a manager that will respond approriately to establish the necessary conditions.
+- Talk about how there is no ambiguity in what a system is doing and what needs to happen to restore its ability to realize its intentions. 
+- Talk about how an active trace in the system can self identify the narrative it is part of in the designs execution.
+- Expand on how this lack of ambiguity enables an automated response that makes the necessary move to automatically manage the system. 
+
+- Paint a full picture about how when a failure occurs, the failure diagnosis is automated and the information needed for deterministic learning from root cause analysis is automatically presented to the developer. 
+- Discuss how in parallel, the recovery is automated and the systems ability to achieve its intentions is restored. 
+- Discuss how the intelligence of the unambiguous response to the unambiguous system state is entirly up to the design of the management system since it knows exactly what it is responding to.
 
 # Conclusion
 
