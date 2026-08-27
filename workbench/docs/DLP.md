@@ -213,6 +213,12 @@ The intelligence of the response by the orchestrator is entirely up to its desig
 
 # Conclusion
 
-- Conclude by communicating how this framework addresses the goal laid out in the introduction. 
-- Highlight that this framework doesn't invent anythign new, instead, it simply eliminates the ambiguity in the existing processes through an unambiguous design and enables the automation.
-- Conclude by highlighting that this frees up developers to focus on building more effective systems.
+The techniques presented in this document take a fundamentally different approach to software systems management than existing approaches. To provides the means to complete the construction of a software system by establishing its design in a Design Abstraction Language as a Computable Semantic Model that unambiguously establishes its meaning.
+
+This results in the complete automation of software systems management because there is no ambiguity in the meaning of the systems state and the necessary response to restore its ability to realize its intentions. This includes recovering from failures, deployment, normal life cycle operations and upgrades. 
+
+In addition, through the CSM, the diagnosis of software failure is automated and it results in a design learning platform that enables the design to learn new semantics through root cause analysis on unambiguous environments that caused the failure. To enable the autoamtion at scale, it leverges the unambiguous nature of the CSM to preserve the environments which reveal new semantics using domain specific compression.
+
+Ultimately, this solution does not invent anything new. Software systems have always operated at this level of meaning and there is nothing that this solution presents that wasn't already known knowledge. What makes it novel is that it takes steps to unambiguously understand the implementation of the software system through the meaning established by its design. It achieves this using the computable semantic model and the ambiguity that is eliminated enables the management of software systems to be fully automated. It treats any manual effort as a symptom of incompelte construction and provides the means to complete the construction through the CSM. 
+
+This solution is ultimately eliminates ambiguity in the development and maintenance of software systems. As a result, the software systems that run modern society are less likely to fail and if they do fail, an automated process ensures their recovery and failure diagnosis to enable deterministic learning. The future of software development will be less about writing bug free code and more about building intelligent and secure systems that understand each other.
