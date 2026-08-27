@@ -199,9 +199,11 @@ Once again, this is made possible by eliminating the ambiguity in the meaning of
 
 The failure in this narrative won't actually happen because the invariants in the CSM would have identified it and testing would have eliminated it. However, it is a simple example to convey the idea and this extends to distributed systems naturally because the designs have shared meaning. While recovering from failures are one part of the orchestration, the same principle applies to life cycle managent because the meaning of the systems state is unambiguous and the response to it is unambiguous.
 
+![DLP](../assets/AutomatedManagement.png)
+
 This means that the manager must be designed to respond appropriately to every meaningful state in the design it is managing. Practically, it won't have to account for every narrative, instead, each design can self identify the states that will need to be managed and internally group narratives into meaningful states. Through this, an enumeration of every meaningful state can be obtained from the design and the manager can be tested to ensure that responds appropriately. 
 
-![DLP](../assets/AutomatedManagement.png)
+![DLP](../assets/AutomatedManagementFailure.png)
 
 When a failure occurs, automated failure diagnosis is performed and the diagnostic data is presented to the developer for root cause analysis to deterministically learn new semantics and prevent future failures. Once the design learns new semantics and it is automatically tested and validated, the automated orchestrator can upgrade the design with the updated CSM. 
 
