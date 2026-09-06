@@ -49,6 +49,31 @@ Since a design is a closed semantic world, the invariants intrinsic to the desig
 
 In this sense, through the invariants, the design absorbs the domain knowledge needed to prevent the failures within its closed semantic world. The design itself is reshaped by the invariants to only allow semantically valid narratives to persist. In this process, by working with the design, debugging, testing and failure diagnosis are automated. However, it is clear that the diagnostic automation isn’t a result of complex analysis of the world, instead, it is the result of the world being fully constructed, resulting in unambiguous diagnosis of failures. In this sense, every time ambiguity is eliminated in a meaningful way in the closed semantic world, a new form of automation will emerge.
 
+\section{Computable Semantic Model}
+
+Software systems are the result of an intentional design.The design is realized through an implementation in a programming language, which uses its abstractions to realize the design’s intentions. Therefore, the meaning behind the mechanical implementation in a programming language is established by the design of the system. Through this process of understanding the execution through the design, the automation enabled by the design is inherited by any diagnostic tool for software systems.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../assets/computable_semantic_model.png}
+    \caption{Computable Semantic Model}
+    \label{fig:example}
+\end{figure}
+
+This is achieved by establishing the design as a Computable Semantic Model (CSM) in a Design Abstraction Language (DAL). A CSM is built by establishing the design structure and its transformations unambiguously in the DAL and then defining the implementation which realizes the meaning established by the design. This effectively means that the implementation exists in the context of its role in the design and any invariants specified by the implementation can be enforced by the design.
+
+This process of establishing the design and its implementation through the CSM means that the invariants establishing the transformations correctness can reshape the permitted narratives in the world to prevent failures. It also provides a means to automatically test that the design's behavior respects the invariants specified by the transformation, effectively eliminating known failures by construction.
+
+\subsection{Computable Semantic Primitives}
+
+In order for the CSM to automate the debugging of software systems, it is necessary for the implementation to realize the meaning of the design faithfully. If this does not happen, then it is not possible to say whether the failure occurred due to an incorrect implementation or an invariant violation. To address this, the design itself can be constructed from computable semantic primitives whose implementation can be synthesized directly from the meaning of the transformation, guaranteeing that the implementation realizes the design's meaning.
+
+This means that the execution can be automatically debugged purely through the invariants that were violated. As later sections will explain, since it is possible to identify and eliminate semantically invalid narratives from the design, all known failures can be eliminated by construction given that the implementation faithfully realizes the design.This then automates failure diagnosis because a failure can only mean one thing, the design must learn new semantics through root cause analysis on the environment that caused the failure.
+
+Before continuing with the larger implications of establishing software systems as computable semantic models, I will briefly discuss the Design Abstraction Language and how it enables the computable semantic model to be built.
+
+
+
 \section{Testing Code Block}
 
 \begin{tcolorbox}
