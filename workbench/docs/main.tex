@@ -1,0 +1,56 @@
+\documentclass{article}
+\usepackage{parskip}
+\usepackage[most]{tcolorbox}
+\usepackage{minted}
+\usepackage[
+    top=0.5in,
+    bottom=1in,
+    left=1in,
+    right=1in
+]{geometry}
+
+\title{Automating the Management of Software Systems}
+\author{Vishal Palaniappan}
+
+\begin{document}
+
+\maketitle
+
+\section{Introduction}
+Software systems are an essential part of modern society and when they fail to function as intended, the implications can be enormous. It is therefore vital that systems are built to minimize the possibility of failure and that, when failures do occur, effective diagnostic processes expedite the systems recovery and prevent the recurrence of failures.
+
+To address this need, this document presents a framework called the Design Learning Platform (DLP) that fully automates the diagnosis of software failures. First, I will first explore the nature of the design on its own and explain how a closed semantic world can predict and resolve failures. Next, I will talk about how the design is applied to software systems and explain the diagnostic automation that it enables. Finally, I will talk about how this framework enables the complete automation of software system management and discuss how this is practically achieved by the platform.
+
+\section{Example}
+
+I am testing code here so I can add it to the appendix.
+
+
+\begin{tcolorbox}
+\begin{verbatim}
+participant("basket")
+
+property(
+    name="length"
+    description="Number of books in basket"
+    type="number"
+)
+property(
+    name="type"
+    description="Data type of participant (list, object, str etc)"
+    type="string"
+)
+domain(
+    contains="books"
+)
+dcs(
+    # Domain structure for compression
+)
+getLength()
+getType()
+\end{verbatim}
+\end{tcolorbox}
+
+
+
+\end{document}
