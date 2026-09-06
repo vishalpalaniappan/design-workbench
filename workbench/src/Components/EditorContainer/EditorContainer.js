@@ -3,17 +3,13 @@ import React, {useCallback, useContext, useEffect, useRef, useState} from "react
 import {useDispatch} from "react-redux";
 import {Editor} from "sample-ui-component-library";
 import {useLayoutEventSubscription} from "ui-layout-manager-dev";
-import {useModalManager} from "ui-layout-manager-dev";
 
+import {useWorkbench} from "../../Providers/GlobalProviders";
 import ServerContext from "../../Providers/ServerContext";
 import {setActiveTab} from "../../Store/appSlice";
-import {mapStatementToBehaviorThunk} from "../../Store/appThunk";
 import {setUpdatedContentThunk} from "../../Store/appThunk";
 import {useEngineFiles} from "../../Store/useAppSelection";
-import {useActiveTab, useLastSaved, useSelectedBehavior} from "../../Store/useAppSelection";
-import {useSelectedParticipant} from "../../Store/useAppSelection";
-import {useSelectedMapping} from "../../Store/useAppSelection";
-import {MapParticipant} from "../Modals/MapParticipant";
+import {useActiveTab, useLastSaved} from "../../Store/useAppSelection";
 
 import "./EditorContainer.scss";
 
@@ -27,71 +23,51 @@ export function EditorContainer () {
     const parentIdRef = useRef(null);
     const files = useEngineFiles();
     const lastSaved = useLastSaved();
-    const {openModal} = useModalManager();
     const [editorLoaded, setEditorLoaded] = useState(false);
-
-    const selectedBehavior = useSelectedBehavior();
-    const selectedParticipant = useSelectedParticipant();
-    const selectedMapping = useSelectedMapping();
 
     const activeTab = useActiveTab();
     const dispatch = useDispatch();
+    const {workbench} = useWorkbench();
 
     useEffect(() => {
         if (files) {
             // Close tabs of files that were deleted
             const _tabs = editorRef.current.getTabs();
             for (let i = 0; i < _tabs.length; i++) {
-                const _tab = _tabs[i];
-                const file = files.find((file) => file.uid === _tab.uid);
-                if (!file) {
-                    editorRef.current.closeTab(_tab.uid);
+                const foundFile = flattenTree(files).find((file) => file.uid === _tabs[i].uid);
+                if (!foundFile) {
+                    editorRef.current.closeTab(_tabs[i].uid);
                 } else {
-                    editorRef.current.updateTab(file);
+                    editorRef.current.updateTab(foundFile);
                 }
             }
             editorRef.current.layoutEditor();
         }
-    }, [files, editorLoaded]);
+    }, [files, lastSaved, editorLoaded]);
 
-    useEffect(() => {
-        if (selectedMapping) {
-            // Mapping selected in the mapping container.
-            const file = files.find((file) => file.uid === selectedMapping.fileUid);
-            editorRef.current.addTab(file, null, selectedMapping.lineNumber);
+    /**
+     * Flatterns the tree so its easier to search it.
+     * @param {Object} tree
+     * @param {Number} level
+     * @return {Array} Flattened Tree.
+     */
+    const flattenTree = (tree, level) => {
+        if (!level) {
+            level = 0;
         }
-    }, [selectedMapping]);
-
-    useEffect(() => {
-        if (selectedBehavior && editorRef.current) {
-            // Behvaior selected in graph by clicking on node.
-            editorRef.current.setCurrentBehavior(selectedBehavior.getName());
-            editorRef.current.layoutEditor();
+        let rows = [];
+        for (let i = 0; i < tree.length; i++) {
+            rows.push(tree[i]);
+            if (tree[i]?.children) {
+                rows = rows.concat(flattenTree(tree[i].children, tree[i].level + 1));
+            }
         }
-    }, [selectedBehavior]);
-
-    useEffect(() => {
-        if (lastSaved && files && editorRef.current) {
-            /**
-             * Inside editor, the content of the tab is saved in
-             * updatedContent key. When updatedContent and content keys are
-             * not the same, it means the file is dirty (shows icon on tab).
-             * When the file is saved onto the server, the updated content
-             * is set to the content key of the file, so we need to update
-             * the content of the tab to reflect that.
-             */
-            const tabs = editorRef.current.getTabs();
-            files.forEach((file) => {
-                if (tabs.some((tab) => tab.uid === file.uid)) {
-                    editorRef.current.updateTab(file);
-                }
-            });
-        }
-    }, [lastSaved]);
+        return rows;
+    };
 
     useEffect(() => {
         if (activeTab && editorRef.current) {
-            const foundFile = files.find((file) => file.uid === activeTab);
+            const foundFile = workbench.getFileUsingUid(activeTab);
             if (!foundFile) {
                 console.error("Active tab file not found in engine files");
                 return;
@@ -103,7 +79,7 @@ export function EditorContainer () {
             }
             editorRef.current.addTab(foundFile);
         }
-    }, [activeTab, editorLoaded]);
+    }, [activeTab, editorLoaded, workbench]);
 
     useLayoutEventSubscription("drag:drop", (event) => {
         const drop = event.payload;
@@ -149,23 +125,6 @@ export function EditorContainer () {
         }
     }, [dispatch, activeTab, editorLoaded]);
 
-    const onSelectAbstraction = useCallback((abstraction, shiftKey) => {
-        if (shiftKey && abstraction?.behaviorId == selectedBehavior.getName()) {
-            if (!selectedParticipant) return;
-            openModal({
-                title: "Map Variable Onto Participant",
-                args: {
-                    abstraction: abstraction,
-                },
-                render: ({close, args}) => {
-                    return <MapParticipant close={close} args={args}/>;
-                },
-            });
-        } else {
-            dispatch(mapStatementToBehaviorThunk(abstraction));
-        }
-    }, [dispatch, selectedBehavior, selectedParticipant]);
-
     useEffect(() => {
         parentIdRef.current = crypto.randomUUID();
         editorRef.current.setTabGroupId(parentIdRef.current);
@@ -179,7 +138,6 @@ export function EditorContainer () {
         <Editor
             ref={editorRef}
             onContentChange={onContentChange}
-            onSelectAbstraction={onSelectAbstraction}
             onSelectTab={onSelectTab}/>
     );
 }

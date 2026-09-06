@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useRef, useState} from "react";
 import PropTypes from "prop-types";
 import {useDispatch} from "react-redux";
 
-import {addFileThunk} from "../../Store/appThunk";
+import {useServer} from "../../Providers/GlobalProviders";
 
 import "./AddValue.scss";
 
@@ -21,6 +21,8 @@ export function AddFile ({close}) {
     const [fileName, setFileName] = useState("");
     const [error, setError] = useState(null);
 
+    const {sendMessage} = useServer();
+
     const inputRef = useRef(null);
 
     useEffect(() => {
@@ -35,7 +37,12 @@ export function AddFile ({close}) {
             return;
         }
         try {
-            dispatch(addFileThunk(fileName));
+            sendMessage({
+                type: "terminal_run_file_cmd",
+                payload: {
+                    cmd: `echo "" > ${fileName} \n`,
+                },
+            });
             close();
         } catch (err) {
             setError(err.toString());
@@ -59,7 +66,7 @@ export function AddFile ({close}) {
     return (
         <div className="add-value-modal">
             <div className="value-name-label">
-                <span>File Name:</span>
+                <span>File Path (relative to workspace):</span>
             </div>
             <div className="value-name-input">
                 <input ref={inputRef}

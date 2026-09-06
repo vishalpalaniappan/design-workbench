@@ -132,32 +132,43 @@
                 {
                     "type": "handleBar",
                     "sibling1": "editorContainer",
-                    "sibling2": "designLayoutContainer"
+                    "sibling2": "graphContainer"
                 },
                 {
-                    "containerId": "designLayoutContainer",
+                    "containerId": "graphContainer",
                     "type": "container",
                     "size": { "initial": { "type": "fill" }}
                 },
                 {
                     "type": "handleBar",
-                    "sibling1": "designLayoutContainer",
-                    "sibling2": "ImplementationScriptContainer"
+                    "sibling1": "graphContainer",
+                    "sibling2": "inspectorContainer"
                 },
                 {
-                    "containerId": "ImplementationScriptContainer",
+                    "containerId": "inspectorContainer",
                     "type": "container",
                     "size": { 
-                        "initial": { "value": 370, "unit": "px", "type": "fixed" }
-                    },
-                    "collapse": { "value": 900, "condition": "lessThan", "relative": "parent" }
+                        "initial": { "value": 300, "unit": "px", "type": "fixed" },
+                        "min": { "value": 170, "unit": "px"},
+                        "max": { "value": 400, "unit": "px"}
+                    }
                 }
             ]
         },
         "ImplementationScriptContainer": {
             "id": "ImplementationScriptContainer",
-            "component": "ImplementationBehaviorScriptViewer",
+            "component": "EditorContainer",
             "background": "#252526"
+        },
+        "graphContainer": {
+            "id": "graphContainer",
+            "component": "Graph",
+            "background": "#007acc"
+        },
+        "inspectorContainer": {
+            "id": "inspectorContainer",
+            "component": "BehaviorInspector",
+            "background": "#007acc"
         },
         "footer": {
             "id": "footer",
