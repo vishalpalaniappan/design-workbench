@@ -6,7 +6,6 @@ import {useModalManager} from "ui-layout-manager-dev";
 
 import {useDalEngine} from "../../Providers/GlobalProviders";
 import ServerContext from "../../Providers/ServerContext";
-import {setImplementationMode} from "../../Store/appSlice";
 import {setDesignMode} from "../../Store/appSlice";
 import {setDebuggingMode} from "../../Store/appSlice";
 import {useStatusMsg} from "../../Store/useAppSelection";
@@ -59,10 +58,6 @@ export function StatusBar () {
         const value = parseInt(event.target.value);
         if (value === 1 && appMode !== 1) {
             dispatch(setDesignMode());
-        } else if (value === 2) {
-            dispatch(setImplementationMode());
-        } else if (value === 3) {
-            dispatch(setDebuggingMode());
         }
     };
 
@@ -93,8 +88,6 @@ export function StatusBar () {
                         (event) => selectMode(event)
                     }>
                         <option value={1}>Design</option>
-                        <option value={2}>Implementation</option>
-                        <option value={3}>Debugging</option>
                     </select>
                 </div>
                 <div className="status-connected">
