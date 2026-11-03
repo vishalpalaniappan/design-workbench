@@ -17,6 +17,8 @@ async function loadDesign(designName) {
 
         // Write engine files to playground folder
         // await loadImplementationInPlayground(engine);
+        const tempPath = path.join(process.cwd(), "temp");
+        await fs.writeFile(path.join(tempPath, "designFiles.json"), JSON.stringify(files));
 
         return {
             designName: designName,
