@@ -11,7 +11,7 @@ import { randomUUID } from 'crypto';
  */
 const loadDir = async function (rootPath, folderPath, level) {
     const entries = await fs.readdir(folderPath, { withFileTypes: true });
-    return Promise.all(entries.map(async (entry) => {
+    return Promise.all(entries.filter((e) => e.name !== ".git").map(async (entry) => {
         const fullPath = path.join(folderPath, entry.name);
 
         const relativePath = path.join(
