@@ -3,13 +3,10 @@ import React, {useCallback, useEffect, useState} from "react";
 import {useDispatch} from "react-redux";
 import {LayoutManager} from "ui-layout-manager-dev";
 
-import debuggingLayout from "../../debuggingLayout.json";
 import implementationLayout from "../../implementationLayout.json";
 import {registry} from "../../Registry";
-import scriptingLayout from "../../scriptingLayout.json";
 import {setDesignMode} from "../../Store/appSlice";
 import {setImplementationMode} from "../../Store/appSlice";
-import {setDebuggingMode} from "../../Store/appSlice";
 import {setDesignLoaded} from "../../Store/appSlice";
 import {useDesignLoaded} from "../../Store/useAppSelection";
 import {useAppMode} from "../../Store/useAppSelection";
@@ -42,12 +39,8 @@ export function LandingPage () {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const designMode = params.get("mode");
-        if (designMode && designMode === "implementation") {
-            dispatch(setImplementationMode());
-        } else if (designMode && designMode === "design") {
+        if (designMode && designMode === "design") {
             dispatch(setDesignMode());
-        } else if (designMode && designMode === "debugging") {
-            dispatch(setDebuggingMode());
         }
         setReady(true);
     }, [dispatch]);
@@ -57,16 +50,8 @@ export function LandingPage () {
         const params = new URLSearchParams(window.location.search);
         if (appMode === 1) {
             dispatch(setDesignLoaded(false));
-            setChosenLayout(scriptingLayout);
-            params.set("mode", "design");
-        } else if (appMode === 2) {
-            dispatch(setDesignLoaded(false));
             setChosenLayout(implementationLayout);
-            params.set("mode", "implementation");
-        } else if (appMode === 3) {
-            dispatch(setDesignLoaded(false));
-            setChosenLayout(debuggingLayout);
-            params.set("mode", "debugging");
+            params.set("mode", "design");
         } else {
             console.warn("Unknown app mode:", appMode);
             dispatch(setDesignLoaded(false));

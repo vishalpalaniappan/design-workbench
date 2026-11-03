@@ -99,7 +99,7 @@ async function saveTraceInEngine(type) {
         const engineData = await fs.readFile(designPath);
         const decompressedLogs = await loadTrace(new Uint8Array(traceData));
         engine.deserialize(engineData);
-        engine.traces.addTrace(traceEntry,true, decompressedLogs);
+        engine.traces.addTrace(traceEntry,false, decompressedLogs);
         console.log("Trace saved successfully in engine.");
         return engine.traces.getTrace(traceEntry.uid);
     } catch (err) {
